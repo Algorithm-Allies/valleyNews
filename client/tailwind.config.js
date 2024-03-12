@@ -6,7 +6,8 @@ export default {
       colors: {
         "brown-100": "#F1EBE4",
         "brown-200": "#E5D9D1",
-        "brown-300": "#786759",
+        "brown-300": "#A8763E",
+        "brown-400": "#786759",
         "custom-orange": "#E48F45",
         "custom-gray": "#C4C4C4",
       },

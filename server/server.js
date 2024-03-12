@@ -24,6 +24,9 @@ db.connect((err) => {
 });
 
 // Routes
+app.get("/", (req, res) => {
+  res.send("Welcome to the homepage!");
+});
 app.use("/api/users", require("./routes/userRoutes"));
 
 app.listen(port, () => {

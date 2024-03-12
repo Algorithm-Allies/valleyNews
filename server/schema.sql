@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS users (
   mobile_phone_number VARCHAR(20),
   business_name VARCHAR(255),
   business_website VARCHAR(255)
-);
+);  
 
 -- Create the articles table
 CREATE TABLE IF NOT EXISTS 'articles' (

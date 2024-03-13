@@ -19,6 +19,7 @@ export async function action({ request }) {
   // Otherwise, something went wrong on the server and we throw an error. This error will show up in useRouterError
   throw new Response("Username and password don't match!", { status: 400 });
 }
+
 function Login() {
   const error = useRouteError();
   return (
@@ -27,8 +28,18 @@ function Login() {
         Login to your Account
       </h2>
       <div className="flex flex-col gap-4 mb-6">
-        <AuthInput type="email" name="email" placeholder="Email" />
-        <AuthInput type="password" name="password" placeholder="Password" />
+        <AuthInput
+          type="email"
+          name="email"
+          placeholder="Email"
+          label="Email"
+        />
+        <AuthInput
+          type="password"
+          name="password"
+          placeholder="Password"
+          label="Password"
+        />
       </div>
       {error && <p>{error.data}</p>}
       <button className="block w-1/2 py-2 mx-auto mb-4 bg-brown-300 text-white rounded">

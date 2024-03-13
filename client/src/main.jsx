@@ -5,7 +5,7 @@ import "./index.css";
 import Login, { action as LoginAction } from "./pages/Login.jsx";
 import Register  from "./pages/Register.jsx";
 import AuthLayout from "./components/Auth/AuthLayout.jsx";
-
+import ResetPassword from "./pages/ResetPassword.jsx";
 const router = createBrowserRouter([
   {
     path: "/auth",
@@ -20,6 +20,10 @@ const router = createBrowserRouter([
         path: "/auth/register",
         element: <Register />,
         errorElement: <Register/>,
+      },{
+        path: "/auth/reset",
+        element: <ResetPassword />,
+        errorElement: <ResetPassword/>,
       }
     ],
   },

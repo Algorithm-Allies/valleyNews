@@ -51,7 +51,7 @@ function Login() {
         <Link className="text-sm text-brown-100">
           Forgot your password? Click Here
         </Link>
-        <Link to="/register" className="text-sm text-brown-100">
+        <Link to="/auth/register" className="text-sm text-brown-100">
           Need an account? Click Here
         </Link>
       </div>

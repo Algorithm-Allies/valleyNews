@@ -29,7 +29,7 @@ function Login() {
       <h2 className="text-white text-xl text-center mb-4">
         Login to your Account
       </h2>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 mb-6">
         <AuthInput
           type="email"
           name="email"
@@ -44,7 +44,7 @@ function Login() {
         />
       </div>
       {error && <AuthError error={error.data} />}
-      <button className="block w-1/2 py-2 mx-auto mt-6 bg-brown-300 text-white rounded">
+      <button className="block shadow-brown shadow-lg w-1/2 py-2 mx-auto mb-4 bg-brown-300 text-white rounded">
         Login
       </button>
       <div className="flex flex-col items-center gap-2 mt-4">

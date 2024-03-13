@@ -7,7 +7,7 @@ function AuthInput({ type, name, label, placeholder, ...props }) {
         name={name}
         type={type}
         placeholder={placeholder}
-        className="w-full p-2 rounded"
+        className="w-full p-2 rounded shadow-gray-100"
         {...props}
       />
     </label>

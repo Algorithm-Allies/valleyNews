@@ -52,17 +52,10 @@ const register = async (req, res) => {
 // Function to retrieve user by email
 const getUserByEmail = async (email) => {
   console.log([email]);
-  //const query = "SELECT 'email' FROM user WHERE 'email' = $1";
-  const query = `SELECT 'email'
-  FROM user
-  WHERE EXISTS (
-      SELECT 'email'
-      FROM user
-      WHERE 'email' = $1
-  )`;
-  const rows = await db.query(query, [email]);
-  console.log(rows);
-  //return rows[0];
+  const query = `SELECT email
+  FROM public."user" where email = $1`;
+  const { rows } = await db.query(query, [email]);
+  return rows[0];
 };
 
 // Function to create a new user
@@ -94,7 +87,7 @@ const login = async (req, res) => {
 
   // Check if the user exists
   db.query(
-    "SELECT email FROM user WHERE email = $1",
+    `SELECT email FROM public."user" WHERE email = $1`,
     [email],
     async (err, result) => {
       if (!result.rows[0]) {

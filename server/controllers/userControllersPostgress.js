@@ -119,42 +119,6 @@ const login = async (req, res) => {
     console.error("Error logging in:", error);
     res.status(500).json({ message: "Internal server error" });
   }
-  //   // Check if the user exists
-  //   db.query(
-  //     `SELECT email FROM public."user" WHERE email = $1`,
-  //     [email],
-  //     async (err, result) => {
-  //       if (!result.rows[0]) {
-  //         res.status(400).json({ message: "User does not exist" });
-  //       } else {
-  //         res.status(400).json({ message: "User already registered" });
-  //       }
-
-  //       const user = result.rows[0];
-
-  //       // Check if the password is correct
-  //       const isMatch = await bcrypt.compare(password, result.rows[0].password);
-  //       if (!isMatch) {
-  //         return res.status(400).json({ message: "Invalid credentials" });
-  //       }
-
-  //       // Generate a token
-  //       const token = jwt.sign(
-  //         { userId: user.id, email: user.email },
-  //         process.env.JWT_SECRET,
-  //         {
-  //           expiresIn: "3h",
-  //         }
-  //       );
-
-  //       // Send the token in a HTTP-only cookie
-  //       res.cookie("token", token, {
-  //         httpOnly: true,
-  //         sameSite: "strict",
-  //       });
-  //       res.status(200).json({ message: "Login successful", token });
-  //     }
-  //   );
 };
 
 module.exports = { register, login };

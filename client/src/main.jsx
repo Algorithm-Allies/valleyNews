@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import Login, { action as LoginAction } from "./pages/Login.jsx";
-import AuthLayout from "./components/AuthLayout.jsx";
+import AuthLayout from "./components/Auth/AuthLayout.jsx";
 
 const router = createBrowserRouter([
   {

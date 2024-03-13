@@ -1,4 +1,6 @@
-import { Form, Link, redirect, useRouteError } from "react-router-dom";
+import { Link, redirect, useRouteError } from "react-router-dom";
+import AuthForm from "../components/Auth/AuthForm";
+import AuthInput from "../components/Auth/AuthInput";
 
 export async function action({ request }) {
   const formData = await request.formData();
@@ -10,45 +12,26 @@ export async function action({ request }) {
       "Content-Type": "application/json",
     },
   });
-  // If, the user was succesful in loggin in, we redirect them to home page
+  // If, the user was succesful in logging in, we redirect them to home page
   if (res.ok) {
     return redirect("/");
   }
-  // Otherwise, something went wrong on the server and we throw an error
+  // Otherwise, something went wrong on the server and we throw an error. This error will show up in useRouterError
   throw new Response("Username and password don't match!", { status: 400 });
 }
-
 function Login() {
   const error = useRouteError();
   return (
-    <Form method="post" className="w-full bg-brown-400 p-8 rounded-lg">
-      <p className="text-white text-xl text-center mb-4">
+    <AuthForm>
+      <h2 className="text-white text-xl text-center mb-4">
         Login to your Account
-      </p>
+      </h2>
       <div className="flex flex-col gap-4 mb-6">
-        <label>
-          <span className="sr-only">Email</span>
-          <input
-            required
-            name="email"
-            type="email"
-            placeholder="Email"
-            className=" w-full p-2 rounded"
-          />
-        </label>
-        <label>
-          <span className="sr-only">Password</span>
-          <input
-            name="password"
-            required
-            type="password"
-            placeholder="Password"
-            className=" w-full p-2 rounded"
-          />
-        </label>
+        <AuthInput type="email" name="email" placeholder="Email" />
+        <AuthInput type="password" name="password" placeholder="Password" />
       </div>
       {error && <p>{error.data}</p>}
-      <button className="block w-1/2 py-2 mx-auto mb-4 bg-brown-300 text-white rounded hover:bg-brown-300/90">
+      <button className="block w-1/2 py-2 mx-auto mb-4 bg-brown-300 text-white rounded">
         Login
       </button>
       <div className="flex flex-col items-center gap-2">
@@ -59,7 +42,7 @@ function Login() {
           Need an account? Click Here
         </Link>
       </div>
-    </Form>
+    </AuthForm>
   );
 }
 

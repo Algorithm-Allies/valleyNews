@@ -43,10 +43,10 @@ function Register() {
           label="Password"
         />
          <AuthInput
-          type="confirm password"
-          name="confirm password"
+          type="password"
+          name="password"
           placeholder="Confirm Password"
-          label="Confirm Password"
+          label="Password"
         />
       </div>
       {error && <p>{error.data}</p>}

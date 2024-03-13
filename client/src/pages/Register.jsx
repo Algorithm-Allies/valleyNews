@@ -61,7 +61,7 @@ function Register() {
         <Link className="text-sm text-brown-100">
           Forgot your password? Click Here
         </Link>
-        <Link to="/login" className="text-sm text-brown-100">
+        <Link to="/auth/login" className="text-sm text-brown-100">
           Already have an account? Click Here
         </Link>
       </div>

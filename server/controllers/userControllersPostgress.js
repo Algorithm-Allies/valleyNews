@@ -51,7 +51,6 @@ const register = async (req, res) => {
 
 // Function to retrieve user by email
 const getUserByEmail = async (email) => {
-  console.log([email]);
   const query = `SELECT email
   FROM public."user" where email = $1`;
   const { rows } = await db.query(query, [email]);
@@ -79,48 +78,83 @@ const createUser = async (
 };
 
 const login = async (req, res) => {
-  const { email, password } = req.body;
-
-  if (!email || !password) {
-    return res.status(400).json({ message: "Please enter email and password" });
-  }
-
-  // Check if the user exists
-  db.query(
-    `SELECT email FROM public."user" WHERE email = $1`,
-    [email],
-    async (err, result) => {
-      if (!result.rows[0]) {
-        res.status(400).json({ message: "User does not exist" });
-      } else {
-        res.status(400).json({ message: "User already registered" });
-      }
-
-      const user = result.rows[0];
-
-      // Check if the password is correct
-      const isMatch = await bcrypt.compare(password, result.rows[0].password);
-      if (!isMatch) {
-        return res.status(400).json({ message: "Invalid credentials" });
-      }
-
-      // Generate a token
-      const token = jwt.sign(
-        { userId: user.id, email: user.email },
-        process.env.JWT_SECRET,
-        {
-          expiresIn: "3h",
-        }
-      );
-
-      // Send the token in a HTTP-only cookie
-      res.cookie("token", token, {
-        httpOnly: true,
-        sameSite: "strict",
-      });
-      res.status(200).json({ message: "Login successful", token });
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res
+        .status(400)
+        .json({ message: "Please enter email and password" });
     }
-  );
+
+    const query = `SELECT email, password, id
+    FROM public."user" where email = $1`;
+    const result = await db.query(query, [email]);
+    if (result.rows.length === 0) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+    // Check if the password is correct
+    const isMatch = await bcrypt.compare(password, result.rows[0].password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+
+    //       // Generate a token
+    const user = result.rows[0];
+
+    const token = jwt.sign(
+      { userId: user.id, email: user.email },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "3h",
+      }
+    );
+
+    //       // Send the token in a HTTP-only cookie
+    res.cookie("token", token, {
+      httpOnly: true,
+      sameSite: "strict",
+    });
+    res.status(200).json({ message: "Login successful", token });
+  } catch (error) {
+    console.error("Error logging in:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+  //   // Check if the user exists
+  //   db.query(
+  //     `SELECT email FROM public."user" WHERE email = $1`,
+  //     [email],
+  //     async (err, result) => {
+  //       if (!result.rows[0]) {
+  //         res.status(400).json({ message: "User does not exist" });
+  //       } else {
+  //         res.status(400).json({ message: "User already registered" });
+  //       }
+
+  //       const user = result.rows[0];
+
+  //       // Check if the password is correct
+  //       const isMatch = await bcrypt.compare(password, result.rows[0].password);
+  //       if (!isMatch) {
+  //         return res.status(400).json({ message: "Invalid credentials" });
+  //       }
+
+  //       // Generate a token
+  //       const token = jwt.sign(
+  //         { userId: user.id, email: user.email },
+  //         process.env.JWT_SECRET,
+  //         {
+  //           expiresIn: "3h",
+  //         }
+  //       );
+
+  //       // Send the token in a HTTP-only cookie
+  //       res.cookie("token", token, {
+  //         httpOnly: true,
+  //         sameSite: "strict",
+  //       });
+  //       res.status(200).json({ message: "Login successful", token });
+  //     }
+  //   );
 };
 
 module.exports = { register, login };

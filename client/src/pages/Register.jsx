@@ -44,7 +44,7 @@ function Register() {
         />
          <AuthInput
           type="password"
-          name="password"
+          name="confirm-password"
           placeholder="Confirm Password"
           label="Password"
         />

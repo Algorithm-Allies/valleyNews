@@ -1,8 +1,10 @@
 const db = require("../config/database");
 const { insertArticle } = require("../services/articleService");
 
+// POST /api/articles
+// Create articles -- bulk insert into database
 async function createArticles(req, res) {
-  const articlesData = req.body; // Assuming req.body is an array of article objects
+  const articlesData = req.body;
   try {
     const insertedIds = [];
     for (const article of articlesData) {
@@ -18,6 +20,8 @@ async function createArticles(req, res) {
   }
 }
 
+// GET /api/articles
+// Get all articles
 async function getArticles(req, res) {
   const query = `
     SELECT * FROM article
@@ -32,6 +36,8 @@ async function getArticles(req, res) {
   }
 }
 
+// GET /api/articles/:id
+// Get article by ID
 async function getArticleById(req, res) {
   const articleId = req.params.id;
 

@@ -1,4 +1,3 @@
-// articleService.js
 const db = require("../config/database");
 
 async function insertArticle(article) {

@@ -1,13 +1,14 @@
-const mysql = require("mysql2");
+const { Client } = require("pg");
 const dotenv = require("dotenv");
 
 dotenv.config();
 
-const db = mysql.createConnection({
+const db = new Client({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
+  port: process.env.DB_PORT, // Add this line if your PostgreSQL server runs on a custom port
 });
 
 module.exports = db;

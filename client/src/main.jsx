@@ -7,8 +7,11 @@ import {
 } from "react-router-dom";
 import "./index.css";
 import Login, { action as LoginAction } from "./pages/Login.jsx";
-import Register from "./pages/Register.jsx";
+
+import Register, { action as RegisterAction } from "./pages/Register.jsx";
 import AuthLayout from "./components/Auth/AuthLayout.jsx";
+import ResetPassword from "./pages/ResetPassword.jsx";
+import PageNotFound from "./pages/PageNotFound.jsx";
 import NewPassword, {
   action as NewPasswordAction,
 } from "./pages/NewPassword.jsx";
@@ -34,7 +37,9 @@ const router = createBrowserRouter([
       {
         path: "/auth/register",
         element: <Register />,
+
         errorElement: <Register />,
+        action: RegisterAction,
       },
       {
         path: "/auth/new-password",
@@ -42,7 +47,17 @@ const router = createBrowserRouter([
         errorElement: <NewPassword />,
         action: NewPasswordAction,
       },
+      {
+        path: "/auth/reset",
+        element: <ResetPassword />,
+        errorElement: <ResetPassword />,
+        errorElement: <Register />,
+      },
     ],
+  },
+  {
+    path: "*",
+    element: <PageNotFound />,
   },
 ]);
 ReactDOM.createRoot(document.getElementById("root")).render(

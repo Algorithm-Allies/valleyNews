@@ -4,7 +4,7 @@ const {
   register,
   login,
   verifiy,
-  resetEmail,
+  passwordResetEmail,
   resetPassword,
 } = require("../controllers/userControllers");
 
@@ -12,7 +12,7 @@ router.get("/", (req, res) => {});
 router.post("/login", login);
 router.post("/register", register);
 router.get("/verify", verifiy);
-router.post("/reset-email", resetEmail);
+router.post("/password-reset-email", passwordResetEmail);
 router.post("/reset-password", resetPassword);
 
 router.get("/logout", (req, res) => {});

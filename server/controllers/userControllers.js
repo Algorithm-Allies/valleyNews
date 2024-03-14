@@ -2,113 +2,17 @@ const db = require("../config/database");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
-const crypto = require("crypto-browserify");
-
-const generateVerificationToken = (user) => {
-  const payload = user;
-  const secretKey = process.env.JWT_SECRET;
-  const options = { expiresIn: "1h" };
-  const token = jwt.sign(payload, secretKey, options);
-  return token;
-};
-
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
-  auth: {
-    user: process.env.SMTP_USERNAME,
-    pass: process.env.SMTP_PASSWORD,
-  },
-});
-
-const sendVerificationEmail = async (email, verificationToken) => {
-  // Construct verification link
-  const encodedToken = encodeURIComponent(verificationToken);
-  const verificationLink = `http://localhost:8000/api/users/verify?token=${encodedToken}`;
-
-  // Email options
-  const mailOptions = {
-    from: process.env.EMAIL,
-    to: email,
-    subject: "Verify Your Email Address",
-    html: `Click <a href="${verificationLink}">here</a> to verify your email address.`,
-  };
-
-  // Send email
-  try {
-    const info = await transporter.sendMail(mailOptions);
-    console.log("Email sent:", info.response);
-  } catch (error) {
-    console.error("Error sending email:", error);
-    throw error;
-  }
-};
-
-const storeVerificationToken = async (token) => {
-  // Store token in your database along with user ID
-  try {
-    const query = `INSERT INTO verification_tokens ("token") VALUES ($1);
-    `;
-    await db.query(query, [token]);
-  } catch (error) {
-    console.error("Error storing verification token:", error);
-    throw error;
-  }
-};
-
-const getTokenByVerificationToken = async (token) => {
-  try {
-    const query = `SELECT token FROM public."verification_tokens" WHERE token = $1;`;
-    const result = await db.query(query, [token]);
-    if (result.rows.length > 0) {
-      return result.rows[0].token;
-    } else {
-      return null; // Token not found
-    }
-  } catch (error) {
-    console.error("Error getting token by verification token:", error);
-    throw error;
-  }
-};
-
-const deleteVerificationToken = async (token) => {
-  try {
-    const query = `DELETE FROM public."verification_tokens" WHERE token = $1;`;
-    await db.query(query, [token]);
-  } catch (error) {
-    console.error("Error deleting verification token:", error);
-    throw error;
-  }
-};
-
-// Function to retrieve user by email
-const getUserByEmail = async (email) => {
-  const query = `SELECT email
-  FROM public."user" where email = $1`;
-  const { rows } = await db.query(query, [email]);
-  return rows[0];
-};
-
-// Function to create a new user
-const createUser = async (
-  email,
-  password,
-  account_type,
-  mobile_phone_number,
-  business_name,
-  business_website
-) => {
-  const query = `INSERT INTO "user" ("email", "password", "account_type", "mobile_phone_number", "business_name", "business_website") VALUES ($1, $2, $3, $4, $5, $6)`;
-  return await db.query(query, [
-    email,
-    password,
-    account_type,
-    mobile_phone_number,
-    business_name,
-    business_website,
-  ]);
-};
+const {
+  sendPasswordResetEmail,
+  sendVerificationEmail,
+} = require("../services/emailService");
+const {
+  generateVerificationToken,
+  storeVerificationToken,
+  deleteVerificationToken,
+  getTokenByVerificationToken,
+} = require("../services/tokenService");
+const { getUserByEmail, createUser } = require("../services/userService");
 
 // POST /api/users/register
 const register = async (req, res) => {
@@ -235,29 +139,8 @@ const login = async (req, res) => {
   }
 };
 
-
-// Send password reset email
-const sendPasswordResetEmail = async (email, token) => {
-  const resetLink = `http://localhost:8000/reset-password?token=${token}`;
-  const mailOptions = {
-    from: process.env.EMAIL,
-    to: email,
-    subject: "Password Reset Request",
-    text: `To reset your password, please click on the following link: ${resetLink}`,
-  };
-
-  try {
-    const info = await transporter.sendMail(mailOptions);
-    console.log("Email sent:", info.response);
-  } catch (error) {
-    console.error("Error sending email:", error);
-    throw error;
-  }
-};
-
 // Route to request password reset
 const passwordResetEmail = async (req, res) => {
-
   try {
     const { email } = req.body;
 

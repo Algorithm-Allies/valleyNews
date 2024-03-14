@@ -235,22 +235,9 @@ const login = async (req, res) => {
   }
 };
 
-const generateToken = () => {
-  return crypto.randomBytes(32).toString("hex");
-};
 
 // Send password reset email
 const sendPasswordResetEmail = async (email, token) => {
-  const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
-    auth: {
-      user: process.env.SMTP_USERNAME,
-      pass: process.env.SMTP_USERNAME,
-    },
-  });
-
   const resetLink = `http://localhost:8000/reset-password?token=${token}`;
   const mailOptions = {
     from: process.env.EMAIL,
@@ -259,17 +246,18 @@ const sendPasswordResetEmail = async (email, token) => {
     text: `To reset your password, please click on the following link: ${resetLink}`,
   };
 
-  await transporter.sendMail(mailOptions);
-};
-
-// Store token in the database
-const storeResetToken = async (email, token) => {
-  const query = `INSERT INTO password_reset_tokens ("email", "token") VALUES ($1, $2)`;
-  await db.query(query, [email, token]);
+  try {
+    const info = await transporter.sendMail(mailOptions);
+    console.log("Email sent:", info.response);
+  } catch (error) {
+    console.error("Error sending email:", error);
+    throw error;
+  }
 };
 
 // Route to request password reset
-const resetEmail = async (req, res) => {
+const passwordResetEmail = async (req, res) => {
+
   try {
     const { email } = req.body;
 
@@ -279,9 +267,7 @@ const resetEmail = async (req, res) => {
       return res.status(400).json({ message: "Email doesnt exist" });
     }
 
-    // Generate token and store in the database
-    const token = generateToken();
-    // await storeResetToken(email, token);
+    const token = generateVerificationToken({ email });
 
     // Send password reset email
     await sendPasswordResetEmail(email, token);
@@ -296,27 +282,17 @@ const resetEmail = async (req, res) => {
 // Route to handle password reset
 const resetPassword = async (req, res) => {
   try {
-    const { token, newPassword } = req.body;
-
-    // Retrieve email associated with the token
-    const query = "SELECT email FROM password_reset_tokens WHERE token = $1";
-    const result = await db.query(query, [token]);
-    if (result.rows.length === 0) {
-      return res.status(400).json({ message: "Invalid or expired token" });
+    const { email, newPassword } = req.body;
+    if (!newPassword) {
+      return res.json({ message: "New Password Required" });
     }
-
-    const email = result.rows[0].email;
 
     // Hash the new password
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
     // Update user's password in the database
-    const updateQuery = `UPDATE users SET password = $1 WHERE email = $2`;
+    const updateQuery = `UPDATE public."user" SET password = $1 WHERE email = $2`;
     await db.query(updateQuery, [hashedPassword, email]);
-
-    // Delete the reset token from the database
-    const deleteQuery = `DELETE FROM password_reset_tokens WHERE token = $1`;
-    await db.query(deleteQuery, [token]);
 
     res.status(200).json({ message: "Password reset successful" });
   } catch (error) {
@@ -325,4 +301,10 @@ const resetPassword = async (req, res) => {
   }
 };
 
-module.exports = { register, login, verifiy, resetPassword, resetEmail };
+module.exports = {
+  register,
+  login,
+  verifiy,
+  resetPassword,
+  passwordResetEmail,
+};

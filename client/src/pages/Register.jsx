@@ -6,7 +6,7 @@ import AuthInput from "../components/Auth/AuthInput";
 export async function action({ request }) {
   const formData = await request.formData();
   const { email, password } = Object.fromEntries(formData);
-  const res = await fetch(`${process.env.VITE_API_URL}/users/register`, {
+  const res = await fetch(`${import.meta.env.VITE_API_URL}/users/register`, {
     method: "POST",
     body: JSON.stringify({ email, password }),
     headers: {

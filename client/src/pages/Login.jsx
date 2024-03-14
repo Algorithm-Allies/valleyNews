@@ -37,9 +37,9 @@ export async function action({ request }) {
 
 function Login() {
   const error = useRouteError();
-  let data;
+  let formError;
   if (error) {
-    data = JSON.parse(error.data);
+    formError = JSON.parse(error.data);
   }
   return (
     <AuthForm>
@@ -52,7 +52,7 @@ function Login() {
           name="email"
           placeholder="Email"
           label="Email"
-          defaultValue={error ? data.email : ""}
+          defaultValue={error ? formError.data.email : ""}
         />
         <AuthInput
           type="password"
@@ -61,7 +61,7 @@ function Login() {
           label="Password"
         />
       </div>
-      {error && <AuthError error={data.message} />}
+      {error && <AuthError error={formError.message} />}
       <button className="block w-1/2 py-2 mx-auto mt-6 bg-brown-300 text-white rounded">
         Login
       </button>

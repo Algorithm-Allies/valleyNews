@@ -2,6 +2,7 @@ const db = require("../config/database");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
+const crypto = require("crypto-browserify");
 
 const generateVerificationToken = (user) => {
   const payload = user;
@@ -234,6 +235,7 @@ const login = async (req, res) => {
   }
 };
 
+
 // Send password reset email
 const sendPasswordResetEmail = async (email, token) => {
   const resetLink = `http://localhost:8000/reset-password?token=${token}`;
@@ -255,6 +257,7 @@ const sendPasswordResetEmail = async (email, token) => {
 
 // Route to request password reset
 const passwordResetEmail = async (req, res) => {
+
   try {
     const { email } = req.body;
 

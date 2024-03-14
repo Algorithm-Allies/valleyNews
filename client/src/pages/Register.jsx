@@ -3,11 +3,10 @@ import { Link, redirect, useRouteError } from "react-router-dom";
 import AuthForm from "../components/Auth/AuthForm";
 import AuthInput from "../components/Auth/AuthInput";
 
-
 export async function action({ request }) {
   const formData = await request.formData();
   const { email, password } = Object.fromEntries(formData);
-  const res = await fetch(`${import.meta.env.VITE_API_URL}/users/register`, {
+  const res = await fetch(`${process.env.VITE_API_URL}/users/register`, {
     method: "POST",
     body: JSON.stringify({ email, password }),
     headers: {
@@ -42,7 +41,7 @@ function Register() {
           placeholder="Password"
           label="Password"
         />
-         <AuthInput
+        <AuthInput
           type="password"
           name="confirm-password"
           placeholder="Confirm Password"
@@ -54,7 +53,7 @@ function Register() {
         Register
       </button>
       <label class="checkbox-container">
-        <input type="checkbox" class="accent-brown-100"/> 
+        <input type="checkbox" class="accent-brown-100" />
         Business Account?
       </label>
       <div className="flex flex-col items-center gap-2">

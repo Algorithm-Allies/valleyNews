@@ -229,12 +229,12 @@ const login = async (req, res) => {
       sameSite: "strict",
     });
     res.status(200).json({ message: "Login successful", token });
+    console.log("Login successful");
   } catch (error) {
     console.error("Error logging in:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
-
 
 // Send password reset email
 const sendPasswordResetEmail = async (email, token) => {
@@ -257,7 +257,6 @@ const sendPasswordResetEmail = async (email, token) => {
 
 // Route to request password reset
 const passwordResetEmail = async (req, res) => {
-
   try {
     const { email } = req.body;
 

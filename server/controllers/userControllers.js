@@ -2,7 +2,6 @@ const db = require("../config/database");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
-
 const crypto = require("crypto-browserify");
 
 const generateVerificationToken = (user) => {
@@ -26,12 +25,11 @@ const transporter = nodemailer.createTransport({
 const sendVerificationEmail = async (email, verificationToken) => {
   // Construct verification link
   const encodedToken = encodeURIComponent(verificationToken);
-  console.log(verificationToken, encodedToken);
   const verificationLink = `http://localhost:8000/api/users/verify?token=${encodedToken}`;
 
   // Email options
   const mailOptions = {
-    from: "williamvelichko2003@gmail.com",
+    from: process.env.EMAIL,
     to: email,
     subject: "Verify Your Email Address",
     html: `Click <a href="${verificationLink}">here</a> to verify your email address.`,
@@ -84,6 +82,34 @@ const deleteVerificationToken = async (token) => {
   }
 };
 
+// Function to retrieve user by email
+const getUserByEmail = async (email) => {
+  const query = `SELECT email
+  FROM public."user" where email = $1`;
+  const { rows } = await db.query(query, [email]);
+  return rows[0];
+};
+
+// Function to create a new user
+const createUser = async (
+  email,
+  password,
+  account_type,
+  mobile_phone_number,
+  business_name,
+  business_website
+) => {
+  const query = `INSERT INTO "user" ("email", "password", "account_type", "mobile_phone_number", "business_name", "business_website") VALUES ($1, $2, $3, $4, $5, $6)`;
+  return await db.query(query, [
+    email,
+    password,
+    account_type,
+    mobile_phone_number,
+    business_name,
+    business_website,
+  ]);
+};
+
 // POST /api/users/register
 const register = async (req, res) => {
   try {
@@ -133,34 +159,6 @@ const register = async (req, res) => {
   }
 };
 
-// Function to retrieve user by email
-const getUserByEmail = async (email) => {
-  const query = `SELECT email
-  FROM public."user" where email = $1`;
-  const { rows } = await db.query(query, [email]);
-  return rows[0];
-};
-
-// Function to create a new user
-const createUser = async (
-  email,
-  password,
-  account_type,
-  mobile_phone_number,
-  business_name,
-  business_website
-) => {
-  const query = `INSERT INTO "user" ("email", "password", "account_type", "mobile_phone_number", "business_name", "business_website") VALUES ($1, $2, $3, $4, $5, $6)`;
-  return await db.query(query, [
-    email,
-    password,
-    account_type,
-    mobile_phone_number,
-    business_name,
-    business_website,
-  ]);
-};
-
 const verifiy = async (req, res) => {
   try {
     const { token } = req.query;
@@ -168,14 +166,12 @@ const verifiy = async (req, res) => {
 
     // Get user ID by verification token
     const savedToken = await getTokenByVerificationToken(decodedToken);
-    console.log(decodedToken, savedToken);
     if (!savedToken) {
       return res.redirect("https://example.com/verification-failed");
     }
 
     const secretKey = process.env.JWT_SECRET; // Replace with your actual secret key
     const decoded = jwt.verify(decodedToken, secretKey);
-    console.log("Decoded token:", decoded);
 
     await createUser(
       decoded.email,
@@ -239,4 +235,94 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { register, login, verifiy };
+const generateToken = () => {
+  return crypto.randomBytes(32).toString("hex");
+};
+
+// Send password reset email
+const sendPasswordResetEmail = async (email, token) => {
+  const transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false,
+    auth: {
+      user: process.env.SMTP_USERNAME,
+      pass: process.env.SMTP_USERNAME,
+    },
+  });
+
+  const resetLink = `http://localhost:8000/reset-password?token=${token}`;
+  const mailOptions = {
+    from: process.env.EMAIL,
+    to: email,
+    subject: "Password Reset Request",
+    text: `To reset your password, please click on the following link: ${resetLink}`,
+  };
+
+  await transporter.sendMail(mailOptions);
+};
+
+// Store token in the database
+const storeResetToken = async (email, token) => {
+  const query = `INSERT INTO password_reset_tokens ("email", "token") VALUES ($1, $2)`;
+  await db.query(query, [email, token]);
+};
+
+// Route to request password reset
+const resetEmail = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    // Check if email exists in the database
+    const existingUser = await getUserByEmail(email);
+    if (!existingUser) {
+      return res.status(400).json({ message: "Email doesnt exist" });
+    }
+
+    // Generate token and store in the database
+    const token = generateToken();
+    // await storeResetToken(email, token);
+
+    // Send password reset email
+    await sendPasswordResetEmail(email, token);
+
+    res.status(200).json({ message: "Password reset email sent successfully" });
+  } catch (error) {
+    console.error("Error sending password reset email:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+// Route to handle password reset
+const resetPassword = async (req, res) => {
+  try {
+    const { token, newPassword } = req.body;
+
+    // Retrieve email associated with the token
+    const query = "SELECT email FROM password_reset_tokens WHERE token = $1";
+    const result = await db.query(query, [token]);
+    if (result.rows.length === 0) {
+      return res.status(400).json({ message: "Invalid or expired token" });
+    }
+
+    const email = result.rows[0].email;
+
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Update user's password in the database
+    const updateQuery = `UPDATE users SET password = $1 WHERE email = $2`;
+    await db.query(updateQuery, [hashedPassword, email]);
+
+    // Delete the reset token from the database
+    const deleteQuery = `DELETE FROM password_reset_tokens WHERE token = $1`;
+    await db.query(deleteQuery, [token]);
+
+    res.status(200).json({ message: "Password reset successful" });
+  } catch (error) {
+    console.error("Error resetting password:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+module.exports = { register, login, verifiy, resetPassword, resetEmail };

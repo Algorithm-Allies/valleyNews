@@ -3,8 +3,11 @@ import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import Login, { action as LoginAction } from "./pages/Login.jsx";
-import Register  from "./pages/Register.jsx";
+import Register from "./pages/Register.jsx";
 import AuthLayout from "./components/Auth/AuthLayout.jsx";
+import NewPassword, {
+  action as NewPasswordAction,
+} from "./pages/NewPassword.jsx";
 
 const router = createBrowserRouter([
   {
@@ -16,11 +19,18 @@ const router = createBrowserRouter([
         element: <Login />,
         errorElement: <Login />,
         action: LoginAction,
-      },{
+      },
+      {
         path: "/auth/register",
         element: <Register />,
-        errorElement: <Register/>,
-      }
+        errorElement: <Register />,
+      },
+      {
+        path: "/auth/new-password",
+        element: <NewPassword />,
+        errorElement: <NewPassword />,
+        action: NewPasswordAction,
+      },
     ],
   },
 ]);

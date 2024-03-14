@@ -1,6 +1,7 @@
 import { Link, redirect, useRouteError } from "react-router-dom";
 import AuthForm from "../components/Auth/AuthForm";
 import AuthInput from "../components/Auth/AuthInput";
+import AuthError from "../components/Auth/AuthError";
 
 export async function action({ request }) {
   const formData = await request.formData();
@@ -22,12 +23,13 @@ export async function action({ request }) {
 
 function Login() {
   const error = useRouteError();
+
   return (
     <AuthForm>
       <h2 className="text-white text-xl text-center mb-4">
         Login to your Account
       </h2>
-      <div className="flex flex-col gap-4 mb-6">
+      <div className="flex flex-col gap-4">
         <AuthInput
           type="email"
           name="email"
@@ -41,11 +43,11 @@ function Login() {
           label="Password"
         />
       </div>
-      {error && <p>{error.data}</p>}
-      <button className="block w-1/2 py-2 mx-auto mb-4 bg-brown-300 text-white rounded">
+      {error && <AuthError error={error.data} />}
+      <button className="block w-1/2 py-2 mx-auto mt-6 bg-brown-300 text-white rounded">
         Login
       </button>
-      <div className="flex flex-col items-center gap-2">
+      <div className="flex flex-col items-center gap-2 mt-4">
         <Link className="text-sm text-brown-100">
           Forgot your password? Click Here
         </Link>

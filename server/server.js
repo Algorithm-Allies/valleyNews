@@ -24,7 +24,11 @@ db.connect((err) => {
 });
 
 // Routes
+app.get("/", (req, res) => {
+  res.send("Welcome to the homepage!");
+});
 app.use("/api/users", require("./routes/userRoutes"));
+app.use("/api/articles", require("./routes/articleRoutes"));
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

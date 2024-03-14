@@ -1,6 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  redirect,
+  RouterProvider,
+} from "react-router-dom";
 import "./index.css";
 import Login, { action as LoginAction } from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
@@ -14,6 +18,13 @@ const router = createBrowserRouter([
     path: "/auth",
     element: <AuthLayout />,
     children: [
+      {
+        index: true,
+        loader: () => {
+          // redirecting user because /auth is not a route
+          return redirect("/auth/login");
+        },
+      },
       {
         path: "/auth/login",
         element: <Login />,

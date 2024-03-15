@@ -3,7 +3,7 @@ const router = express.Router();
 const {
   register,
   login,
-  verifiy,
+  verify,
   passwordResetEmail,
   resetPassword,
 } = require("../controllers/userControllers");
@@ -11,7 +11,7 @@ const {
 router.get("/", (req, res) => {});
 router.post("/login", login);
 router.post("/register", register);
-router.get("/verify", verifiy);
+router.get("/verify", verify);
 router.post("/password-reset-email", passwordResetEmail);
 router.post("/reset-password", resetPassword);
 

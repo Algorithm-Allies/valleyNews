@@ -1,5 +1,3 @@
-//can put logic here to send email when user signs up and when user requests password reset
-//can use nodemailer package
 const nodemailer = require("nodemailer");
 const dotenv = require("dotenv").config();
 const port = process.env.PORT;

@@ -63,6 +63,7 @@ const register = async (req, res) => {
   }
 };
 
+// GET /api/users/verify
 const verify = async (req, res) => {
   try {
     const { token } = req.query;
@@ -74,7 +75,7 @@ const verify = async (req, res) => {
       return res.redirect("https://example.com/verification-failed");
     }
 
-    const secretKey = process.env.JWT_SECRET; // Replace with your actual secret key
+    const secretKey = process.env.JWT_SECRET;
     const decoded = jwt.verify(decodedToken, secretKey);
 
     await createUser(
@@ -95,6 +96,7 @@ const verify = async (req, res) => {
   }
 };
 
+// POST /api/users/login
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -116,7 +118,7 @@ const login = async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    //       // Generate a token
+    // Generate a token
     const user = result.rows[0];
 
     const token = jwt.sign(
@@ -127,7 +129,7 @@ const login = async (req, res) => {
       }
     );
 
-    //       // Send the token in a HTTP-only cookie
+    // Send the token in a HTTP-only cookie
     res.cookie("token", token, {
       httpOnly: true,
       sameSite: "strict",
@@ -141,6 +143,7 @@ const login = async (req, res) => {
 };
 
 // Route to request password reset
+// POST /api/users/password-reset-email
 const passwordResetEmail = async (req, res) => {
   try {
     const { email } = req.body;
@@ -164,6 +167,7 @@ const passwordResetEmail = async (req, res) => {
 };
 
 // Route to handle password reset
+// POST /api/users/reset-password
 const resetPassword = async (req, res) => {
   try {
     const { email, newPassword } = req.body;

@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const db = require("../config/database");
 
 const generateVerificationToken = (user) => {
   const payload = user;

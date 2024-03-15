@@ -63,7 +63,7 @@ const register = async (req, res) => {
   }
 };
 
-const verifiy = async (req, res) => {
+const verify = async (req, res) => {
   try {
     const { token } = req.query;
     const decodedToken = decodeURIComponent(token);
@@ -187,7 +187,7 @@ const resetPassword = async (req, res) => {
 module.exports = {
   register,
   login,
-  verifiy,
+  verify,
   resetPassword,
   passwordResetEmail,
 };

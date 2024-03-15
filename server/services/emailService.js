@@ -1,6 +1,8 @@
 //can put logic here to send email when user signs up and when user requests password reset
 //can use nodemailer package
 const nodemailer = require("nodemailer");
+const dotenv = require("dotenv").config();
+const port = process.env.PORT;
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
@@ -15,7 +17,7 @@ const transporter = nodemailer.createTransport({
 const sendVerificationEmail = async (email, verificationToken) => {
   // Construct verification link
   const encodedToken = encodeURIComponent(verificationToken);
-  const verificationLink = `http://localhost:8000/api/users/verify?token=${encodedToken}`;
+  const verificationLink = `http://localhost:${port}/api/users/verify?token=${encodedToken}`;
 
   // Email options
   const mailOptions = {

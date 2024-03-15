@@ -7,6 +7,7 @@ import Register, { action as RegisterAction } from "./pages/Register.jsx";
 import AuthLayout from "./components/Auth/AuthLayout.jsx";
 import ResetPassword from "./pages/ResetPassword.jsx";
 import PageNotFound from "./pages/PageNotFound.jsx";
+import NewsPage from "./pages/NewsPage.jsx";
 const router = createBrowserRouter([
   {
     path: "/auth",
@@ -29,7 +30,10 @@ const router = createBrowserRouter([
         errorElement: <ResetPassword/>,
         errorElement: <Register />,
         
-      },
+      },{
+        path: "/auth/landing",
+        element: <NewsPage/>
+      }
     ],
   },{
     path: "*",

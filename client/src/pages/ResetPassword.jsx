@@ -7,6 +7,7 @@ import {
   sanitizeFormData,
 } from "../lib/formHelpers";
 import FormError from "../components/FormError";
+import AuthButton from "../components/Auth/AuthButton";
 
 export async function action({ request }) {
   const formData = sanitizeFormData(await request.formData());
@@ -60,9 +61,7 @@ function ResetPassword() {
           <FormError formError={formError.message} />
         </div>
       )}
-      <button className="block shadow-brown shadow-lg w-1/2 py-2 mx-auto mb-4 bg-brown-300 text-white rounded">
-        Send Reset Link
-      </button>
+      <AuthButton>Send Reset Link</AuthButton>
       <div className="flex flex-col items-center gap-2">
         <Link to="/auth/reset" className="text-sm text-brown-100">
           Forgot your password? Click Here

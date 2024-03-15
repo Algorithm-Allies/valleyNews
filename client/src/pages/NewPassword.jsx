@@ -7,6 +7,7 @@ import {
   sanitizeFormData,
   validatePassword,
 } from "../lib/formHelpers";
+import AuthButton from "../components/Auth/AuthButton";
 
 export async function action({ request }) {
   const formData = sanitizeFormData(await request.formData());
@@ -85,9 +86,8 @@ function NewPassword() {
           <FormError formError={formError.message} />
         </div>
       )}
-      <button className="block shadow-brown shadow-lg w-1/2 py-2 mx-auto mb-4 bg-brown-300 text-white rounded">
-        Confirm
-      </button>
+      <AuthButton>Confirm</AuthButton>
+
       <div className="flex flex-col items-center gap-2 mt-4">
         <Link to="/auth/login" className="text-sm text-brown-100">
           Already have an account? Click Here

@@ -8,6 +8,7 @@ import {
   sanitizeFormData,
   validatePassword,
 } from "../lib/formHelpers";
+import AuthButton from "../components/Auth/AuthButton";
 
 export async function action({ request }) {
   const formData = sanitizeFormData(await request.formData());
@@ -21,7 +22,6 @@ export async function action({ request }) {
       message: "Please enter email, password, and confirmation password",
     });
   }
-
   if (password !== confirmPassword) {
     formValidationErrorResponse({
       data: { email },
@@ -35,7 +35,6 @@ export async function action({ request }) {
       message,
     });
   }
-
   const res = await fetch(`${import.meta.env.VITE_API_URL}/users/register`, {
     method: "POST",
     body: JSON.stringify({ email, password }),
@@ -60,6 +59,7 @@ function Register() {
   if (error) {
     formError = JSON.parse(error.data);
   }
+
   return (
     <AuthForm>
       <h2 className="text-white text-xl text-center mb-4">
@@ -97,9 +97,8 @@ function Register() {
           <FormError formError={formError.message} />
         </div>
       )}
-      <button className="block shadow-brown shadow-lg w-1/2 py-2 mx-auto mb-4 bg-brown-300 text-white rounded">
-        Register
-      </button>
+      <AuthButton>Register</AuthButton>
+
       <label className="checkbox-container">
         <input type="checkbox" className="accent-brown-100" />
         Business Account?

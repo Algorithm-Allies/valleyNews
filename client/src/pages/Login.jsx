@@ -6,18 +6,17 @@ import {
   formValidationErrorResponse,
   sanitizeFormData,
 } from "../lib/formHelpers";
+import AuthButton from "../components/Auth/AuthButton";
 
 export async function action({ request }) {
   const formData = sanitizeFormData(await request.formData());
   const { email, password } = Object.fromEntries(formData);
-
   if (!email || !password) {
     formValidationErrorResponse({
       data: { email },
       message: "Please enter your email and password",
     });
   }
-
   const res = await fetch(`${import.meta.env.VITE_API_URL}/users/login`, {
     method: "POST",
     body: JSON.stringify({ email, password }),
@@ -69,9 +68,7 @@ function Login() {
           <FormError formError={formError.message} />
         </div>
       )}
-      <button className="block w-1/2 py-2 mx-auto mt-6 bg-brown-300 text-white rounded">
-        Login
-      </button>
+      <AuthButton>Login</AuthButton>
       <div className="flex flex-col items-center gap-2 mt-4">
         <Link to="/auth/reset" className="text-sm text-brown-100">
           Forgot your password? Click Here

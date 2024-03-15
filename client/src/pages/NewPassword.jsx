@@ -1,19 +1,40 @@
 import { Link, useRouteError } from "react-router-dom";
-import AuthError from "../components/Auth/AuthError";
+import FormError from "../components/FormError";
 import AuthForm from "../components/Auth/AuthForm";
 import AuthInput from "../components/Auth/AuthInput";
+import {
+  formValidationErrorResponse,
+  sanitizeFormData,
+  validatePassword,
+} from "../lib/formHelpers";
 
 export async function action({ request }) {
-  const formData = await request.formData();
+  const formData = sanitizeFormData(await request.formData());
   const { password, confirmPassword } = Object.fromEntries(formData);
-  if (password !== confirmPassword) {
-    throw new Response("Passwords don't match!", { status: 400 });
+
+  if (!password || !confirmPassword) {
+    formValidationErrorResponse({
+      message: "Please enter your new password and confimation password!",
+    });
   }
+  if (password !== confirmPassword) {
+    formValidationErrorResponse({
+      message: "Passwords don't match!",
+    });
+  }
+  const { valid, message } = validatePassword(password);
+
+  if (!valid) {
+    formValidationErrorResponse({
+      message,
+    });
+  }
+
   const res = await fetch(
     `${import.meta.env.VITE_API_URL}/users/new-password`,
     {
       method: "POST",
-      body: JSON.stringify({ password, confirmPassword }),
+      body: JSON.stringify({ password }),
       headers: {
         "Content-Type": "application/json",
       },
@@ -23,12 +44,18 @@ export async function action({ request }) {
   if (res.ok) {
     return redirect("/");
   }
-  // Otherwise, something went wrong on the server and we throw an error. This error will show up in useRouterError
-  throw new Response("Username and password don't match!", { status: 400 });
+  // Otherwise, something went wrong on the server, we will return whatever message the server returns.  For example, email already in use.
+  formValidationErrorResponse({
+    message: "The server error message",
+  });
 }
 
 function NewPassword() {
   const error = useRouteError();
+  let formError;
+  if (error) {
+    formError = JSON.parse(error.data);
+  }
   return (
     <AuthForm>
       <div className="mb-4 text-center space-y-1">
@@ -37,22 +64,27 @@ function NewPassword() {
           Enter a new password below to change your password
         </p>
       </div>
-
       <div className="flex flex-col gap-4 mb-6">
         <AuthInput
+          key={Math.random()}
           type="password"
           name="password"
           placeholder="Password"
           label="Password"
         />
         <AuthInput
+          key={Math.random()}
           type="password"
           name="confirmPassword"
           placeholder="Confirm Password"
           label="Confirm Password"
         />
       </div>
-      {error && <AuthError error={error.data} />}
+      {error && (
+        <div className="mb-4">
+          <FormError formError={formError.message} />
+        </div>
+      )}
       <button className="block shadow-brown shadow-lg w-1/2 py-2 mx-auto mb-4 bg-brown-300 text-white rounded">
         Confirm
       </button>

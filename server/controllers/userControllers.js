@@ -133,6 +133,7 @@ const login = async (req, res) => {
       sameSite: "strict",
     });
     res.status(200).json({ message: "Login successful", token });
+    console.log("Login successful");
   } catch (error) {
     console.error("Error logging in:", error);
     res.status(500).json({ message: "Internal server error" });

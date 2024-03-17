@@ -3,7 +3,6 @@ function AuthInput({ type, name, label, placeholder, ...props }) {
     <label>
       <span className="sr-only">{label}</span>
       <input
-        required
         name={name}
         type={type}
         placeholder={placeholder}

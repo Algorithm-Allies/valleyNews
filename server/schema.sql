@@ -29,5 +29,7 @@ CREATE TABLE IF NOT EXISTS article (
     date_published DATE,
     image_url VARCHAR(255),
     image_alt_description TEXT,
+    thumbnail_url VARCHAR(255),
+    thumbnail_alt_description TEXT,
     paragraphs TEXT[]
 );

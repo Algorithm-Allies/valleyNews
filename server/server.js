@@ -3,6 +3,7 @@ const db = require("./config/database");
 const cookie = require("cookie-parser");
 const cors = require("cors");
 const dotenv = require("dotenv").config();
+const { scrapeAndCreateArticles } = require("./scheduler");
 
 const port = process.env.PORT || 8000;
 

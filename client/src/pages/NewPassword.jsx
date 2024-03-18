@@ -1,27 +1,41 @@
-import React from "react";
 import { Link, useRouteError } from "react-router-dom";
+import FormError from "../components/FormError";
 import AuthForm from "../components/Auth/AuthForm";
 import AuthInput from "../components/Auth/AuthInput";
 import {
   formValidationErrorResponse,
   sanitizeFormData,
+  validatePassword,
 } from "../lib/formHelpers";
-import FormError from "../components/FormError";
 import AuthButton from "../components/Auth/AuthButton";
 
 export async function action({ request }) {
   const formData = sanitizeFormData(await request.formData());
-  const { email } = Object.fromEntries(formData);
-  if (!email) {
+  const { password, confirmPassword } = Object.fromEntries(formData);
+
+  if (!password || !confirmPassword) {
     formValidationErrorResponse({
-      message: "Please enter your email to reset your password!",
+      message: "Please enter your new password and confimation password!",
     });
   }
+  if (password !== confirmPassword) {
+    formValidationErrorResponse({
+      message: "Passwords don't match!",
+    });
+  }
+  const { valid, message } = validatePassword(password);
+
+  if (!valid) {
+    formValidationErrorResponse({
+      message,
+    });
+  }
+
   const res = await fetch(
     `${import.meta.env.VITE_API_URL}/users/new-password`,
     {
       method: "POST",
-      body: JSON.stringify({ email }),
+      body: JSON.stringify({ password }),
       headers: {
         "Content-Type": "application/json",
       },
@@ -37,7 +51,7 @@ export async function action({ request }) {
   });
 }
 
-function ResetPassword() {
+function NewPassword() {
   const error = useRouteError();
   let formError;
   if (error) {
@@ -45,15 +59,26 @@ function ResetPassword() {
   }
   return (
     <AuthForm>
-      <h2 className="text-white text-xl text-center mb-4">
-        Reset Account Password
-      </h2>
+      <div className="mb-4 text-center space-y-1">
+        <h2 className="text-white text-xl">Change your password</h2>
+        <p className="text-brown-100 text-sm">
+          Enter a new password below to change your password
+        </p>
+      </div>
       <div className="flex flex-col gap-4 mb-6">
         <AuthInput
-          type="email"
-          name="email"
-          placeholder="Email"
-          label="Email"
+          key={Math.random()}
+          type="password"
+          name="password"
+          placeholder="Password"
+          label="Password"
+        />
+        <AuthInput
+          key={Math.random()}
+          type="password"
+          name="confirmPassword"
+          placeholder="Confirm Password"
+          label="Confirm Password"
         />
       </div>
       {error && (
@@ -61,17 +86,17 @@ function ResetPassword() {
           <FormError formError={formError.message} />
         </div>
       )}
-      <AuthButton>Send Reset Link</AuthButton>
-      <div className="flex flex-col items-center gap-2">
-        <Link to="/auth/reset" className="text-sm text-brown-100">
-          Forgot your password? Click Here
-        </Link>
+      <AuthButton>Confirm</AuthButton>
+
+      <div className="flex flex-col items-center gap-2 mt-4">
         <Link to="/auth/login" className="text-sm text-brown-100">
           Already have an account? Click Here
+        </Link>
+        <Link to="/auth/register" className="text-sm text-brown-100">
+          Need an account? Click Here
         </Link>
       </div>
     </AuthForm>
   );
 }
-
-export default ResetPassword;
+export default NewPassword;

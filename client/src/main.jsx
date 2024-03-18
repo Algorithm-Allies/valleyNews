@@ -54,7 +54,7 @@ const router = createBrowserRouter([
         errorElement: <ResetPassword />,
         action: ResetPasswordAction,
       },{
-        path: "/auth/landing",
+        path: "/auth/home",
         element: <NewsPage/>
       }
     ],

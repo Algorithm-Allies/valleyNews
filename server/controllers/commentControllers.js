@@ -4,6 +4,8 @@ const {
   findArticleById,
   findCommentsByArticleId,
   addCommentIntoArticle,
+  editCommentByID,
+  deleteCommentByID,
 } = require("../services/commentService");
 //view a comment by id
 const viewCommentById = async (req, res) => {
@@ -88,10 +90,50 @@ const addComment = async (req, res) => {
 //edit comment
 const editComment = async (req, res) => {
   const comment_id = req.params.comment_id;
+  const updatedCommentData = req.body;
+
+  try {
+    // Query the database to find the comment by ID
+    const existingComment = await findCommentById(comment_id);
+
+    if (!existingComment) {
+      // If comment does not exist, return a 404 status code with a message
+      return res.status(404).json({ message: "Comment not found" });
+    }
+
+    // Update the existing comment with the new data
+    const editedComment = await editCommentByID(comment_id, updatedCommentData);
+
+    res.json(editedComment);
+  } catch (error) {
+    // If an error occurs during the database query or update, return a 500 status code with an error message
+    console.error("Error editing comment:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };
-//delete comment
+
 const deleteComment = async (req, res) => {
   const comment_id = req.params.comment_id;
+
+  try {
+    // Query the database to find the comment by ID
+    const existingComment = await findCommentById(comment_id);
+
+    if (!existingComment) {
+      // If comment does not exist, return a 404 status code with a message
+      return res.status(404).json({ message: "Comment not found" });
+    }
+
+    // Perform the delete operation
+    await deleteCommentByID(comment_id);
+
+    // Return a success message
+    res.json({ message: "Comment deleted successfully" });
+  } catch (error) {
+    // If an error occurs during the database query or delete operation, return a 500 status code with an error message
+    console.error("Error deleting comment:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };
 
 module.exports = {

@@ -76,9 +76,45 @@ async function addCommentIntoArticle(comment) {
   }
 }
 
+const editCommentByID = async (comment_id, comment) => {
+  try {
+    const query = `
+        UPDATE comment
+        SET 
+          comment = $1,
+          updated_at = CURRENT_TIMESTAMP
+        WHERE id = $2
+        RETURNING *;
+      `;
+
+    const { edited_comment } = comment;
+
+    const editedComment = await db.one(query, [edited_comment, comment_id]);
+    return editedComment;
+  } catch (error) {
+    console.error("Error editing comment:", error);
+    throw error;
+  }
+};
+
+const deleteCommentByID = async (comment_id) => {
+  try {
+    const query = `
+        DELETE FROM comment
+        WHERE id = $1;
+      `;
+
+    await db.none(query, [comment_id]);
+  } catch (error) {
+    console.error("Error deleting comment:", error);
+    throw error;
+  }
+};
 module.exports = {
   findCommentById,
   findArticleById,
   findCommentsByArticleId,
   addCommentIntoArticle,
+  editCommentByID,
+  deleteCommentByID,
 };

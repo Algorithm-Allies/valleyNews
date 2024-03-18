@@ -51,8 +51,34 @@ async function findCommentsByArticleId(article_id) {
   }
 }
 
+async function addCommentIntoArticle(comment) {
+  try {
+    const query = `
+        INSERT INTO comment (article_id, user_id, comment, created_at)
+        VALUES ($1, $2, $3, $4)
+        RETURNING *;
+      `;
+
+    const { article_id, user_id, comment, created_at } = comment;
+
+    // Execute the query and pass the comment data as parameters
+    const addedComment = await db.one(query, [
+      article_id,
+      user_id,
+      comment,
+      created_at,
+    ]);
+
+    return addedComment;
+  } catch (error) {
+    console.error("Error adding comment into article:", error);
+    throw error;
+  }
+}
+
 module.exports = {
   findCommentById,
   findArticleById,
   findCommentsByArticleId,
+  addCommentIntoArticle,
 };

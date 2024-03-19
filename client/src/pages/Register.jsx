@@ -1,5 +1,5 @@
-
 import React from "react";
+import { useState } from "react";
 import { Link, redirect, useActionData, useRouteError } from "react-router-dom";
 
 import AuthForm from "../components/Auth/AuthForm";
@@ -41,8 +41,8 @@ export async function action({ request }) {
   }
   // Just for testing to show the email verification message
   return { data: { email } };
-
-  const res = await fetch(`${import.meta.env.VITE_API_URL}/users/register`, {
+  /*
+const res = await fetch(`${import.meta.env.VITE_API_URL}/users/register`, {
     method: "POST",
     body: JSON.stringify({ email, password }),
     headers: {
@@ -63,6 +63,7 @@ export async function action({ request }) {
       message: errorMessage,
     });
   }
+  */
 }
 
 function Register() {
@@ -72,12 +73,12 @@ function Register() {
   if (error) {
     formError = JSON.parse(error.data);
   }
-  const [businessCheck, setBusinessCheck] = useState(false)
+  const [businessCheck, setBusinessCheck] = useState(false);
 
   return (
     <AuthForm>
       <h2 className="text-white text-xl text-center mb-4">
-        Register {businessCheck && 'Business'} Account to Valley News
+        Register {businessCheck && "Business"} Account to Valley News
       </h2>
       <div className="flex flex-col gap-4 mb-6">
         {/* 
@@ -108,33 +109,31 @@ function Register() {
           placeholder="Confirm Password"
           label="Password"
         />
-        {
-          businessCheck && (
-            <>
-              <AuthInput
-                key={Math.random()}
-                type="tel"
-                name="phone"
-                placeholder="Mobile Phone Number"
-                label="Mobile Phone Number"
-              />
-              <AuthInput
-                key={Math.random()}
-                type="text"
-                name="business_name"
-                placeholder="Business Name"
-                label="Business Website"
-              />
-              <AuthInput
-                key={Math.random()}
-                type="url"
-                name="business_website"
-                placeholder="Business Website"
-                label="Business Website"
-              />
-            </>
-          )
-        }
+        {businessCheck && (
+          <>
+            <AuthInput
+              key={Math.random()}
+              type="tel"
+              name="phone"
+              placeholder="Mobile Phone Number"
+              label="Mobile Phone Number"
+            />
+            <AuthInput
+              key={Math.random()}
+              type="text"
+              name="business_name"
+              placeholder="Business Name"
+              label="Business Website"
+            />
+            <AuthInput
+              key={Math.random()}
+              type="url"
+              name="business_website"
+              placeholder="Business Website"
+              label="Business Website"
+            />
+          </>
+        )}
       </div>
       {error && (
         <div className="mb-4">
@@ -148,7 +147,11 @@ function Register() {
       )}
       <AuthButton>Register</AuthButton>
       <label className="checkbox-container">
-        <input type="checkbox" className="accent-brown-100" onClick={() => setBusinessCheck(!businessCheck)} />
+        <input
+          type="checkbox"
+          className="accent-brown-100"
+          onClick={() => setBusinessCheck(!businessCheck)}
+        />
         Business Account?
       </label>
       <div className="flex flex-col items-center gap-2">

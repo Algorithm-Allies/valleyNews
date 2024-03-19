@@ -1,21 +1,19 @@
 import React, { useState } from "react";
 import { Link, redirect, useActionData, useRouteError } from "react-router-dom";
-
 import AuthForm from "../components/Auth/AuthForm";
 import AuthInput from "../components/Auth/AuthInput";
 import FormError from "../components/FormError";
+import FormSuccess from "../components/FormSuccess";
 import {
   formValidationErrorResponse,
   sanitizeFormData,
   validatePassword,
 } from "../lib/formHelpers";
 import AuthButton from "../components/Auth/AuthButton";
-import FormSuccess from "../components/FormSuccess";
 
 export async function action({ request }) {
   const formData = sanitizeFormData(await request.formData());
   const { email, password, confirmPassword } = Object.fromEntries(formData);
-
   // email, password, and confirm password all are required
   if (!password || !email || !confirmPassword) {
     formValidationErrorResponse({
@@ -48,9 +46,9 @@ const res = await fetch(`${import.meta.env.VITE_API_URL}/users/register`, {
       "Content-Type": "application/json",
     },
   });
-  // If, the user was succesful in registering in, we return their email to display in a verify message
+  // If, the user was successful in registering in, we redirect them to home page
   if (res.ok) {
-    return { data: { email } };
+    return redirect("/");
   }
   // If, the user was not successful in registering in, we display the error message
   else {
@@ -84,7 +82,7 @@ function Register() {
           I add defaultValue because when the user submits the form the email input is reset and I want the email value to persist between form request.  I think it would be bad UX if they had to re-enter their email every request.  I also change the key on a successful form request, thus causing a new instance of AuthInput and the email being reset, since they have already successfully registered otherwise the email value will persist.
         */}
         <AuthInput
-          key={success ? "email" : Math.random()}
+          key={success ? Math.random() : "email"}
           type="email"
           name="email"
           placeholder="Email"

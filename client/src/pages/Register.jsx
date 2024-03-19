@@ -1,5 +1,7 @@
-import React, { useState } from "react";
-import { Link, redirect, useRouteError } from "react-router-dom";
+
+import React from "react";
+import { Link, redirect, useActionData, useRouteError } from "react-router-dom";
+
 import AuthForm from "../components/Auth/AuthForm";
 import AuthInput from "../components/Auth/AuthInput";
 import FormError from "../components/FormError";
@@ -9,10 +11,12 @@ import {
   validatePassword,
 } from "../lib/formHelpers";
 import AuthButton from "../components/Auth/AuthButton";
+import FormSuccess from "../components/FormSuccess";
 
 export async function action({ request }) {
   const formData = sanitizeFormData(await request.formData());
   const { email, password, confirmPassword } = Object.fromEntries(formData);
+
   // email, password, and confirm password all are required
   if (!password || !email || !confirmPassword) {
     formValidationErrorResponse({
@@ -35,6 +39,9 @@ export async function action({ request }) {
       message,
     });
   }
+  // Just for testing to show the email verification message
+  return { data: { email } };
+
   const res = await fetch(`${import.meta.env.VITE_API_URL}/users/register`, {
     method: "POST",
     body: JSON.stringify({ email, password }),
@@ -42,9 +49,9 @@ export async function action({ request }) {
       "Content-Type": "application/json",
     },
   });
-  // If, the user was successful in registering in, we redirect them to home page
+  // If, the user was succesful in registering in, we return their email to display in a verify message
   if (res.ok) {
-    return redirect("/");
+    return { data: { email } };
   }
   // If, the user was not successful in registering in, we display the error message
   else {
@@ -60,6 +67,7 @@ export async function action({ request }) {
 
 function Register() {
   const error = useRouteError();
+  const success = useActionData();
   let formError;
   if (error) {
     formError = JSON.parse(error.data);
@@ -72,8 +80,11 @@ function Register() {
         Register {businessCheck && 'Business'} Account to Valley News
       </h2>
       <div className="flex flex-col gap-4 mb-6">
-        {/* I don't do it on email because I want to email to persist between form request. I think it would be bad UX if they had to re-enter their email every time. */}
+        {/* 
+          I add defaultValue because when the user submits the form the email input is reset and I want the email value to persist between form request.  I think it would be bad UX if they had to re-enter their email every request.  I also change the key on a successful form request, thus causing a new instance of AuthInput and the email being reset, since they have already successfully registered otherwise the email value will persist.
+        */}
         <AuthInput
+          key={success ? "email" : Math.random()}
           type="email"
           name="email"
           placeholder="Email"
@@ -130,8 +141,12 @@ function Register() {
           <FormError formError={formError.message} />
         </div>
       )}
+      {success && (
+        <div className="mb-4">
+          <FormSuccess email={success.data.email} />
+        </div>
+      )}
       <AuthButton>Register</AuthButton>
-
       <label className="checkbox-container">
         <input type="checkbox" className="accent-brown-100" onClick={() => setBusinessCheck(!businessCheck)} />
         Business Account?

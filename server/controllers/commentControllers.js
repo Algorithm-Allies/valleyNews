@@ -12,18 +12,13 @@ const viewCommentById = async (req, res) => {
   const commentId = req.params.comment_id;
 
   try {
-    // Query the database to find the comment by ID
     const comment = await findCommentById(commentId);
-
     if (!comment) {
-      // If comment does not exist, return a 404 status code with a message
       return res.status(404).json({ message: "Comment not found" });
     }
 
-    // If comment exists, return it as a response
     res.json(comment);
   } catch (error) {
-    // If an error occurs during the database query, return a 500 status code with an error message
     console.error("Error retrieving comment by ID:", error);
     res.status(500).json({ message: "Internal server error" });
   }
@@ -34,21 +29,14 @@ const viewCommentsInArticle = async (req, res) => {
   const articleId = req.params.article_id;
 
   try {
-    // Query the database to check if the article exists
     const article = await findArticleById(articleId);
-
     if (!article) {
-      // If the article does not exist, return a 404 status code with a message
       return res.status(404).json({ message: "Article not found" });
     }
-
-    // If the article exists, query the database to retrieve comments associated with the article
     const comments = await findCommentsByArticleId(articleId);
 
-    // Return the comments as a response
     res.json(comments);
   } catch (error) {
-    // If an error occurs during the database query, return a 500 status code with an error message
     console.error("Error retrieving comments in article:", error);
     res.status(500).json({ message: "Internal server error" });
   }
@@ -58,30 +46,26 @@ const viewCommentsInArticle = async (req, res) => {
 const addComment = async (req, res) => {
   const articleId = req.params.article_id;
   const commentData = req.body;
-  const userId = req.user.id; // Assuming the user ID is available in the request object
-  const timestamp = new Date(); // Assuming you want to use the current timestamp
+  const userId = req.user.id;
+  const timestamp = new Date();
 
   try {
-    // Query the database to check if the article exists
     const article = await findArticleById(articleId);
-
     if (!article) {
-      // If the article does not exist, return a 404 status code with a message
       return res.status(404).json({ message: "Article not found" });
     }
 
     const comment = {
       article_id: articleId,
-      user_id: userId, // Assign the user ID obtained from the request
+      user_id: userId,
       comment: commentData.comment,
-      timestamp: timestamp, // Assign the current timestamp
+      timestamp: timestamp,
     };
 
     const addingComment = await addCommentIntoArticle(comment);
 
     res.json(addingComment);
   } catch (error) {
-    // If an error occurs during the database query, return a 500 status code with an error message
     console.error("Error adding comment into article:", error);
     res.status(500).json({ message: "Internal server error" });
   }
@@ -93,20 +77,14 @@ const editComment = async (req, res) => {
   const updatedCommentData = req.body;
 
   try {
-    // Query the database to find the comment by ID
     const existingComment = await findCommentById(comment_id);
-
     if (!existingComment) {
-      // If comment does not exist, return a 404 status code with a message
       return res.status(404).json({ message: "Comment not found" });
     }
-
-    // Update the existing comment with the new data
     const editedComment = await editCommentByID(comment_id, updatedCommentData);
 
     res.json(editedComment);
   } catch (error) {
-    // If an error occurs during the database query or update, return a 500 status code with an error message
     console.error("Error editing comment:", error);
     res.status(500).json({ message: "Internal server error" });
   }
@@ -116,21 +94,14 @@ const deleteComment = async (req, res) => {
   const comment_id = req.params.comment_id;
 
   try {
-    // Query the database to find the comment by ID
     const existingComment = await findCommentById(comment_id);
-
     if (!existingComment) {
-      // If comment does not exist, return a 404 status code with a message
       return res.status(404).json({ message: "Comment not found" });
     }
-
-    // Perform the delete operation
     await deleteCommentByID(comment_id);
 
-    // Return a success message
     res.json({ message: "Comment deleted successfully" });
   } catch (error) {
-    // If an error occurs during the database query or delete operation, return a 500 status code with an error message
     console.error("Error deleting comment:", error);
     res.status(500).json({ message: "Internal server error" });
   }

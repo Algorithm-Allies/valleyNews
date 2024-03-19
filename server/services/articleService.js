@@ -27,7 +27,6 @@ async function insertArticle(article) {
 
   try {
     const { rows } = await db.query(query, values);
-    console.log(`Inserted article with ID: ${rows[0].id}`);
     return rows[0].id;
   } catch (error) {
     console.error("Error inserting article:", error);

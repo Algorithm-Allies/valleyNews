@@ -17,14 +17,11 @@ CREATE TABLE IF NOT EXISTS user (
 CREATE TABLE IF NOT EXISTS article (
     id SERIAL PRIMARY KEY,
     source VARCHAR(255) NOT NULL,
-    publisher VARCHAR(50) CHECK (publisher IN ('Oakdale Leader', 'Riverbank News', 'Modesto Bee', 'Tracy Press', 'Ripon News', 'Turlock Journal')) NOT NULL,
+    publisher VARCHAR(50) CHECK (publisher IN ('Oakdale Leader', 'The Riverbank News', 'The Modesto Bee', 'The Tracy Press', 'Ripon Journal', 'Turlock Journal')) NOT NULL,
     headline TEXT NOT NULL,
     subheading TEXT,
-    category VARCHAR(50) CHECK (category IN ('SPORTS', 'NEWS')) NOT NULL,
-    subcategory VARCHAR(50) CHECK (
-        (category = 'NEWS' AND subcategory IN ('Local', 'Crime', 'Government', 'Education')) OR
-        (category = 'SPORTS' AND subcategory IN ('High School', 'Local'))
-    ),
+    category VARCHAR(50) CHECK (category IN ('SPORTS', 'NEWS')),
+    subcategory VARCHAR(50),
     author VARCHAR(100),
     date_published DATE,
     image_url VARCHAR(255),

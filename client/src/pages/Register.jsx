@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, redirect, useRouteError } from "react-router-dom";
 import AuthForm from "../components/Auth/AuthForm";
 import AuthInput from "../components/Auth/AuthInput";
@@ -42,15 +42,20 @@ export async function action({ request }) {
       "Content-Type": "application/json",
     },
   });
-  // If, the user was succesful in registering in, we redirect them to home page
+  // If, the user was successful in registering in, we redirect them to home page
   if (res.ok) {
     return redirect("/");
   }
-  // Otherwise, something went wrong on the server, we will return whatever message the server returns.  For example, email already in use.
-  formValidationErrorResponse({
-    data: { email },
-    message: "The server error message",
-  });
+  // If, the user was not successful in registering in, we display the error message
+  else {
+    const errorResponse = await res.json();
+    const errorMessage = errorResponse.message;
+
+    formValidationErrorResponse({
+      data: { email },
+      message: errorMessage,
+    });
+  }
 }
 
 function Register() {
@@ -59,11 +64,12 @@ function Register() {
   if (error) {
     formError = JSON.parse(error.data);
   }
+  const [businessCheck, setBusinessCheck] = useState(false)
 
   return (
     <AuthForm>
       <h2 className="text-white text-xl text-center mb-4">
-        Register Account to Valley News
+        Register {businessCheck && 'Business'} Account to Valley News
       </h2>
       <div className="flex flex-col gap-4 mb-6">
         {/* I don't do it on email because I want to email to persist between form request. I think it would be bad UX if they had to re-enter their email every time. */}
@@ -91,6 +97,33 @@ function Register() {
           placeholder="Confirm Password"
           label="Password"
         />
+        {
+          businessCheck && (
+            <>
+              <AuthInput
+                key={Math.random()}
+                type="tel"
+                name="phone"
+                placeholder="Mobile Phone Number"
+                label="Mobile Phone Number"
+              />
+              <AuthInput
+                key={Math.random()}
+                type="text"
+                name="business_name"
+                placeholder="Business Name"
+                label="Business Website"
+              />
+              <AuthInput
+                key={Math.random()}
+                type="url"
+                name="business_website"
+                placeholder="Business Website"
+                label="Business Website"
+              />
+            </>
+          )
+        }
       </div>
       {error && (
         <div className="mb-4">
@@ -100,7 +133,7 @@ function Register() {
       <AuthButton>Register</AuthButton>
 
       <label className="checkbox-container">
-        <input type="checkbox" className="accent-brown-100" />
+        <input type="checkbox" className="accent-brown-100" onClick={() => setBusinessCheck(!businessCheck)} />
         Business Account?
       </label>
       <div className="flex flex-col items-center gap-2">

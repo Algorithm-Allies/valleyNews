@@ -17,6 +17,7 @@ import NewPassword, {
   action as NewPasswordAction,
 } from "./pages/NewPassword.jsx";
 
+import NewsPage from "./pages/NewsPage.jsx";
 const router = createBrowserRouter([
   {
     path: "/auth",
@@ -52,7 +53,10 @@ const router = createBrowserRouter([
         element: <ResetPassword />,
         errorElement: <ResetPassword />,
         action: ResetPasswordAction,
-      },
+      },{
+        path: "/auth/home",
+        element: <NewsPage/>
+      }
     ],
   },
   {

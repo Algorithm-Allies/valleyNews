@@ -1,22 +1,18 @@
 const db = require("../config/database");
 const { insertArticle } = require("../services/articleService");
 
-// POST /api/articles
 // Create articles -- bulk insert into database
-async function createArticles(req, res) {
-  const articlesData = req.body;
+async function createArticles(articlesData) {
   try {
     const insertedIds = [];
     for (const article of articlesData) {
       const insertedId = await insertArticle(article);
       insertedIds.push(insertedId);
     }
-    res
-      .status(201)
-      .json({ ids: insertedIds, message: "Articles inserted successfully" });
+    console.log(`Inserted ${insertedIds.length} articles`);
   } catch (error) {
     console.error("Error inserting articles:", error);
-    res.status(500).json({ error: "Internal server error" });
+    throw error;
   }
 }
 
@@ -58,8 +54,25 @@ async function getArticleById(req, res) {
   }
 }
 
+// GET /api/articles/details
+// Get basic article details
+async function getArticleDetails(req, res) {
+  const query = `
+    SELECT id, source, headline, publisher, author, date_published FROM article
+  `;
+
+  try {
+    const { rows } = await db.query(query);
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error("Error getting articles:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
 module.exports = {
   createArticles,
   getArticles,
   getArticleById,
+  getArticleDetails,
 };

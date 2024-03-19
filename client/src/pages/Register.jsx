@@ -51,11 +51,16 @@ export async function action({ request }) {
   if (res.ok) {
     return { data: { email } };
   }
-  // Otherwise, something went wrong on the server, we will return whatever message the server returns.  For example, email already in use.
-  formValidationErrorResponse({
-    data: { email },
-    message: "The server error message",
-  });
+  // If, the user was not successful in registering in, we display the error message
+  else {
+    const errorResponse = await res.json();
+    const errorMessage = errorResponse.message;
+
+    formValidationErrorResponse({
+      data: { email },
+      message: errorMessage,
+    });
+  }
 }
 
 function Register() {

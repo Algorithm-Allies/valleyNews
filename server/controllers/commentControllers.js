@@ -46,7 +46,8 @@ const viewCommentsInArticle = async (req, res) => {
 const addComment = async (req, res) => {
   const articleId = req.params.article_id;
   const commentData = req.body;
-  const userId = req.user.id;
+  //const userId = req.user.id;
+  const userId = 19;
   const timestamp = new Date();
 
   try {
@@ -81,9 +82,12 @@ const editComment = async (req, res) => {
     if (!existingComment) {
       return res.status(404).json({ message: "Comment not found" });
     }
-    const editedComment = await editCommentByID(comment_id, updatedCommentData);
+    const editedComment = await editCommentByID(
+      comment_id,
+      updatedCommentData.comment
+    );
 
-    res.json(editedComment);
+    res.json(editedComment.rows);
   } catch (error) {
     console.error("Error editing comment:", error);
     res.status(500).json({ message: "Internal server error" });

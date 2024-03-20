@@ -1,10 +1,10 @@
 const db = require("../config/database");
 
-async function findCommentById(comment_id) {
+const findCommentById = async (comment_id) => {
   try {
     const query = `
       SELECT *
-      FROM comments
+      FROM comment
       WHERE id = $1
     `;
     const { rows } = await db.query(query, [comment_id]);
@@ -14,61 +14,61 @@ async function findCommentById(comment_id) {
     console.error("Error retrieving comment by ID:", error);
     throw error;
   }
-}
+};
 
-async function findArticleById(article_id) {
+const findArticleById = async (article_id) => {
   try {
     const query = `
-        SELECT *
-        FROM article
-        WHERE id = $1
-      `;
-    const article = await db.oneOrNone(query, [article_id]);
-    return article;
+          SELECT *
+          FROM article
+          WHERE id = $1
+        `;
+    const result = await db.query(query, [article_id]);
+    return result.rows[0]; // Return the first row or null if no rows found
   } catch (error) {
     console.error("Error finding article by ID:", error);
     throw error;
   }
-}
+};
 
-async function findCommentsByArticleId(article_id) {
+const findCommentsByArticleId = async (article_id) => {
   try {
     const query = `
         SELECT *
-        FROM comments
+        FROM comment
         WHERE article_id = $1
       `;
-    const comments = await db.manyOrNone(query, [article_id]);
-    return comments;
+    const comments = await db.query(query, [article_id]);
+    return comments.rows;
   } catch (error) {
     console.error("Error finding comments by article ID:", error);
     throw error;
   }
-}
+};
 
-async function addCommentIntoArticle(comment) {
+const addCommentIntoArticle = async (commentData) => {
   try {
     const query = `
-        INSERT INTO comment (article_id, user_id, comment, created_at)
+        INSERT INTO comment ("article_id", "user_id", "comment", "created_at")
         VALUES ($1, $2, $3, $4)
         RETURNING *;
       `;
 
-    const { article_id, user_id, comment, created_at } = comment;
+    const { article_id, user_id, comment, created_at } = commentData;
 
-    const addedComment = await db.one(query, [
+    const addedComment = await db.query(query, [
       article_id,
       user_id,
       comment,
       created_at,
     ]);
 
-    return addedComment;
+    return addedComment.rows;
   } catch (error) {
     console.error("Error adding comment into article:", error);
     throw error;
   }
-}
+};
 
 const editCommentByID = async (comment_id, comment) => {
   try {
@@ -80,10 +80,8 @@ const editCommentByID = async (comment_id, comment) => {
         WHERE id = $2
         RETURNING *;
       `;
-
-    const { edited_comment } = comment;
-
-    const editedComment = await db.one(query, [edited_comment, comment_id]);
+    console.log(comment);
+    const editedComment = await db.query(query, [comment, comment_id]);
     return editedComment;
   } catch (error) {
     console.error("Error editing comment:", error);
@@ -98,7 +96,7 @@ const deleteCommentByID = async (comment_id) => {
         WHERE id = $1;
       `;
 
-    await db.none(query, [comment_id]);
+    await db.query(query, [comment_id]);
   } catch (error) {
     console.error("Error deleting comment:", error);
     throw error;

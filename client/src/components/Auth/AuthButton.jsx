@@ -4,9 +4,9 @@ function AuthButton({ children }) {
   const navigation = useNavigation();
   return (
     <button
-      className={`flex justify-center  w-1/2 py-2 mx-auto mt-6 bg-brown-300/50 rounded ${
-        navigation.state === "submitting" ? "bg-brown-300/50" : "bg-brown-300"
-      }`}
+      className={`flex justify-center  w-1/2 py-2 mx-auto mt-6  rounded ${
+        navigation.state === "submitting" ? "bg-yellow-600/50" : "bg-yellow-600"
+      } hover:bg-yellow-700 transition-colors`}
     >
       <div className="relative">
         <span

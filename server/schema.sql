@@ -30,3 +30,22 @@ CREATE TABLE IF NOT EXISTS article (
     thumbnail_alt_description TEXT,
     paragraphs TEXT[]
 );
+
+-- Create the verification_token table
+CREATE TABLE IF NOT EXISTS verification_tokens (
+  id SERIAL PRIMARY KEY,
+  token VARCHAR(128) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create Comment Table 
+CREATE TABLE IF NOT EXISTS comment (
+    id SERIAL PRIMARY KEY,
+    user_id INT,
+    article_id INT,
+    comment TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES public."user"(id),
+    FOREIGN KEY (article_id) REFERENCES article(id)
+);

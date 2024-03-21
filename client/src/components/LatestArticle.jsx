@@ -4,7 +4,7 @@ function LatestArticle(itemData) {
         {itemData.map((thumbnail, i) => (
           <div className="shadow-gray-700 shadow-md bg-brown-100 p-3 rounded-lg flex justify-between flex-row" key={i}>
             <img className="object-cover h-48 w-96" component="img" src={[thumbnail.articleImg]}></img>
-            <div className="flex flex-col px-[2em]">
+            <div className="flex flex-col px-[2em] justify-center">
                 <div className='text-lg py-1.5 font-bold'>{thumbnail.articleTitle}</div>
                     <div className='py-1.5'>{thumbnail.articleBody}</div>
                     <div className="flex items-end justify-end">

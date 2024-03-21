@@ -17,14 +17,11 @@ CREATE TABLE IF NOT EXISTS user (
 CREATE TABLE IF NOT EXISTS article (
     id SERIAL PRIMARY KEY,
     source VARCHAR(255) NOT NULL,
-    publisher VARCHAR(50) CHECK (publisher IN ('Oakdale Leader', 'Riverbank News', 'Modesto Bee', 'Tracy Press', 'Ripon News', 'Turlock Journal')) NOT NULL,
+    publisher VARCHAR(50) CHECK (publisher IN ('Oakdale Leader', 'The Riverbank News', 'The Modesto Bee', 'The Tracy Press', 'Ripon Journal', 'Turlock Journal')) NOT NULL,
     headline TEXT NOT NULL,
     subheading TEXT,
-    category VARCHAR(50) CHECK (category IN ('SPORTS', 'NEWS')) NOT NULL,
-    subcategory VARCHAR(50) CHECK (
-        (category = 'NEWS' AND subcategory IN ('Local', 'Crime', 'Government', 'Education')) OR
-        (category = 'SPORTS' AND subcategory IN ('High School', 'Local'))
-    ),
+    category VARCHAR(50) CHECK (category IN ('SPORTS', 'NEWS')),
+    subcategory VARCHAR(50),
     author VARCHAR(100),
     date_published DATE,
     image_url VARCHAR(255),
@@ -32,4 +29,23 @@ CREATE TABLE IF NOT EXISTS article (
     thumbnail_url VARCHAR(255),
     thumbnail_alt_description TEXT,
     paragraphs TEXT[]
+);
+
+-- Create the verification_token table
+CREATE TABLE IF NOT EXISTS verification_tokens (
+  id SERIAL PRIMARY KEY,
+  token VARCHAR(128) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create Comment Table 
+CREATE TABLE IF NOT EXISTS comment (
+    id SERIAL PRIMARY KEY,
+    user_id INT,
+    article_id INT,
+    comment TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES public."user"(id),
+    FOREIGN KEY (article_id) REFERENCES article(id)
 );

@@ -6,24 +6,42 @@ import userImage from '../assets/user.svg';
 function NewsPage() {
   return (
     <div className="flex justify-center flex-col items-center">
-      <div className="text-2xl leading-6 font-bold text-custom-orange self-start m-4">News Page</div>
+      <div className="text-2xl leading-6 font-bold text-custom-orange self-start m-4 items-stretch">News Page</div>
         {ArticleThumbnail(articles)}
     </div>
   );
 }
 const articles = [{
   articleImg:testImage,
-  articleBody: "Test body",
+  articleTitle:"Soccer Time!",
+  articleBody: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
   authorImg:userImage,
   articleAuthor:"Joe Schmoe",
   articleDate:"3/20/24"
 
 },{
   articleImg:birdImage,
-  articleBody: "Test body 2",
+  articleTitle: "Bird Watching Taking Over Modesto",
+  articleBody: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
   authorImg:userImage,
   articleAuthor:"Jane Schmoe",
   articleDate:"3/20/24"
+
+},{
+  articleImg:testImage,
+  articleTitle: "More Soccer Time! Fun in the Sun!",
+  articleBody: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+  authorImg:userImage,
+  articleAuthor:"Joe Schmoe",
+  articleDate:"3/21/24"
+
+},{
+  articleImg:birdImage,
+  articleTitle:"Funny Birds take over Modesto",
+  articleBody: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+  authorImg:userImage,
+  articleAuthor:"Jane Schmoe",
+  articleDate:"3/21/24"
 
 }]
 export default NewsPage;

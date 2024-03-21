@@ -22,6 +22,12 @@ const addSubscription = async (req, res) => {
         .status(400)
         .json({ message: `User with ID ${user_id} does not exist` });
     }
+    const sub = await getSubscriptionInfo(user_id);
+    if (sub.length > 0) {
+      return res
+        .status(400)
+        .json({ message: `User with ID ${user_id} is already subscribed` });
+    }
 
     const subData = {
       category,

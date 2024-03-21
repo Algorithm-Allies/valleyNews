@@ -28,7 +28,15 @@ const createUser = async (
   ]);
 };
 
+const getUserById = async (id) => {
+  const query = `SELECT id
+    FROM public."user" where id = $1`;
+  const { rows } = await db.query(query, [id]);
+  return rows[0];
+};
+
 module.exports = {
   getUserByEmail,
   createUser,
+  getUserById,
 };

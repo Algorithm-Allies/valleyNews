@@ -1,9 +1,9 @@
 
 function ArticleThumbnail(itemData) {
   return (
-    <div className="unset-border-box shadow-gray-700 shadow-md bg-brown-400 p-8 rounded-lg flex flex-row max-md:flex-col md:gap-x-8 gap-4 md:justify-center md:w-[80vw]">
+    <div className="unset-border-box md:flex-wrap shadow-gray-700 shadow-md bg-brown-400 p-8 rounded-lg flex flex-row max-md:flex-col md:gap-x-8 gap-4 md:justify-center md:w-[80vw]">
       {itemData.map((thumbnail, i) => (
-        <div className="shadow-gray-700 shadow-md bg-brown-100 p-3 rounded-lg flex md:justify-between flex-col" key={i}>
+        <div className="md:w-[21%] grow shadow-gray-700 shadow-md bg-brown-100 p-3 rounded-lg flex md:justify-between flex-col" key={i}>
           <img className="object-cover h-48 w-96" component="img" src={[thumbnail.articleImg]}></img>
           <div className='text-lg py-1.5 font-bold'>{thumbnail.articleTitle}</div>
           <div className='py-1.5'>{thumbnail.articleBody}</div>

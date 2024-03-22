@@ -51,3 +51,13 @@ CREATE TABLE IF NOT EXISTS comment (
     FOREIGN KEY (user_id) REFERENCES public."user"(id),
     FOREIGN KEY (article_id) REFERENCES article(id)
 );
+
+-- Create Subsription Table
+CREATE TABLE IF NOT EXISTS subscription (
+  id SERIAL PRIMARY KEY,
+  user_id INT,
+  category VARCHAR(100) CHECK (category IN ('SPORTS', 'CRIME', 'NEWS')),
+  frequency VARCHAR(100) CHECK (frequency IN ('Hourly', 'Daily', 'Weekly', 'Biweekly', 'Monthly')),
+  delivery_method VARCHAR(100) CHECK (delivery_method IN ('Email', 'SMS')),
+  FOREIGN KEY (user_id) REFERENCES public."user"(id)
+);

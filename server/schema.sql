@@ -21,7 +21,9 @@ CREATE TABLE IF NOT EXISTS article (
     headline TEXT NOT NULL,
     subheading TEXT,
     category VARCHAR(50) CHECK (category IN ('SPORTS', 'NEWS')),
-    subcategory VARCHAR(50),
+    subcategory VARCHAR(50) CHECK (
+        subcategory IN ('CRIME', 'GOVERNMENT', 'EDUCATION', 'LOCAL SPORTS', 'LOCAL NEWS', 'HIGH SCHOOL SPORTS')
+    ),,
     author VARCHAR(100),
     date_published DATE,
     image_url VARCHAR(255),

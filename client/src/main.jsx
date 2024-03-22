@@ -18,6 +18,16 @@ import NewPassword, {
 } from "./pages/NewPassword.jsx";
 
 import NewsPage from "./pages/NewsPage.jsx";
+const pageHeaders =[
+  {
+    spotlight:"Latest News",
+    main:"News"
+  },
+  {
+    spotlight:"Latest in Sports",
+    main:"Sports"
+  }
+]
 const router = createBrowserRouter([
   {
     path: "/auth",
@@ -53,10 +63,16 @@ const router = createBrowserRouter([
         element: <ResetPassword />,
         errorElement: <ResetPassword />,
         action: ResetPasswordAction,
-      },{
-        path: "/auth/home",
-        element: <NewsPage/>
-      }
+      },
+      
+      {
+        path: "/auth/news",
+        element: NewsPage(pageHeaders[0])
+      },
+      {
+        path: "/auth/sports",
+        element: NewsPage(pageHeaders[1])
+      } 
     ],
   },
   {

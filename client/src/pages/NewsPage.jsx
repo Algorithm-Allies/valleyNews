@@ -4,16 +4,17 @@ import testImage from '../assets/test-image.png';
 import birdImage from '../assets/bird.jpg'
 import userImage from '../assets/user.svg';
 //page for different news categories based on selected category i.e local, sports, crime, government, education, etc
-function NewsPage() {
+function NewsPage(pageHeaders) {
   return (
     <div className="flex justify-center flex-col items-center">
-      <div className="text-2xl leading-6 font-bold text-custom-orange self-start m-4 items-stretch">Spotlight</div>
-       {LatestArticle(latestArticle)}
-      <div className="text-2xl leading-6 font-bold text-custom-orange self-start m-4 items-stretch">News Page</div>
-        {ArticleThumbnail(articles)}
-    </div>
+        <div className="text-2xl leading-6 font-bold text-custom-orange self-start m-4 items-stretch">{pageHeaders.spotlight}</div>
+          {LatestArticle(latestArticle)}
+        <div className="text-2xl leading-6 font-bold text-custom-orange self-start m-4 items-stretch">{pageHeaders.main}</div>
+          {ArticleThumbnail(articles)}
+      </div>
   );
 }
+
 const latestArticle=[{
   articleImg:testImage,
   articleTitle:"Soccer Time!",

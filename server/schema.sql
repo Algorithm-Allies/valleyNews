@@ -21,7 +21,9 @@ CREATE TABLE IF NOT EXISTS article (
     headline TEXT NOT NULL,
     subheading TEXT,
     category VARCHAR(50) CHECK (category IN ('SPORTS', 'NEWS')),
-    subcategory VARCHAR(50),
+    subcategory VARCHAR(50) CHECK (
+        subcategory IN ('CRIME', 'GOVERNMENT', 'EDUCATION', 'LOCAL SPORTS', 'LOCAL NEWS', 'HIGH SCHOOL SPORTS')
+    ),,
     author VARCHAR(100),
     date_published DATE,
     image_url VARCHAR(255),
@@ -29,4 +31,23 @@ CREATE TABLE IF NOT EXISTS article (
     thumbnail_url VARCHAR(255),
     thumbnail_alt_description TEXT,
     paragraphs TEXT[]
+);
+
+-- Create the verification_token table
+CREATE TABLE IF NOT EXISTS verification_tokens (
+  id SERIAL PRIMARY KEY,
+  token VARCHAR(128) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create Comment Table 
+CREATE TABLE IF NOT EXISTS comment (
+    id SERIAL PRIMARY KEY,
+    user_id INT,
+    article_id INT,
+    comment TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES public."user"(id),
+    FOREIGN KEY (article_id) REFERENCES article(id)
 );

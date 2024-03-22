@@ -18,6 +18,26 @@ import NewPassword, {
 } from "./pages/NewPassword.jsx";
 
 import NewsPage from "./pages/NewsPage.jsx";
+import HomePage from "./pages/Homepage.jsx";
+import AboutUs from "./pages/AboutUs.jsx";
+import Subscribe from "./pages/Subscribe.jsx";
+import { getAllArticles, getArticleById } from "./services/articleService.js";
+
+function ArticleFeedPage() {
+  return null;
+}
+function RootLayout() {
+  return (
+    <div>
+      {/* Navbar Component */}
+      {/* <Outlet /> dynamic content based on the route */}
+      {/* Footer component */}
+    </div>
+  );
+}
+function ArticleView() {
+  return null;
+}
 const router = createBrowserRouter([
   {
     path: "/auth",
@@ -53,10 +73,70 @@ const router = createBrowserRouter([
         element: <ResetPassword />,
         errorElement: <ResetPassword />,
         action: ResetPasswordAction,
-      },{
+      },
+      {
         path: "/auth/home",
-        element: <NewsPage/>
-      }
+        element: <NewsPage />,
+      },
+    ],
+  },
+  {
+    path: "/",
+    element: <RootLayout />,
+    children: [
+      {
+        index: true,
+        element: <HomePage />,
+        loader: async () => {
+          try {
+            const res = await getAllArticles();
+            if (res.ok) {
+              return res.data;
+            }
+          } catch (e) {}
+        },
+      },
+      {
+        path: "/:category/:subcategory",
+        element: <ArticleFeedPage />,
+        loader: async ({ params }) => {
+          const { category, subcategory } = params;
+          try {
+            const res = await getArticlesByCategoryAndSubcategory({
+              category,
+              subcategory,
+            });
+            if (res.ok) {
+              return res.data;
+            }
+          } catch (e) {}
+        },
+      },
+      {
+        path: "/:category/:subcategory/:articleId",
+        element: <ArticleView />,
+        loader: async ({ params }) => {
+          const { category, subcategory, articleId } = params;
+          try {
+            const res = await getArticleById({
+              category,
+              subcategory,
+              articleId,
+            });
+            if (res.ok) {
+              return res.data;
+            }
+          } catch (e) {}
+        },
+      },
+      {
+        path: "/staff",
+        element: <AboutUs />,
+      },
+      {
+        path: "/subscribe",
+        element: <Subscribe />,
+      },
     ],
   },
   {

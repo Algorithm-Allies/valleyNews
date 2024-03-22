@@ -21,7 +21,11 @@ import NewsPage from "./pages/NewsPage.jsx";
 import HomePage from "./pages/Homepage.jsx";
 import AboutUs from "./pages/AboutUs.jsx";
 import Subscribe from "./pages/Subscribe.jsx";
-import { getAllArticles, getArticleById } from "./services/articleService.js";
+import {
+  getAllArticles,
+  getArticleById,
+  getArticlesByCategory,
+} from "./services/articleService.js";
 
 function ArticleFeedPage() {
   return null;
@@ -35,9 +39,10 @@ function RootLayout() {
     </div>
   );
 }
-function ArticleView() {
+function ArticleViewPage() {
   return null;
 }
+
 const router = createBrowserRouter([
   {
     path: "/auth",
@@ -97,6 +102,19 @@ const router = createBrowserRouter([
         },
       },
       {
+        path: "/:category",
+        element: <ArticleFeedPage />,
+        loader: async ({ params }) => {
+          const { category } = params;
+          try {
+            const res = await getArticlesByCategory({ category });
+            if (res.ok) {
+              return res.data;
+            }
+          } catch (e) {}
+        },
+      },
+      {
         path: "/:category/:subcategory",
         element: <ArticleFeedPage />,
         loader: async ({ params }) => {
@@ -113,15 +131,13 @@ const router = createBrowserRouter([
         },
       },
       {
-        path: "/:category/:subcategory/:articleId",
-        element: <ArticleView />,
+        path: "/:category/:subcategory/:id",
+        element: <ArticleViewPage />,
         loader: async ({ params }) => {
-          const { category, subcategory, articleId } = params;
+          const { id } = params;
           try {
             const res = await getArticleById({
-              category,
-              subcategory,
-              articleId,
+              id,
             });
             if (res.ok) {
               return res.data;
@@ -133,10 +149,7 @@ const router = createBrowserRouter([
         path: "/staff",
         element: <AboutUs />,
       },
-      {
-        path: "/subscribe",
-        element: <Subscribe />,
-      },
+      { path: "/subscribe", element: <Subscribe /> },
     ],
   },
   {

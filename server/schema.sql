@@ -21,7 +21,9 @@ CREATE TABLE IF NOT EXISTS article (
     headline TEXT NOT NULL,
     subheading TEXT,
     category VARCHAR(50) CHECK (category IN ('SPORTS', 'NEWS')),
-    subcategory VARCHAR(50),
+    subcategory VARCHAR(50) CHECK (
+        subcategory IN ('CRIME', 'GOVERNMENT', 'EDUCATION', 'LOCAL SPORTS', 'LOCAL NEWS', 'HIGH SCHOOL SPORTS')
+    ),,
     author VARCHAR(100),
     date_published DATE,
     image_url VARCHAR(255),
@@ -48,4 +50,14 @@ CREATE TABLE IF NOT EXISTS comment (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES public."user"(id),
     FOREIGN KEY (article_id) REFERENCES article(id)
+);
+
+-- Create Subsription Table
+CREATE TABLE IF NOT EXISTS subscription (
+  id SERIAL PRIMARY KEY,
+  user_id INT,
+  category VARCHAR(100) CHECK (category IN ('SPORTS', 'CRIME', 'NEWS')),
+  frequency VARCHAR(100) CHECK (frequency IN ('Hourly', 'Daily', 'Weekly', 'Biweekly', 'Monthly')),
+  delivery_method VARCHAR(100) CHECK (delivery_method IN ('Email', 'SMS')),
+  FOREIGN KEY (user_id) REFERENCES public."user"(id)
 );

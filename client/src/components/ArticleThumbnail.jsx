@@ -1,10 +1,13 @@
 
 function ArticleThumbnail(itemData) {
   return (
-    <div className="unset-border-box md:flex-wrap shadow-gray-700 shadow-md bg-brown-400 p-8 rounded-lg flex flex-row max-md:flex-col md:gap-x-8 gap-4 md:justify-center md:w-[80vw]">
+    <div className="unset-border-box  shadow-gray-700 shadow-md bg-brown-400 
+    p-8 rounded-lg grid xl:grid-cols-4 
+    lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 
+    md:gap-x-8 gap-4 md:w-[80vw] auto-rows-max">
       {itemData.map((thumbnail, i) => (
-        <div className="max-md:w-[100%] lg:w-[21%] grow shadow-gray-700 shadow-md bg-brown-100 p-3 rounded-lg flex md:justify-between flex-col" key={i}>
-          <img className="object-cover h-48 w-96" src={[thumbnail.articleImg]}></img>
+        <div className="shadow-gray-700 shadow-md bg-brown-100 p-3 rounded-lg flex md:justify-between flex-col" key={i}>
+          <img className="object-cover h-48 w-100" src={[thumbnail.articleImg]}></img>
           <div className='text-lg py-1.5 font-bold'>{thumbnail.articleTitle}</div>
           <div className='py-1.5'>{thumbnail.articleBody}</div>
           <div className="flex items-end justify-end">

@@ -1,5 +1,4 @@
 import React from "react";
-import NavBar from "../components/NavBar";
 import Mailbox from "../assets/mailbox.png";
 import * as RadioGroup from "@radix-ui/react-radio-group";
 
@@ -29,8 +28,7 @@ export async function action({ request }) {
 function Subscribe() {
   return (
     <div className="h-screen bg-brown-100 py-20">
-      <div className="max-w-4xl w-full mx-auto space-y-12">
-        <NavBar />
+      <div className="max-w-4xl w-full mx-auto px-4 md:px-0">
         <div className="md:flex md:gap-8">
           <div className="hidden md:grid bg-brown-200 size-[400px]  place-content-center rounded">
             <img
@@ -40,9 +38,9 @@ function Subscribe() {
               alt=""
             />
           </div>
-          <form className="pt-10 max-w-96 mx-auto md:flex-1 md:max-w-none">
+          <form className="max-w-96 mx-auto md:flex-1 md:max-w-none">
             <div className="space-y-0.5 mb-6 text-center">
-              <h2 className=" text-xl font-bold text-stone-700 md:text-2xl">
+              <h2 className=" text-lg font-bold text-stone-700 text-pretty md:text-2xl ">
                 Subscribe to{" "}
                 <span className=" text-custom-orange">Central Valley News</span>
               </h2>
@@ -50,7 +48,6 @@ function Subscribe() {
                 Get the latest news from around the Central Valley!
               </p>
             </div>
-
             {/* <Unsubscribed /> */}
             <Subscribed />
           </form>
@@ -91,7 +88,7 @@ function FormOptions({ options, header }) {
 
 function Unsubscribed() {
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <div className="space-y-4">
         <FormOptions header="Frequency" options={FREQUENCY_OPTIONS} />
         <FormOptions header="Delivery Method" options={DELIVERY_OPTIONS} />
@@ -99,7 +96,7 @@ function Unsubscribed() {
       <button
         name="intent"
         value="add"
-        className="block w-1/2 mx-auto rounded bg-custom-orange text-gray-100 h-12 font-bold hover:bg-orange-400 transition-colors "
+        className="block w-1/2 mx-auto text-xs rounded bg-custom-orange text-gray-100 h-8 font-bold hover:bg-orange-400 transition-colors md:h-12 md:text-base"
       >
         Subscribe
       </button>
@@ -109,9 +106,8 @@ function Unsubscribed() {
 
 function Subscribed() {
   return (
-    <div className="space-y-8">
-      <div className="space-y-1">
-        <h4 className="text-base font-bold mb-2">Update Subscription</h4>
+    <div className="space-y-6 md:space-y-8">
+      <div className="space-y-6">
         <div className="space-y-4">
           <FormOptions header="Frequency" options={FREQUENCY_OPTIONS} />
           <FormOptions header="Delivery Method" options={DELIVERY_OPTIONS} />
@@ -119,14 +115,14 @@ function Subscribed() {
         <button
           name="intent"
           value="edit"
-          className="block w-1/2 mx-auto rounded bg-custom-orange text-gray-100 h-12 font-bold hover:bg-orange-400 transition-colors "
+          className="block w-1/2 mx-auto text-xs rounded bg-custom-orange text-gray-100 h-8 font-bold hover:bg-orange-400 transition-colors md:h-12 md:text-base"
         >
           Update
         </button>
       </div>
       <div className="h-[2px] bg-brown-200"></div>
       <div className="space-y-1">
-        <p className="text-sm text-gray-500">
+        <p className=" text-xs text-gray-500 md:text-sm">
           No longer want to receive updates from Central Valley News, fell free
           to unsubscribe
         </p>
@@ -134,7 +130,7 @@ function Subscribed() {
           type="submit"
           name="intent"
           value="delete"
-          className="block w-1/2 mx-auto rounded text-sm  text-stone-600 h-8 underline"
+          className="block w-1/2 mx-auto rounded text-xs   text-stone-600 h-8 underline md:text-sm"
         >
           Unsubscribe
         </button>

@@ -9,17 +9,17 @@ export async function action({ request }) {
   let formData = await request.formData();
   let intent = formData.get("intent");
   // add subscription
-  if (intent === "add") {
+  if (intent === "addSubscription") {
     try {
     } catch (e) {}
   }
   // edit subscription
-  if (intent === "edit") {
+  if (intent === "editSubscription") {
     try {
     } catch (e) {}
   }
   // remove subscription
-  if (intent === "delete") {
+  if (intent === "deleteSubscription") {
     try {
     } catch (e) {}
   }
@@ -95,7 +95,7 @@ function Unsubscribed() {
       </div>
       <button
         name="intent"
-        value="add"
+        value="addSubscription"
         className="block w-1/2 mx-auto text-xs rounded bg-custom-orange text-gray-100 h-8 font-bold hover:bg-orange-400 transition-colors md:h-12 md:text-base"
       >
         Subscribe
@@ -114,7 +114,7 @@ function Subscribed() {
         </div>
         <button
           name="intent"
-          value="edit"
+          value="updateSubscription"
           className="block w-1/2 mx-auto text-xs rounded bg-custom-orange text-gray-100 h-8 font-bold hover:bg-orange-400 transition-colors md:h-12 md:text-base"
         >
           Update
@@ -129,7 +129,7 @@ function Subscribed() {
         <button
           type="submit"
           name="intent"
-          value="delete"
+          value="deleteSubscription"
           className="block w-1/2 mx-auto rounded text-xs   text-stone-600 h-8 underline md:text-sm"
         >
           Unsubscribe

@@ -2,6 +2,7 @@ import {
   CalendarDaysIcon,
   NewspaperIcon,
   UserCircleIcon,
+  ChevronRightIcon,
 } from "@heroicons/react/24/solid";
 
 const ARTICLE_TEST_DATA = {
@@ -65,12 +66,21 @@ export default function ArticlePage() {
   return (
     <div className="bg-brown-100 min-h-screen">
       <article className="max-w-3xl py-20 mx-auto text-stone-700">
+        <div className="space-y-1 mb-2">
+          <h1 className="text-2xl font-bold text-pretty">{headline}</h1>
+          {subheading && <p className="text-base">{subheading}</p>}
+        </div>
+        <div className="flex gap-1 items-center text-sm  mb-6">
+          <p className="font-semibold">{category}</p>
+          <ChevronRightIcon className="size-4 text-gray-500" />
+          <p className="font-semibold">{subcategory}</p>
+        </div>
         <img
           src={image_url}
           className="w-full h-[400px] object-cover rounded-md mb-3"
           alt={image_alt_description}
         />
-        <div className="flex items-center gap-4 mb-4 text-sm text-stone-500">
+        <div className="flex items-center gap-4 mb-6 text-sm text-stone-500">
           <div className="flex items-center gap-2">
             <CalendarDaysIcon className="size-4" />
             <p className="font-semibold">{date_published}</p>
@@ -88,10 +98,7 @@ export default function ArticlePage() {
             <p className="font-semibold">{author}</p>
           </div>
         </div>
-        <div className="space-y-1 mb-6">
-          <h1 className="text-2xl font-bold text-pretty">{headline}</h1>
-          {subheading && <p className="text-base">{subheading}</p>}
-        </div>
+
         <div className="space-y-4 mb-6">
           {paragraphs.map((paragraph) => (
             <p className="text-base">{paragraph}</p>

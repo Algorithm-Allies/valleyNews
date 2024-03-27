@@ -20,6 +20,7 @@ import AboutUs from "./pages/AboutUs.jsx";
 
 import NewsPage from "./pages/NewsPage.jsx";
 import Subscribe from "./pages/Subscribe.jsx";
+import ArticlePage from "./pages/ArticlePage.jsx";
 const router = createBrowserRouter([
   {
     path: "/auth",
@@ -68,7 +69,7 @@ const router = createBrowserRouter([
   },
   {
     path: "*",
-    element: <Subscribe />,
+    element: <ArticlePage />,
   },
 ]);
 ReactDOM.createRoot(document.getElementById("root")).render(

@@ -12,3 +12,16 @@
 .unset-border-box{
     box-sizing: unset !important;
 }
+
+html {
+    border: 5px solid blue;
+}
+
+body {
+    border: 5px solid green;
+}
+
+#root {
+    border: 5px solid red;
+    min-height: 100vh;
+}

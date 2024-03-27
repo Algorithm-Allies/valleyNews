@@ -70,6 +70,7 @@ CREATE TABLE IF NOT EXISTS Business (
     address VARCHAR(255),
     phone_number VARCHAR(20),
     email VARCHAR(255),
+    website VARCHAR(255),
     user_ids INTEGER[],
     article_ids INTEGER[]
 );

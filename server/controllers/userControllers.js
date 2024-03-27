@@ -12,7 +12,13 @@ const {
   deleteVerificationToken,
   getTokenByVerificationToken,
 } = require("../services/tokenService");
-const { getUserByEmail, createUser } = require("../services/userService");
+const {
+  getUserByEmail,
+  createUser,
+  deleteUserById,
+} = require("../services/userService");
+
+const { createBusinessQuery } = require("../services/businessService");
 
 // POST /api/users/register
 const register = async (req, res) => {
@@ -32,6 +38,11 @@ const register = async (req, res) => {
       return res
         .status(400)
         .json({ message: "Please enter email and password" });
+    }
+    if (account_type === "business") {
+      if (!business_name) {
+        return res.status(400).json({ message: "Please enter business name" });
+      }
     }
 
     // Check if the user already exists
@@ -78,14 +89,11 @@ const verify = async (req, res) => {
     const secretKey = process.env.JWT_SECRET;
     const decoded = jwt.verify(decodedToken, secretKey);
 
-    await createUser(
-      decoded.email,
-      decoded.hashedPassword,
-      decoded.account_type,
-      decoded.mobile_phone_number,
-      decoded.business_name,
-      decoded.business_website
-    );
+    if (decoded.account_type === "Business") {
+      await handleBusinessVerification(decoded);
+    } else {
+      await handleUserVerification(decoded);
+    }
 
     await deleteVerificationToken(token);
 
@@ -94,6 +102,45 @@ const verify = async (req, res) => {
     console.error("Error verifying email:", error);
     res.status(500).json({ message: "Internal server error" });
   }
+};
+
+const handleBusinessVerification = async (decoded) => {
+  // Create user
+  await createUser(
+    decoded.email,
+    decoded.hashedPassword,
+    decoded.account_type,
+    decoded.mobile_phone_number,
+    decoded.business_name,
+    decoded.business_website
+  );
+
+  // Retrieve user ID
+  const user = await getUserByEmail(decoded.email);
+  const user_id = user.id;
+
+  // Create business using user's information
+  const businessData = {
+    admin_id: user_id,
+    address: null,
+    phone_number: decoded.mobile_phone_number,
+    email: decoded.email,
+    name: decoded.business_name,
+    website: decoded.business_website,
+  };
+  await createBusinessQuery(businessData);
+};
+
+const handleUserVerification = async (decoded) => {
+  // Create user without further processing
+  await createUser(
+    decoded.email,
+    decoded.hashedPassword,
+    decoded.account_type,
+    decoded.mobile_phone_number,
+    decoded.business_name,
+    decoded.business_website
+  );
 };
 
 // POST /api/users/login

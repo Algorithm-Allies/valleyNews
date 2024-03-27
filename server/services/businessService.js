@@ -3,17 +3,19 @@ const db = require("../config/database");
 const createBusinessQuery = async (businessData) => {
   try {
     const query = `
-    INSERT INTO business ("admin_id", "address", "phone_number", "email", "name")
-    VALUES ($1, $2, $3, $4, $5)
+    INSERT INTO business ("admin_id", "address", "phone_number", "email", "name", "website")
+    VALUES ($1, $2, $3, $4, $5, $6)
     RETURNING *;`;
 
-    const { admin_id, address, phone_number, email, name } = businessData;
+    const { admin_id, address, phone_number, email, name, website } =
+      businessData;
     const business = await db.query(query, [
       admin_id,
       address,
       phone_number,
       email,
       name,
+      website,
     ]);
     return business.rows[0];
   } catch (error) {
@@ -37,11 +39,11 @@ const viewBusinessQuery = async (businessId) => {
 
 const editBusinessQuery = async (businessId, newData) => {
   try {
-    const { address, phoneNumber, email, name } = newData;
+    const { address, phoneNumber, email, name, website } = newData;
     const query = `
         UPDATE business
-        SET address = $1, phone_number = $2, email = $3, name = $4
-        WHERE id = $5
+        SET address = $1, phone_number = $2, email = $3, name = $4, website = $5
+        WHERE id = $6
         RETURNING *;
       `;
     const result = await db.query(query, [
@@ -49,6 +51,7 @@ const editBusinessQuery = async (businessId, newData) => {
       phoneNumber,
       email,
       name,
+      website,
       businessId,
     ]);
     return result.rows[0];

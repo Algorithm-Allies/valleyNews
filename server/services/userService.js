@@ -2,7 +2,7 @@ const db = require("../config/database");
 
 // Function to retrieve user by email
 const getUserByEmail = async (email) => {
-  const query = `SELECT email
+  const query = `SELECT *
     FROM public."user" where email = $1`;
   const { rows } = await db.query(query, [email]);
   return rows[0];
@@ -35,8 +35,15 @@ const getUserById = async (id) => {
   return rows[0];
 };
 
+const deleteUserById = async (id) => {
+  const query = `DELETE FROM public."user"
+	WHERE id = $1`;
+  await db.query(query, [id]);
+};
+
 module.exports = {
   getUserByEmail,
   createUser,
   getUserById,
+  deleteUserById,
 };

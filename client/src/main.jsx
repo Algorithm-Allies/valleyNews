@@ -16,6 +16,7 @@ import PageNotFound from "./pages/PageNotFound.jsx";
 import NewPassword, {
   action as NewPasswordAction,
 } from "./pages/NewPassword.jsx";
+import AboutUs from './pages/AboutUs.jsx'
 
 import NewsPage from "./pages/NewsPage.jsx";
 const router = createBrowserRouter([
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
       },{
         path: "/auth/home",
         element: <NewsPage/>
+      },
+      {
+        path: "/auth/about-us",
+        element: <AboutUs />
       }
     ],
   },

@@ -16,9 +16,10 @@ import PageNotFound from "./pages/PageNotFound.jsx";
 import NewPassword, {
   action as NewPasswordAction,
 } from "./pages/NewPassword.jsx";
-import AboutUs from './pages/AboutUs.jsx'
+import AboutUs from "./pages/AboutUs.jsx";
 
 import NewsPage from "./pages/NewsPage.jsx";
+import Subscribe from "./pages/Subscribe.jsx";
 const router = createBrowserRouter([
   {
     path: "/auth",
@@ -54,19 +55,20 @@ const router = createBrowserRouter([
         element: <ResetPassword />,
         errorElement: <ResetPassword />,
         action: ResetPasswordAction,
-      },{
+      },
+      {
         path: "/auth/home",
-        element: <NewsPage/>
+        element: <NewsPage />,
       },
       {
         path: "/auth/about-us",
-        element: <AboutUs />
-      }
+        element: <AboutUs />,
+      },
     ],
   },
   {
     path: "*",
-    element: <PageNotFound />,
+    element: <Subscribe />,
   },
 ]);
 ReactDOM.createRoot(document.getElementById("root")).render(

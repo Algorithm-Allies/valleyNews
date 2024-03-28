@@ -7,9 +7,7 @@ CREATE TABLE IF NOT EXISTS user (
   email VARCHAR(255) NOT NULL UNIQUE,
   password VARCHAR(255) NOT NULL,
   account_type VARCHAR(20) NOT NULL CHECK (account_type IN ('User', 'Business')),
-  mobile_phone_number VARCHAR(20),
-  business_name VARCHAR(255),
-  business_website VARCHAR(255)
+
 );  
 
 
@@ -67,10 +65,9 @@ CREATE TABLE IF NOT EXISTS Business (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     admin_id INTEGER NOT NULL,
-    address VARCHAR(255),
     phone_number VARCHAR(20),
-    email VARCHAR(255),
     website VARCHAR(255),
     user_ids INTEGER[],
     article_ids INTEGER[]
 );
+

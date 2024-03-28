@@ -9,23 +9,9 @@ const getUserByEmail = async (email) => {
 };
 
 // Function to create a new user
-const createUser = async (
-  email,
-  password,
-  account_type,
-  mobile_phone_number,
-  business_name,
-  business_website
-) => {
-  const query = `INSERT INTO "user" ("email", "password", "account_type", "mobile_phone_number", "business_name", "business_website") VALUES ($1, $2, $3, $4, $5, $6)`;
-  return await db.query(query, [
-    email,
-    password,
-    account_type,
-    mobile_phone_number,
-    business_name,
-    business_website,
-  ]);
+const createUser = async (email, password, account_type) => {
+  const query = `INSERT INTO "user" ("email", "password", "account_type") VALUES ($1, $2, $3)`;
+  return await db.query(query, [email, password, account_type]);
 };
 
 const getUserById = async (id) => {

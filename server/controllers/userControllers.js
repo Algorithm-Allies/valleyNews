@@ -28,7 +28,7 @@ const register = async (req, res) => {
       email,
       password,
       account_type,
-      mobile_phone_number,
+      phone_number,
       business_name,
       business_website,
     } = req.body;
@@ -57,7 +57,7 @@ const register = async (req, res) => {
       email,
       hashedPassword,
       account_type,
-      mobile_phone_number,
+      phone_number,
       business_name,
       business_website,
     };
@@ -106,14 +106,7 @@ const verify = async (req, res) => {
 
 const handleBusinessVerification = async (decoded) => {
   // Create user
-  await createUser(
-    decoded.email,
-    decoded.hashedPassword,
-    decoded.account_type,
-    decoded.mobile_phone_number,
-    decoded.business_name,
-    decoded.business_website
-  );
+  await createUser(decoded.email, decoded.hashedPassword, decoded.account_type);
 
   // Retrieve user ID
   const user = await getUserByEmail(decoded.email);
@@ -122,9 +115,7 @@ const handleBusinessVerification = async (decoded) => {
   // Create business using user's information
   const businessData = {
     admin_id: user_id,
-    address: null,
-    phone_number: decoded.mobile_phone_number,
-    email: decoded.email,
+    phone_number: decoded.phone_number,
     name: decoded.business_name,
     website: decoded.business_website,
   };
@@ -133,14 +124,7 @@ const handleBusinessVerification = async (decoded) => {
 
 const handleUserVerification = async (decoded) => {
   // Create user without further processing
-  await createUser(
-    decoded.email,
-    decoded.hashedPassword,
-    decoded.account_type,
-    decoded.mobile_phone_number,
-    decoded.business_name,
-    decoded.business_website
-  );
+  await createUser(decoded.email, decoded.hashedPassword, decoded.account_type);
 };
 
 // POST /api/users/login

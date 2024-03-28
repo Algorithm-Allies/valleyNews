@@ -20,7 +20,6 @@ const createBusiness = async (req, res) => {
       admin_id: adminId,
       address: address,
       phone_number: phoneNumber,
-      email: email,
       name: name,
     };
     const result = await createBusinessQuery(businessData);
@@ -50,10 +49,10 @@ const viewBusiness = async (req, res) => {
 
 //Edit Business
 const editBusiness = async (req, res) => {
-  const { phoneNumber, email, address, name } = req.body;
+  const { phone_number, business_name, business_website } = req.body;
   const businessId = req.params.id;
 
-  if (!phoneNumber || !email || !address || !name) {
+  if (!phone_number || !business_website || !business_name) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
@@ -64,10 +63,9 @@ const editBusiness = async (req, res) => {
     }
 
     const businessData = {
-      phoneNumber,
-      email,
-      address,
-      name,
+      phone_number,
+      business_name,
+      business_website,
     };
 
     const result = await editBusinessQuery(businessId, businessData);

@@ -105,14 +105,11 @@ const verify = async (req, res) => {
 };
 
 const handleBusinessVerification = async (decoded) => {
-  // Create user
   await createUser(decoded.email, decoded.hashedPassword, decoded.account_type);
 
-  // Retrieve user ID
   const user = await getUserByEmail(decoded.email);
   const user_id = user.id;
 
-  // Create business using user's information
   const businessData = {
     admin_id: user_id,
     phone_number: decoded.phone_number,
@@ -123,7 +120,6 @@ const handleBusinessVerification = async (decoded) => {
 };
 
 const handleUserVerification = async (decoded) => {
-  // Create user without further processing
   await createUser(decoded.email, decoded.hashedPassword, decoded.account_type);
 };
 
@@ -143,13 +139,11 @@ const login = async (req, res) => {
     if (result.rows.length === 0) {
       return res.status(400).json({ message: "Invalid email or password" });
     }
-    // Check if the password is correct
     const isMatch = await bcrypt.compare(password, result.rows[0].password);
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    // Generate a token
     const user = result.rows[0];
 
     const token = jwt.sign(
@@ -160,7 +154,6 @@ const login = async (req, res) => {
       }
     );
 
-    // Send the token in a HTTP-only cookie
     res.cookie("token", token, {
       httpOnly: true,
       sameSite: "strict",

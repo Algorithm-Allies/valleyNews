@@ -71,9 +71,73 @@ const deleteBusinessQuery = async (businessId) => {
   }
 };
 
+const addUserQuery = async (businessId, userId) => {
+  try {
+    const query = `
+        UPDATE business
+        SET user_ids = array_append(user_ids, $2)
+        WHERE id = $1;
+      `;
+    const result = await db.query(query, [businessId, userId]);
+    return result.rows;
+  } catch (error) {
+    console.error("Error adding user to business:", error);
+    throw error;
+  }
+};
+
+const removeUserQuery = async (businessId, userId) => {
+  try {
+    const query = `
+        UPDATE business
+        SET user_ids = array_remove(user_ids, $2)
+        WHERE id = $1;
+      `;
+    const result = await db.query(query, [businessId, userId]);
+    return result.rows;
+  } catch (error) {
+    console.error("Error removing user from business:", error);
+    throw error;
+  }
+};
+
+const addArticleQuery = async (businessId, articleId) => {
+  try {
+    const query = `
+        UPDATE business
+        SET article_ids = array_append(article_ids, $2)
+        WHERE id = $1;
+      `;
+    const result = await db.query(query, [businessId, articleId]);
+    return result.rows;
+  } catch (error) {
+    console.error("Error adding article to business:", error);
+    throw error;
+  }
+};
+
+const removeArticleQuery = async (businessId, articleId) => {
+  try {
+    const query = `
+        UPDATE business
+        SET article_ids = array_remove(article_ids, $2)
+        WHERE id = $1;
+      `;
+    const result = await db.query(query, [businessId, articleId]);
+    return result.rows;
+  } catch (error) {
+    console.error("Error removing article from business:", error);
+    throw error;
+  }
+};
+
 module.exports = {
   createBusinessQuery,
   viewBusinessQuery,
   deleteBusinessQuery,
   editBusinessQuery,
+  addUserQuery,
+  removeUserQuery,
+  addArticleQuery,
+  removeArticleQuery,
 };

@@ -4,6 +4,10 @@ const {
   viewBusinessQuery,
   editBusinessQuery,
   deleteBusinessQuery,
+  addUserQuery,
+  removeUserQuery,
+  addArticleQuery,
+  removeArticleQuery,
 } = require("../services/businessService");
 
 //Create Business
@@ -14,7 +18,6 @@ const createBusiness = async (req, res) => {
     if (!adminId || !name) {
       res.status(404).json({ message: "AdminId or name required" });
     }
-    // Execute the SQL query to insert a new business into the database
 
     const businessData = {
       admin_id: adminId,
@@ -93,19 +96,61 @@ const deleteBusiness = async (req, res) => {
   }
 };
 
-//Add users to Business
+const addUsers = async (req, res) => {
+  const { businessId, userId } = req.body;
+  try {
+    await addUserQuery(businessId, userId);
+    res.status(200).json({ message: "User added to business successfully" });
+  } catch (error) {
+    console.error("Error adding user to business:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 
-//Remove users from Business
+const removeUsers = async (req, res) => {
+  const { businessId, userId } = req.body;
+  try {
+    await removeUserQuery(businessId, userId);
+    res
+      .status(200)
+      .json({ message: "User removed from business successfully" });
+  } catch (error) {
+    console.error("Error removing user from business:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 
-//Add articles to Business
+const addArticles = async (req, res) => {
+  const { businessId, articleId } = req.body;
+  try {
+    await addArticleQuery(businessId, articleId);
+    res.status(200).json({ message: "Article added to business successfully" });
+  } catch (error) {
+    console.error("Error adding article to business:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 
-//Edit articles from Businessw
-
-//Remove articles from Business
+const removeArticles = async (req, res) => {
+  const { businessId, articleId } = req.body;
+  try {
+    await removeArticleQuery(businessId, articleId);
+    res
+      .status(200)
+      .json({ message: "Article removed from business successfully" });
+  } catch (error) {
+    console.error("Error removing article from business:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 
 module.exports = {
   createBusiness,
   viewBusiness,
   editBusiness,
   deleteBusiness,
+  addUsers,
+  removeUsers,
+  addArticles,
+  removeArticles,
 };

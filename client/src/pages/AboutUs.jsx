@@ -58,7 +58,7 @@ function AboutUs() {
       websiteLink: ''
     },
   ]
-  return <div className="grid grid-cols-3 auto-cols-fr gap-6">
+  return <div className="grid grid-cols-3 gap-4">
     {
       aboutUsDummyData.map((data => {
         return (

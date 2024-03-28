@@ -12,18 +12,13 @@ const {
   deleteVerificationToken,
   getTokenByVerificationToken,
 } = require("../services/tokenService");
-const {
-  getUserByEmail,
-  createUser,
-  deleteUserById,
-} = require("../services/userService");
+const { getUserByEmail, createUser } = require("../services/userService");
 
 const { createBusinessQuery } = require("../services/businessService");
 
 // POST /api/users/register
 const register = async (req, res) => {
   try {
-    // Extract user input from request body
     const {
       email,
       password,
@@ -33,7 +28,6 @@ const register = async (req, res) => {
       business_website,
     } = req.body;
 
-    // Validate required fields
     if (!email || !password) {
       return res
         .status(400)
@@ -45,13 +39,11 @@ const register = async (req, res) => {
       }
     }
 
-    // Check if the user already exists
     const existingUser = await getUserByEmail(email);
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = {
       email,

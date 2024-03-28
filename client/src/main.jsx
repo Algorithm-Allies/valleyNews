@@ -16,6 +16,7 @@ import PageNotFound from "./pages/PageNotFound.jsx";
 import NewPassword, {
   action as NewPasswordAction,
 } from "./pages/NewPassword.jsx";
+import AboutUs from "./pages/AboutUs.jsx";
 
 import NewsPage from "./pages/NewsPage.jsx";
 import HomePage from "./pages/Homepage.jsx";
@@ -154,7 +155,7 @@ const router = createBrowserRouter([
   },
   {
     path: "*",
-    element: <PageNotFound />,
+    element: <Subscribe />,
   },
 ]);
 ReactDOM.createRoot(document.getElementById("root")).render(

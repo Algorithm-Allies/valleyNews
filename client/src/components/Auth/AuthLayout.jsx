@@ -2,7 +2,7 @@ import { Outlet } from "react-router-dom";
 import NavBar from "../NavBar";
 function AuthLayout() {
   return (
-    <div className="bg-brown-100 min-h-screen">
+    <div className="min-h-screen pb-[5vh] bg-brown-100">
       <NavBar />
       <div className="flex flex-col items-center justify-center max-w-[80vw] w-full mx-auto pt-[15vh]">
         <div className="space-y-2 text-center mb-4">

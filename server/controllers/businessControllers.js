@@ -12,7 +12,7 @@ const {
 
 //Create Business
 const createBusiness = async (req, res) => {
-  const { adminId, address, phoneNumber, email, name } = req.body;
+  const { adminId, phoneNumber, name, website } = req.body;
 
   try {
     if (!adminId || !name) {
@@ -21,7 +21,7 @@ const createBusiness = async (req, res) => {
 
     const businessData = {
       admin_id: adminId,
-      address: address,
+      website: website,
       phone_number: phoneNumber,
       name: name,
     };

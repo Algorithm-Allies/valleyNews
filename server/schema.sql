@@ -32,3 +32,32 @@ CREATE TABLE IF NOT EXISTS article (
     thumbnail_alt_description TEXT,
     paragraphs TEXT[]
 );
+
+-- Create the verification_token table
+CREATE TABLE IF NOT EXISTS verification_tokens (
+  id SERIAL PRIMARY KEY,
+  token VARCHAR(128) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create Comment Table 
+CREATE TABLE IF NOT EXISTS comment (
+    id SERIAL PRIMARY KEY,
+    user_id INT,
+    article_id INT,
+    comment TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES public."user"(id),
+    FOREIGN KEY (article_id) REFERENCES article(id)
+);
+
+-- Create Subsription Table
+CREATE TABLE IF NOT EXISTS subscription (
+  id SERIAL PRIMARY KEY,
+  user_id INT,
+  category VARCHAR(100) CHECK (category IN ('SPORTS', 'CRIME', 'NEWS')),
+  frequency VARCHAR(100) CHECK (frequency IN ('Hourly', 'Daily', 'Weekly', 'Biweekly', 'Monthly')),
+  delivery_method VARCHAR(100) CHECK (delivery_method IN ('Email', 'SMS')),
+  FOREIGN KEY (user_id) REFERENCES public."user"(id)
+);

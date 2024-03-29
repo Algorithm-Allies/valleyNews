@@ -26,7 +26,7 @@ function BusinessPanel() {
   ]
   return <div>
     <div className="flex items-center">
-      <h2 className="text-xl font-bold">Articles</h2>
+      <h2 className="text-2xl font-bold">Articles</h2>
       <button className="ml-auto bg-orange-500 text-white py-2 px-4 rounded-md">New Article</button>
     </div>
     <hr className="h-2 bg-black mt-2" />

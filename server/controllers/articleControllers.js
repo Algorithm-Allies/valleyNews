@@ -123,6 +123,8 @@ async function getArticleDetails(req, res) {
   }
 }
 
+// GET /api/articles/urls
+// Get all article URLs
 async function getArticleUrls(req, res) {
   const query = `
     SELECT id, source FROM article

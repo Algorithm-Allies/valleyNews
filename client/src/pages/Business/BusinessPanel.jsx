@@ -30,21 +30,21 @@ function BusinessPanel() {
       <button className="ml-auto bg-orange-500 text-white py-2 px-4 rounded-md">New Article</button>
     </div>
     <hr className="h-2 bg-black mt-2" />
-    <table className="text-left">
+    <table className="text-left bg-white">
       <tr>
-        <th>ID</th>
-        <th>Title</th>
-        <th>Engagements</th>
-        <th>Actions</th>
+        <th className="p-4">ID</th>
+        <th className="p-4">Title</th>
+        <th className="p-4">Engagements</th>
+        <th className="p-4">Actions</th>
       </tr>
       {
         articleDummyData.map((article) => {
           return (
             <tr className="">
-              <td className="py-2">{article.id}</td>
-              <td>{article.title}</td>
-              <td>{article.engagements}</td>
-              <td>
+              <td className="p-4">{article.id}</td>
+              <td className="p-4">{article.title}</td>
+              <td className="p-4">{article.engagements}</td>
+              <td className="p-4">
                 <button><i class="fa-solid fa-trash"></i></button>
                 <button><i class="fa-solid fa-pencil"></i></button>
                 <button><i class="fa-solid fa-newspaper"></i></button>

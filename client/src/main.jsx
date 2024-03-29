@@ -19,6 +19,7 @@ import NewPassword, {
 import AboutUs from './pages/AboutUs.jsx'
 
 import NewsPage from "./pages/NewsPage.jsx";
+import BusinessPanel from "./pages/Business/BusinessPanel.jsx";
 const router = createBrowserRouter([
   {
     path: "/auth",
@@ -61,6 +62,10 @@ const router = createBrowserRouter([
       {
         path: "/auth/about-us",
         element: <AboutUs />
+      },
+      {
+        path: "/auth/business/dashboard",
+        element: <BusinessPanel />
       }
     ],
   },

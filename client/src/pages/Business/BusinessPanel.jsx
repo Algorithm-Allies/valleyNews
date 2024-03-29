@@ -46,7 +46,7 @@ function BusinessPanel() {
               <td className="p-4">{article.engagements}</td>
               <td className="p-4">
                 <button><i class="fa-solid fa-trash"></i></button>
-                <button><i class="fa-solid fa-pencil"></i></button>
+                <button><i class="fa-solid fa-pencil mx-4"></i></button>
                 <button><i class="fa-solid fa-newspaper"></i></button>
               </td>
             </tr>

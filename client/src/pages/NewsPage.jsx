@@ -22,6 +22,20 @@ const latestArticle=[{
   authorImg:userImage,
   articleAuthor:"Joe Schmoe",
   articleDate:"3/20/24"
+},{
+  articleImg:testImage,
+  articleTitle:"Soccer Time!",
+  articleBody: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+  authorImg:userImage,
+  articleAuthor:"Joe Schmoe",
+  articleDate:"3/20/24"
+},{
+  articleImg:testImage,
+  articleTitle:"Soccer Time!",
+  articleBody: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+  authorImg:userImage,
+  articleAuthor:"Joe Schmoe",
+  articleDate:"3/20/24"
 }]
 const articles = [{
   articleImg:testImage,

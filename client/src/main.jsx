@@ -20,7 +20,6 @@ import AboutUs from "./pages/AboutUs.jsx";
 
 import NewsPage from "./pages/NewsPage.jsx";
 import HomePage from "./pages/Homepage.jsx";
-import AboutUs from "./pages/AboutUs.jsx";
 import Subscribe from "./pages/Subscribe.jsx";
 import {
   getAllArticles,

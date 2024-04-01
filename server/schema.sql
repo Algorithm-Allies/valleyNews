@@ -7,9 +7,7 @@ CREATE TABLE IF NOT EXISTS user (
   email VARCHAR(255) NOT NULL UNIQUE,
   password VARCHAR(255) NOT NULL,
   account_type VARCHAR(20) NOT NULL CHECK (account_type IN ('User', 'Business')),
-  mobile_phone_number VARCHAR(20),
-  business_name VARCHAR(255),
-  business_website VARCHAR(255)
+
 );  
 
 
@@ -61,3 +59,15 @@ CREATE TABLE IF NOT EXISTS subscription (
   delivery_method VARCHAR(100) CHECK (delivery_method IN ('Email', 'SMS')),
   FOREIGN KEY (user_id) REFERENCES public."user"(id)
 );
+
+-- Create Business Table
+CREATE TABLE IF NOT EXISTS Business (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    admin_id INTEGER NOT NULL,
+    phone_number VARCHAR(20),
+    website VARCHAR(255),
+    user_ids INTEGER[],
+    article_ids INTEGER[]
+);
+

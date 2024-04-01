@@ -14,39 +14,42 @@ const {
 } = require("../services/tokenService");
 const { getUserByEmail, createUser } = require("../services/userService");
 
+const { createBusinessQuery } = require("../services/businessService");
+
 // POST /api/users/register
 const register = async (req, res) => {
   try {
-    // Extract user input from request body
     const {
       email,
       password,
       account_type,
-      mobile_phone_number,
+      phone_number,
       business_name,
       business_website,
     } = req.body;
 
-    // Validate required fields
     if (!email || !password) {
       return res
         .status(400)
         .json({ message: "Please enter email and password" });
     }
+    if (account_type === "business") {
+      if (!business_name) {
+        return res.status(400).json({ message: "Please enter business name" });
+      }
+    }
 
-    // Check if the user already exists
     const existingUser = await getUserByEmail(email);
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = {
       email,
       hashedPassword,
       account_type,
-      mobile_phone_number,
+      phone_number,
       business_name,
       business_website,
     };
@@ -78,14 +81,11 @@ const verify = async (req, res) => {
     const secretKey = process.env.JWT_SECRET;
     const decoded = jwt.verify(decodedToken, secretKey);
 
-    await createUser(
-      decoded.email,
-      decoded.hashedPassword,
-      decoded.account_type,
-      decoded.mobile_phone_number,
-      decoded.business_name,
-      decoded.business_website
-    );
+    if (decoded.account_type === "Business") {
+      await handleBusinessVerification(decoded);
+    } else {
+      await handleUserVerification(decoded);
+    }
 
     await deleteVerificationToken(token);
 
@@ -94,6 +94,25 @@ const verify = async (req, res) => {
     console.error("Error verifying email:", error);
     res.status(500).json({ message: "Internal server error" });
   }
+};
+
+const handleBusinessVerification = async (decoded) => {
+  await createUser(decoded.email, decoded.hashedPassword, decoded.account_type);
+
+  const user = await getUserByEmail(decoded.email);
+  const user_id = user.id;
+
+  const businessData = {
+    admin_id: user_id,
+    phone_number: decoded.phone_number,
+    name: decoded.business_name,
+    website: decoded.business_website,
+  };
+  await createBusinessQuery(businessData);
+};
+
+const handleUserVerification = async (decoded) => {
+  await createUser(decoded.email, decoded.hashedPassword, decoded.account_type);
 };
 
 // POST /api/users/login
@@ -112,13 +131,11 @@ const login = async (req, res) => {
     if (result.rows.length === 0) {
       return res.status(400).json({ message: "Invalid email or password" });
     }
-    // Check if the password is correct
     const isMatch = await bcrypt.compare(password, result.rows[0].password);
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    // Generate a token
     const user = result.rows[0];
 
     const token = jwt.sign(
@@ -129,7 +146,6 @@ const login = async (req, res) => {
       }
     );
 
-    // Send the token in a HTTP-only cookie
     res.cookie("token", token, {
       httpOnly: true,
       sameSite: "strict",

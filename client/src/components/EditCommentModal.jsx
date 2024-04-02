@@ -34,8 +34,7 @@ export default function EditCommentModal({ comment, closeModal }) {
                     : "text-stone-600"
                 }`}
               >
-                {Math.max(MAX_CHARACTERS - editComment.length, 0)} characters
-                remaining
+                {MAX_CHARACTERS - editComment.length} characters remaining
               </p>
             </div>
             <div className="flex justify-center">

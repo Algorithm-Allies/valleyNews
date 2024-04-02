@@ -22,7 +22,7 @@ export default function CommentForm() {
             comment.length > MAX_CHARACTERS ? "text-red-500" : "text-stone-600"
           }`}
         >
-          {Math.max(MAX_CHARACTERS - comment.length, 0)} characters remaining
+          {MAX_CHARACTERS - comment.length} characters remaining
         </p>
       </div>
       <div className="flex justify-end">

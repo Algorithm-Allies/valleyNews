@@ -22,10 +22,10 @@ function LatestArticle( itemData ) {
       modules={[Autoplay, Pagination, Navigation]}
     >
       {itemData.map((thumbnail, index) => (
-        <SwiperSlide className='shadow-gray-700 shadow-md bg-brown-100 p-3 rounded-lg flex md:justify-between flex-col w-[50%]' key={thumbnail.id}>  
-          <img className="flex self-center w-[40vw] object-contain" src={thumbnail.articleImg} alt={`Slide ${index}`} />
+        <SwiperSlide className='shadow-gray-700 shadow-md bg-brown-100 p-3 rounded-lg flex md:justify-between flex-col w-[50%]' key={index}>  
+          <img className="flex self-center w-[30vw] object-contain" src={thumbnail.articleImg} alt={`Slide ${index}`} />
           <div className="flex flex-col px-[2em] justify-center">
-            <div className='text-lg py-1.5 font-bold'>{thumbnail.articleTitle}</div>
+            <div className='text-lg py-1.5 font-bold flex self-center'>{thumbnail.articleTitle}</div>
             <div className='py-1.5'>{thumbnail.articleBody}</div>
             <div className="flex items-end justify-end">
               <img className="w-10 h-10 rounded-full mr-4" src={thumbnail.authorImg} alt="Author" />

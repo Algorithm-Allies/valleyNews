@@ -1,9 +1,10 @@
+const { json } = require("express");
 const db = require("../config/database");
 const { insertArticle } = require("../services/articleService");
 
 // POST /api/articles
-async function createArticle(req, res) {
-  articles = req.body;
+async function createNewArticles(req, res) {
+  articles = json.parse(req.body);
   try {
     await createArticles(articles);
     res.status(201).json({ message: "Articles created successfully" });
@@ -153,6 +154,7 @@ async function getArticleUrls(req, res) {
 
 module.exports = {
   createArticles,
+  createNewArticles,
   getArticles,
   getArticlesByCategory,
   getArticlesBySubcategory,

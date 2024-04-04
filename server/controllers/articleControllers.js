@@ -1,5 +1,18 @@
+const { json } = require("express");
 const db = require("../config/database");
 const { insertArticle } = require("../services/articleService");
+
+// POST /api/articles
+async function createNewArticles(req, res) {
+  articles = json.parse(req.body);
+  try {
+    await createArticles(articles);
+    res.status(201).json({ message: "Articles created successfully" });
+  } catch (error) {
+    console.error("Error creating articles:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
 
 // Create articles -- bulk insert into database
 async function createArticles(articlesData) {
@@ -141,6 +154,7 @@ async function getArticleUrls(req, res) {
 
 module.exports = {
   createArticles,
+  createNewArticles,
   getArticles,
   getArticlesByCategory,
   getArticlesBySubcategory,

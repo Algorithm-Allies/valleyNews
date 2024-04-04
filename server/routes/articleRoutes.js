@@ -12,7 +12,7 @@ const {
   createNewArticles,
 } = require("../controllers/articleControllers");
 
-router.post("/", createNewArticles);
+router.post("/", createArticles);
 router.get("/", getArticles);
 //router.get("/id/:id", getArticleById);
 router.get("/urls", getArticleUrls);

@@ -17,6 +17,7 @@ async function createNewArticles(req, res) {
 // Create articles -- bulk insert into database
 async function createArticles(req, res) {
   const articlesData = await req.body;
+  console.log(articlesData);
   try {
     const insertedIds = [];
     for (const article of articlesData.articles) {

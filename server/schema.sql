@@ -7,9 +7,7 @@ CREATE TABLE IF NOT EXISTS user (
   email VARCHAR(255) NOT NULL UNIQUE,
   password VARCHAR(255) NOT NULL,
   account_type VARCHAR(20) NOT NULL CHECK (account_type IN ('User', 'Business')),
-  mobile_phone_number VARCHAR(20),
-  business_name VARCHAR(255),
-  business_website VARCHAR(255)
+
 );  
 
 
@@ -17,14 +15,13 @@ CREATE TABLE IF NOT EXISTS user (
 CREATE TABLE IF NOT EXISTS article (
     id SERIAL PRIMARY KEY,
     source VARCHAR(255) NOT NULL,
-    publisher VARCHAR(50) CHECK (publisher IN ('Oakdale Leader', 'Riverbank News', 'Modesto Bee', 'Tracy Press', 'Ripon News', 'Turlock Journal')) NOT NULL,
+    publisher VARCHAR(50) CHECK (publisher IN ('Oakdale Leader', 'The Riverbank News', 'The Modesto Bee', 'The Tracy Press', 'Ripon Journal', 'Turlock Journal')) NOT NULL,
     headline TEXT NOT NULL,
     subheading TEXT,
-    category VARCHAR(50) CHECK (category IN ('SPORTS', 'NEWS')) NOT NULL,
+    category VARCHAR(50) CHECK (category IN ('SPORTS', 'NEWS')),
     subcategory VARCHAR(50) CHECK (
-        (category = 'NEWS' AND subcategory IN ('Local', 'Crime', 'Government', 'Education')) OR
-        (category = 'SPORTS' AND subcategory IN ('High School', 'Local'))
-    ),
+        subcategory IN ('CRIME', 'GOVERNMENT', 'EDUCATION', 'LOCAL SPORTS', 'LOCAL NEWS', 'HIGH SCHOOL SPORTS')
+    ),,
     author VARCHAR(100),
     date_published DATE,
     image_url VARCHAR(255),
@@ -33,3 +30,44 @@ CREATE TABLE IF NOT EXISTS article (
     thumbnail_alt_description TEXT,
     paragraphs TEXT[]
 );
+
+-- Create the verification_token table
+CREATE TABLE IF NOT EXISTS verification_tokens (
+  id SERIAL PRIMARY KEY,
+  token VARCHAR(128) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create Comment Table 
+CREATE TABLE IF NOT EXISTS comment (
+    id SERIAL PRIMARY KEY,
+    user_id INT,
+    article_id INT,
+    comment TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES public."user"(id),
+    FOREIGN KEY (article_id) REFERENCES article(id)
+);
+
+-- Create Subsription Table
+CREATE TABLE IF NOT EXISTS subscription (
+  id SERIAL PRIMARY KEY,
+  user_id INT,
+  category VARCHAR(100) CHECK (category IN ('SPORTS', 'CRIME', 'NEWS')),
+  frequency VARCHAR(100) CHECK (frequency IN ('Hourly', 'Daily', 'Weekly', 'Biweekly', 'Monthly')),
+  delivery_method VARCHAR(100) CHECK (delivery_method IN ('Email', 'SMS')),
+  FOREIGN KEY (user_id) REFERENCES public."user"(id)
+);
+
+-- Create Business Table
+CREATE TABLE IF NOT EXISTS Business (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    admin_id INTEGER NOT NULL,
+    phone_number VARCHAR(20),
+    website VARCHAR(255),
+    user_ids INTEGER[],
+    article_ids INTEGER[]
+);
+

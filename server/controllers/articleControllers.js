@@ -32,6 +32,59 @@ async function getArticles(req, res) {
   }
 }
 
+//GET api/article/:category
+//Get articles by category
+async function getArticlesByCategory(req, res) {
+  const category = req.params.category.toUpperCase();
+
+  const query = `
+    SELECT * FROM article
+    WHERE category = $1
+  `;
+
+  try {
+    const { rows } = await db.query(query, [category]);
+    if (rows.length === 0) {
+      return res
+        .status(404)
+        .json({ error: "No articles found for this category" });
+    }
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error("Error getting articles by category:", error.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+// GET /api/articles/:category/:subcategory
+// Get articles by category and subcategory
+async function getArticlesBySubcategory(req, res) {
+  const category = req.params.category.toUpperCase();
+  const subcategory = req.params.subcategory.toUpperCase();
+
+  const query = `
+    SELECT * FROM article
+    WHERE category = $1
+    AND subcategory = $2
+  `;
+
+  try {
+    const { rows } = await db.query(query, [category, subcategory]);
+    if (rows.length === 0) {
+      return res
+        .status(404)
+        .json({ error: "No articles found for this subcategory" });
+    }
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error(
+      "Error getting articles for this subcategory:",
+      error.message
+    );
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
 // GET /api/articles/:id
 // Get article by ID
 async function getArticleById(req, res) {
@@ -70,9 +123,28 @@ async function getArticleDetails(req, res) {
   }
 }
 
+// GET /api/articles/urls
+// Get all article URLs
+async function getArticleUrls(req, res) {
+  const query = `
+    SELECT id, source FROM article
+  `;
+
+  try {
+    const { rows } = await db.query(query);
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error("Error getting article URLs:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
 module.exports = {
   createArticles,
   getArticles,
+  getArticlesByCategory,
+  getArticlesBySubcategory,
   getArticleById,
   getArticleDetails,
+  getArticleUrls,
 };

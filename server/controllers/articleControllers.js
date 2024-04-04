@@ -19,7 +19,7 @@ async function createArticles(req, res) {
   const articlesData = await req.body;
   try {
     const insertedIds = [];
-    for (const article of articlesData) {
+    for (const article of articlesData.articles) {
       const insertedId = await insertArticle(article);
       insertedIds.push(insertedId);
     }

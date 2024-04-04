@@ -25,6 +25,7 @@ import {
   getArticleById,
   getArticlesByCategory,
 } from "./services/articleService.js";
+import ArticlePage from "./pages/ArticlePage.jsx";
 
 function ArticleFeedPage() {
   return null;
@@ -131,7 +132,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/:category/:subcategory/:id",
-        element: <ArticleViewPage />,
+        element: <ArticlePage />,
         loader: async ({ params }) => {
           const { id } = params;
           try {
@@ -153,7 +154,7 @@ const router = createBrowserRouter([
   },
   {
     path: "*",
-    element: <Subscribe />,
+    element: <PageNotFound />,
   },
 ]);
 ReactDOM.createRoot(document.getElementById("root")).render(

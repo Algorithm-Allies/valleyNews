@@ -8,8 +8,10 @@ const {
   getArticlesByCategory,
   getArticlesBySubcategory,
   getArticleUrls,
+  createArticles,
 } = require("../controllers/articleControllers");
 
+router.post("/", createArticles);
 router.get("/", getArticles);
 //router.get("/id/:id", getArticleById);
 router.get("/urls", getArticleUrls);

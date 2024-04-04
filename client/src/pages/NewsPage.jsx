@@ -1,91 +1,75 @@
+import { useEffect, useState } from "react";
 import ArticleThumbnail from "../components/ArticleThumbnail";
 import LatestArticle from "../components/LatestArticle";
-import testImage from '../assets/test-image.png';
-import birdImage from '../assets/bird.jpg'
-import userImage from '../assets/user.svg';
+
+import {
+  getAllArticles,
+  getArticlesByCategory,
+} from "../services/articleService";
+import { useParams } from "react-router-dom";
 //page for different news categories based on selected category i.e local, sports, crime, government, education, etc
 function NewsPage(pageHeaders) {
+  const category = useParams().category;
+  const [loading, setLoading] = useState(true);
+  const [latestArticle, setLatestArticle] = useState([]);
+  const [articles, setArticles] = useState([]);
+
+  useEffect(() => {
+    const fetchArticles = async () => {
+      try {
+        const res = await getArticlesByCategory({ category });
+        if (res.ok) {
+          setArticles(res.data);
+          setLatestArticle([res.data[0]]);
+        }
+      } catch (error) {
+        console.error("Error fetching articles:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchArticles();
+  }, [category]);
+
+  if (loading) {
+    return <h1>Loading...</h1>;
+  }
+
   return (
     <div className="flex justify-center flex-col items-center">
-        <div className="text-2xl leading-6 font-bold text-custom-orange self-start m-4 items-stretch">{pageHeaders.spotlight}</div>
-          {LatestArticle(latestArticle)}
-        <div className="text-2xl leading-6 font-bold text-custom-orange self-start m-4 items-stretch">{pageHeaders.main}</div>
-          {ArticleThumbnail(articles)}
+      <div className="text-2xl leading-6 font-bold text-custom-orange self-start m-4 items-stretch">
+        {pageHeaders.spotlight}
       </div>
+      {LatestArticle(latestArticle)}
+      <div className="text-2xl leading-6 font-bold text-custom-orange self-start m-4 items-stretch">
+        {pageHeaders.main}
+      </div>
+      <div
+        className="unset-border-box  shadow-gray-700 shadow-md bg-brown-400 
+    p-8 rounded-lg grid xl:grid-cols-4 
+    lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 
+    md:gap-x-8 gap-4 md:w-[80vw] auto-rows-max"
+      >
+        {articles.map((article) => (
+          <ArticleThumbnail
+            id={article.id}
+            category={category}
+            key={article.id}
+            url={article.source}
+            author={article.author}
+            publisher={article.publisher}
+            title={article.headline}
+            imgUrl={article.image_url}
+            imgDescription={article.image_alt_description}
+            date={article.date}
+            thumbnail={article.thumbnail_url}
+            body={article.paragraphs}
+          />
+        ))}
+      </div>
+    </div>
   );
 }
 
-const latestArticle=[{
-  articleImg:testImage,
-  articleTitle:"Soccer Time!",
-  articleBody: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-  authorImg:userImage,
-  articleAuthor:"Joe Schmoe",
-  articleDate:"3/20/24"
-}]
-const articles = [{
-  articleImg:testImage,
-  articleTitle:"Soccer Time!",
-  articleBody: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-  authorImg:userImage,
-  articleAuthor:"Joe Schmoe",
-  articleDate:"3/20/24"
-
-},{
-  articleImg:birdImage,
-  articleTitle: "Bird Watching Taking Over Modesto",
-  articleBody: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-  authorImg:userImage,
-  articleAuthor:"Jane Schmoe",
-  articleDate:"3/20/24"
-
-},{
-  articleImg:testImage,
-  articleTitle: "More Soccer Time! Fun in the Sun!",
-  articleBody: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-  authorImg:userImage,
-  articleAuthor:"Joe Schmoe",
-  articleDate:"3/21/24"
-
-},{
-  articleImg:birdImage,
-  articleTitle:"Funny Birds take over Modesto",
-  articleBody: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-  authorImg:userImage,
-  articleAuthor:"Jane Schmoe",
-  articleDate:"3/21/24"
-
-},{
-  articleImg:testImage,
-  articleTitle:"Soccer Time!",
-  articleBody: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-  authorImg:userImage,
-  articleAuthor:"Joe Schmoe",
-  articleDate:"3/20/24"
-
-},{
-  articleImg:birdImage,
-  articleTitle: "Bird Watching Taking Over Modesto",
-  articleBody: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-  authorImg:userImage,
-  articleAuthor:"Jane Schmoe",
-  articleDate:"3/20/24"
-
-},{
-  articleImg:testImage,
-  articleTitle: "More Soccer Time! Fun in the Sun!",
-  articleBody: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-  authorImg:userImage,
-  articleAuthor:"Joe Schmoe",
-  articleDate:"3/21/24"
-
-},{
-  articleImg:birdImage,
-  articleTitle:"Funny Birds take over Modesto",
-  articleBody: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-  authorImg:userImage,
-  articleAuthor:"Jane Schmoe",
-  articleDate:"3/21/24"
-
-}]
 export default NewsPage;

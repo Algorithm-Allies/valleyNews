@@ -1,3 +1,6 @@
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { getArticleById } from "../services/articleService";
 import {
   CalendarDaysIcon,
   NewspaperIcon,
@@ -66,6 +69,25 @@ export default function ArticlePage() {
     image: { alt: image_alt_description },
     paragraphs,
   } = ARTICLE_TEST_DATA;
+
+  const [article, setArticle] = useState(null);
+
+  useEffect(() => {
+    const fetchArticle = async () => {
+      try {
+        const id = useParams().id;
+        const res = await getArticleById(id);
+        if (res.ok) {
+          setArticle(res.data);
+        }
+      } catch (error) {
+        console.error("Error fetching article:", error);
+      }
+    };
+
+    fetchArticle();
+  }, []);
+
   return (
     <div className="bg-brown-100 min-h-screen">
       <div className="max-w-3xl py-20 mx-auto text-stone-700 space-y-12">

@@ -4,7 +4,7 @@ const { insertArticle } = require("../services/articleService");
 
 // POST /api/articles
 async function createNewArticles(req, res) {
-  articles = json.parse(req.body);
+  articles = JSON.parse(req.body);
   console.log(articles);
   try {
     await createArticles(articles);

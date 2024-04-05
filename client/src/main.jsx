@@ -103,19 +103,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/:category/:subcategory",
-        element: <ArticleFeedPage />,
-        loader: async ({ params }) => {
-          const { category, subcategory } = params;
-          try {
-            const res = await getArticlesByCategoryAndSubcategory({
-              category,
-              subcategory,
-            });
-            if (res.ok) {
-              return res.data;
-            }
-          } catch (e) {}
-        },
+        element: <NewsPage />,
       },
       {
         path: "/:category/:subcategory/:id",

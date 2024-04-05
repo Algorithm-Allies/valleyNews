@@ -73,7 +73,23 @@ async function getArticlesByCategory(req, res) {
 // Get articles by category and subcategory
 async function getArticlesBySubcategory(req, res) {
   const category = req.params.category.toUpperCase();
-  const subcategory = req.params.subcategory.toUpperCase();
+  let subcategory;
+
+  switch (req.params.subcategory.toLowerCase()) {
+    case "local":
+      subcategory = category === "NEWS" ? "LOCAL NEWS" : "LOCAL SPORTS";
+      break;
+    case "high-school":
+      subcategory = "HIGH SCHOOL SPORTS";
+      break;
+    case "crime":
+    case "government":
+    case "education":
+      subcategory = req.params.subcategory.toUpperCase();
+      break;
+    default:
+      return res.status(400).json({ error: "Invalid subcategory" });
+  }
 
   const query = `
     SELECT * FROM article

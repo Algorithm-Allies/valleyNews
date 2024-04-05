@@ -3,7 +3,6 @@ import NavBar from "../NavBar";
 function AuthLayout() {
   return (
     <div className="min-h-screen pb-[5vh] bg-brown-100">
-      <NavBar />
       <div className="flex flex-col items-center justify-center max-w-[80vw] w-full mx-auto pt-[15vh]">
         <div className="space-y-2 text-center mb-4">
           <h1 className="text-3xl leading-6 font-bold text-custom-orange">

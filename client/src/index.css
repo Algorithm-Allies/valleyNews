@@ -12,3 +12,6 @@
 .unset-border-box{
     box-sizing: unset !important;
 }
+.swiper-button-prev, .swiper-button-next {
+    color:rgb(73, 62, 53) !important;
+  }

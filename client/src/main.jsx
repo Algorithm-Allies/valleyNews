@@ -19,8 +19,8 @@ import NewPassword, {
 } from "./pages/NewPassword.jsx";
 import NewsPage from "./pages/NewsPage.jsx";
 import HomePage from "./pages/Homepage.jsx";
-import AboutUs from "./pages/AboutUs.jsx";
 import Subscribe from "./pages/Subscribe.jsx";
+import AboutUs from './pages/AboutUs.jsx'
 import {
   getAllArticles,
   getArticleById,
@@ -103,19 +103,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/:category/:subcategory",
-        element: <ArticleFeedPage />,
-        loader: async ({ params }) => {
-          const { category, subcategory } = params;
-          try {
-            const res = await getArticlesByCategoryAndSubcategory({
-              category,
-              subcategory,
-            });
-            if (res.ok) {
-              return res.data;
-            }
-          } catch (e) {}
-        },
+        element: <NewsPage />,
       },
       {
         path: "/:category/:subcategory/:id",

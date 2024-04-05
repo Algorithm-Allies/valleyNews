@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import ArticleThumbnail from "../components/ArticleThumbnail";
 import LatestArticle from "../components/LatestArticle";
+import { useParams, Link } from "react-router-dom";
 
 import {
-  getAllArticles,
+  getArticlesByCategoryAndSubcategory,
   getArticlesByCategory,
 } from "../services/articleService";
-import { useParams } from "react-router-dom";
+
 //page for different news categories based on selected category i.e local, sports, crime, government, education, etc
-function NewsPage(pageHeaders) {
-  const category = useParams().category;
+function NewsPage() {
+  const { category, subcategory } = useParams();
   const [loading, setLoading] = useState(true);
   const [latestArticle, setLatestArticle] = useState([]);
   const [articles, setArticles] = useState([]);
@@ -17,7 +18,15 @@ function NewsPage(pageHeaders) {
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const res = await getArticlesByCategory({ category });
+        let res;
+        if (subcategory) {
+          res = await getArticlesByCategoryAndSubcategory({
+            category,
+            subcategory,
+          });
+        } else {
+          res = await getArticlesByCategory({ category });
+        }
         if (res.ok) {
           setArticles(res.data);
           setLatestArticle([res.data[0]]);
@@ -30,20 +39,62 @@ function NewsPage(pageHeaders) {
     };
 
     fetchArticles();
-  }, [category]);
+  }, [category, subcategory]);
 
   if (loading) {
-    return <h1>Loading...</h1>;
+    return (
+      <div className="text-xl text-custom-orange flex justify-center mt-20">
+        Loading...
+      </div>
+    );
   }
 
   return (
-    <div className="flex justify-center flex-col items-center">
-      <div className="text-2xl leading-6 font-bold text-custom-orange self-start m-4 items-stretch">
-        {pageHeaders.spotlight}
+    <div className="flex justify-center flex-col items-center w-full">
+      <div className="text-2xl leading-6 font-bold text-custom-orange m-4 ">
+        <nav className="mb-4">
+          <ul className="flex justify-center">
+            <li className="mr-4">
+              <Link to="/news">NEWS</Link>
+            </li>
+            <li>
+              <Link to="/sports">SPORTS</Link>
+            </li>
+          </ul>
+        </nav>
+
+        {category === "news" ? (
+          <nav className="mb-4">
+            <ul className="flex">
+              <li className="mr-4">
+                <Link to="/news/government">Government</Link>
+              </li>
+              <li className="mr-4">
+                <Link to="/news/education">Education</Link>
+              </li>
+              <li>
+                <Link to="/news/crime">Crime</Link>
+              </li>
+            </ul>
+          </nav>
+        ) : (
+          category === "sports" && (
+            <nav className="mb-4">
+              <ul className="flex">
+                <li className="mr-4">
+                  <Link to="/sports/high-school">High School</Link>
+                </li>
+                <li>
+                  <Link to="/sports/local">Local</Link>
+                </li>
+              </ul>
+            </nav>
+          )
+        )}
       </div>
       {LatestArticle(latestArticle)}
-      <div className="text-2xl leading-6 font-bold text-custom-orange self-start m-4 items-stretch">
-        {pageHeaders.main}
+      <div className=" text-2xl leading-6 text-center text-custom-orange  m-4 items-stretch">
+        {subcategory ? subcategory.toUpperCase() : null}
       </div>
       <div
         className="unset-border-box  shadow-gray-700 shadow-md bg-brown-400 
@@ -55,6 +106,7 @@ function NewsPage(pageHeaders) {
           <ArticleThumbnail
             id={article.id}
             category={category}
+            subcategory={subcategory}
             key={article.id}
             url={article.source}
             author={article.author}

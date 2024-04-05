@@ -9,6 +9,7 @@ const {
   getArticlesBySubcategory,
   getArticleUrls,
   createArticles,
+  createNewArticles,
 } = require("../controllers/articleControllers");
 
 router.post("/", createArticles);

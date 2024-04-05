@@ -1,6 +1,9 @@
 export async function getAllArticles() {
   try {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/articles`);
+    const res = await fetch(
+      //`${import.meta.env.VITE_API_URL}/articles`
+      `https://valleynews.onrender.com/api/articles`
+    );
     if (res.ok) {
       const articles = await res.json();
       return { ok: true, data: articles };
@@ -12,7 +15,8 @@ export async function getAllArticles() {
 export async function getArticlesByCategory({ category }) {
   try {
     const res = await fetch(
-      `${import.meta.env.VITE_API_URL}/articles/${category}`
+      //`https://valleynews.onrender.com/api/articles/${category}`
+      `https://valleynews.onrender.com/api/articles/${category}`
     );
     if (res.ok) {
       const articles = await res.json();
@@ -28,7 +32,8 @@ export async function getArticlesByCategoryAndSubcategory({
 }) {
   try {
     const res = await fetch(
-      `${import.meta.env.VITE_API_URL}/articles/${category}/${subcategory}`
+      //`${import.meta.env.VITE_API_URL}/articles/${category}/${subcategory}`
+      `$https://valleynews.onrender.com/api/articles/${category}/${subcategory}`
     );
     if (res.ok) {
       const articles = await res.json();
@@ -39,7 +44,10 @@ export async function getArticlesByCategoryAndSubcategory({
 
 export async function getArticleById({ id }) {
   try {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/articles/${id}`);
+    const res = await fetch(
+      //`${import.meta.env.VITE_API_URL}/articles/${id}`
+      `https://valleynews.onrender.com/api/articles/${id}`
+    );
     if (res.ok) {
       const articles = await res.json();
       return { ok: true, data: articles };

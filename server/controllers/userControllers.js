@@ -16,6 +16,25 @@ const { getUserByEmail, createUser } = require("../services/userService");
 
 const { createBusinessQuery } = require("../services/businessService");
 
+const registerBusiness = async (req, res) => {
+  const {
+    businessName,
+    businessNumber,
+    website,
+    email,
+    password,
+    account_type,
+  } = req.body;
+  try {
+    //validate businessName, number, email, password required
+    //check if businessName or email exists
+    //hashpassword
+    //create verificationtoek,
+    //save token
+    //send a email verification
+  } catch (error) {}
+};
+
 // POST /api/users/register
 const register = async (req, res) => {
   try {

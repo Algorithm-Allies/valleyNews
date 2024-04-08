@@ -10,6 +10,22 @@ const {
   removeArticleQuery,
 } = require("../services/businessService");
 
+//registering as Business
+/* 
+businessName, businessNumber, BusinessSite, BusinessEmail, Password
+*/
+const registerBusiness = async (req, res) => {
+  const { businessName, businessNumber, website, email, password } = req.body;
+  try {
+    //validate businessName, number, email, password required
+    //check if businessName or email exists
+    //hashpassword
+    //create verificationtoek,
+    //save token
+    //send a email verification
+  } catch (error) {}
+};
+
 //Create Business
 const createBusiness = async (req, res) => {
   const { adminId, phoneNumber, name, website } = req.body;

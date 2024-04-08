@@ -67,7 +67,13 @@ CREATE TABLE IF NOT EXISTS Business (
     admin_id INTEGER NOT NULL,
     phone_number VARCHAR(20),
     website VARCHAR(255),
-    user_ids INTEGER[],
-    article_ids INTEGER[]
+
 );
 
+-- Create User Business Table many to many
+CREATE TABLE IF NOT EXISTS userBusiness (
+  id SERIAL PRIMARY KEY,
+  FOREIGN KEY (user_id) REFERENCES public."user"(id)
+      FOREIGN KEY (business_id) REFERENCES business(id)
+
+)

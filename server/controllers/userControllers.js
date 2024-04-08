@@ -14,27 +14,12 @@ const {
 } = require("../services/tokenService");
 const { getUserByEmail, createUser } = require("../services/userService");
 
-const { createBusinessQuery } = require("../services/businessService");
+const {
+  createBusinessQuery,
+  userBusinessQuery,
+} = require("../services/businessService");
 
-const registerBusiness = async (req, res) => {
-  const {
-    businessName,
-    businessNumber,
-    website,
-    email,
-    password,
-    account_type,
-  } = req.body;
-  try {
-    //validate businessName, number, email, password required
-    //check if businessName or email exists
-    //hashpassword
-    //create verificationtoek,
-    //save token
-    //send a email verification
-  } catch (error) {}
-};
-
+const { createPermissionQuery } = require("../services/permissionService");
 // POST /api/users/register
 const register = async (req, res) => {
   try {
@@ -52,7 +37,7 @@ const register = async (req, res) => {
         .status(400)
         .json({ message: "Please enter email and password" });
     }
-    if (account_type === "business") {
+    if (account_type === "Business") {
       if (!business_name) {
         return res.status(400).json({ message: "Please enter business name" });
       }
@@ -116,18 +101,27 @@ const verify = async (req, res) => {
 };
 
 const handleBusinessVerification = async (decoded) => {
-  await createUser(decoded.email, decoded.hashedPassword, decoded.account_type);
+  const user = await createUser(
+    decoded.email,
+    decoded.hashedPassword,
+    decoded.account_type
+  );
 
-  const user = await getUserByEmail(decoded.email);
   const user_id = user.id;
 
   const businessData = {
-    admin_id: user_id,
     phone_number: decoded.phone_number,
     name: decoded.business_name,
     website: decoded.business_website,
   };
-  await createBusinessQuery(businessData);
+  const business = await createBusinessQuery(businessData);
+
+  const permissionData = {
+    role: "Admin",
+    description: "full access",
+  };
+  const permission = await createPermissionQuery(permissionData);
+  await userBusinessQuery(business.id, user_id, permission.id);
 };
 
 const handleUserVerification = async (decoded) => {

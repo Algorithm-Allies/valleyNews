@@ -1,25 +1,35 @@
 const db = require("../config/database");
+const { use } = require("../routes/userRoutes");
 
 const createBusinessQuery = async (businessData) => {
   try {
     const query = `
-    INSERT INTO business ("admin_id", "phone_number", "name", "website")
-    VALUES ($1, $2, $3, $4)
+    INSERT INTO business ("phone_number", "name", "website")
+    VALUES ($1, $2, $3)
     RETURNING *;`;
 
-    const { admin_id, phone_number, name, website } = businessData;
-    const business = await db.query(query, [
-      admin_id,
-      phone_number,
-      name,
-      website,
-    ]);
+    const { phone_number, name, website } = businessData;
+    const business = await db.query(query, [phone_number, name, website]);
     return business.rows[0];
   } catch (error) {
     console.error("Error adding creating business", error);
     throw error;
   }
 };
+const userBusinessQuery = async (business_id, user_id, permission_id) => {
+  try {
+    const query = `INSERT INTO public."userBusiness" ("business_id", "user_id", "permission_id")
+VALUES ($1, $2, $3)
+RETURNING *;
+`;
+    const result = await db.query(query, [business_id, user_id, permission_id]);
+    return result.rows[0];
+  } catch (error) {
+    console.error("Error adding creating userBusiness connection", error);
+    throw error;
+  }
+};
+
 const viewBusinessQuery = async (businessId) => {
   try {
     const query = `
@@ -140,4 +150,5 @@ module.exports = {
   removeUserQuery,
   addArticleQuery,
   removeArticleQuery,
+  userBusinessQuery,
 };

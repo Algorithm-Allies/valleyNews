@@ -18,7 +18,5 @@ router.put("/:id", editBusiness);
 router.delete("/:id", deleteBusiness);
 router.post("/user/add", addUsers);
 router.put("/user/remove", removeUsers);
-router.post("/article/add", addArticles);
-router.put("/article/remove", removeArticles);
 
 module.exports = router;

@@ -1,5 +1,4 @@
 const db = require("../config/database");
-const { use } = require("../routes/userRoutes");
 
 const createBusinessQuery = async (businessData) => {
   try {
@@ -26,6 +25,20 @@ RETURNING *;
     return result.rows[0];
   } catch (error) {
     console.error("Error adding creating userBusiness connection", error);
+    throw error;
+  }
+};
+
+const getUserBusiness = async (businessId, userId) => {
+  try {
+    const query = `
+        SELECT * FROM "userBusiness"
+        WHERE business_id = $1 AND user_id = $2
+      `;
+    const result = await db.query(query, [businessId, userId]);
+    return result.rows[0];
+  } catch (error) {
+    console.error("Error getting userBusiness:", error);
     throw error;
   }
 };
@@ -81,27 +94,11 @@ const deleteBusinessQuery = async (businessId) => {
   }
 };
 
-const addUserQuery = async (businessId, userId) => {
-  try {
-    const query = `
-        UPDATE business
-        SET user_ids = array_append(user_ids, $2)
-        WHERE id = $1;
-      `;
-    const result = await db.query(query, [businessId, userId]);
-    return result.rows;
-  } catch (error) {
-    console.error("Error adding user to business:", error);
-    throw error;
-  }
-};
-
 const removeUserQuery = async (businessId, userId) => {
   try {
     const query = `
-        UPDATE business
-        SET user_ids = array_remove(user_ids, $2)
-        WHERE id = $1;
+        DELETE FROM "userBusiness"
+        WHERE business_id = $1 AND user_id = $2;
       `;
     const result = await db.query(query, [businessId, userId]);
     return result.rows;
@@ -111,44 +108,12 @@ const removeUserQuery = async (businessId, userId) => {
   }
 };
 
-const addArticleQuery = async (businessId, articleId) => {
-  try {
-    const query = `
-        UPDATE business
-        SET article_ids = array_append(article_ids, $2)
-        WHERE id = $1;
-      `;
-    const result = await db.query(query, [businessId, articleId]);
-    return result.rows;
-  } catch (error) {
-    console.error("Error adding article to business:", error);
-    throw error;
-  }
-};
-
-const removeArticleQuery = async (businessId, articleId) => {
-  try {
-    const query = `
-        UPDATE business
-        SET article_ids = array_remove(article_ids, $2)
-        WHERE id = $1;
-      `;
-    const result = await db.query(query, [businessId, articleId]);
-    return result.rows;
-  } catch (error) {
-    console.error("Error removing article from business:", error);
-    throw error;
-  }
-};
-
 module.exports = {
   createBusinessQuery,
   viewBusinessQuery,
   deleteBusinessQuery,
   editBusinessQuery,
-  addUserQuery,
   removeUserQuery,
-  addArticleQuery,
-  removeArticleQuery,
   userBusinessQuery,
+  getUserBusiness,
 };

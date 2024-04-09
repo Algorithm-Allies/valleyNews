@@ -4,27 +4,12 @@ const {
   viewBusinessQuery,
   editBusinessQuery,
   deleteBusinessQuery,
-  addUserQuery,
   removeUserQuery,
-  addArticleQuery,
-  removeArticleQuery,
+  userBusinessQuery,
+  getUserBusiness,
 } = require("../services/businessService");
-
-//registering as Business
-/* 
-businessName, businessNumber, BusinessSite, BusinessEmail, Password
-*/
-const registerBusiness = async (req, res) => {
-  const { businessName, businessNumber, website, email, password } = req.body;
-  try {
-    //validate businessName, number, email, password required
-    //check if businessName or email exists
-    //hashpassword
-    //create verificationtoek,
-    //save token
-    //send a email verification
-  } catch (error) {}
-};
+const { createPermissionQuery } = require("../services/permissionService");
+const { getUserById } = require("../services/userService");
 
 //Create Business
 const createBusiness = async (req, res) => {
@@ -115,7 +100,29 @@ const deleteBusiness = async (req, res) => {
 const addUsers = async (req, res) => {
   const { businessId, userId } = req.body;
   try {
-    await addUserQuery(businessId, userId);
+    const business = await viewBusinessQuery(businessId);
+    if (!business) {
+      return res.status(404).json({ message: "Business not found" });
+    }
+
+    const user = await getUserById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const existingUserBusiness = await getUserBusiness(businessId, userId);
+    if (existingUserBusiness) {
+      return res
+        .status(400)
+        .json({ message: "User already associated with the business" });
+    }
+
+    let permissionData = {
+      role: "regularUser",
+      description: "temporary full access",
+    };
+    const permission = await createPermissionQuery(permissionData);
+    await userBusinessQuery(businessId, userId, permission.id);
     res.status(200).json({ message: "User added to business successfully" });
   } catch (error) {
     console.error("Error adding user to business:", error);
@@ -136,30 +143,6 @@ const removeUsers = async (req, res) => {
   }
 };
 
-const addArticles = async (req, res) => {
-  const { businessId, articleId } = req.body;
-  try {
-    await addArticleQuery(businessId, articleId);
-    res.status(200).json({ message: "Article added to business successfully" });
-  } catch (error) {
-    console.error("Error adding article to business:", error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-};
-
-const removeArticles = async (req, res) => {
-  const { businessId, articleId } = req.body;
-  try {
-    await removeArticleQuery(businessId, articleId);
-    res
-      .status(200)
-      .json({ message: "Article removed from business successfully" });
-  } catch (error) {
-    console.error("Error removing article from business:", error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-};
-
 module.exports = {
   createBusiness,
   viewBusiness,
@@ -167,6 +150,4 @@ module.exports = {
   deleteBusiness,
   addUsers,
   removeUsers,
-  addArticles,
-  removeArticles,
 };

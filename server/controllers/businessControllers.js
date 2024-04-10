@@ -7,6 +7,8 @@ const {
   removeUserQuery,
   userBusinessQuery,
   getUserBusiness,
+  viewUsersQuery,
+  getSingleUserQuery,
 } = require("../services/businessService");
 const { createPermissionQuery } = require("../services/permissionService");
 const { getUserById } = require("../services/userService");
@@ -118,7 +120,7 @@ const addUsers = async (req, res) => {
     }
 
     let permissionData = {
-      role: "regularUser",
+      role: "viewer",
       description: "temporary full access",
     };
     const permission = await createPermissionQuery(permissionData);
@@ -133,12 +135,59 @@ const addUsers = async (req, res) => {
 const removeUsers = async (req, res) => {
   const { businessId, userId } = req.body;
   try {
+    const business = await viewBusinessQuery(businessId);
+    if (!business) {
+      return res.status(404).json({ message: "Business not found" });
+    }
+
+    const user = await getUserById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
     await removeUserQuery(businessId, userId);
     res
       .status(200)
       .json({ message: "User removed from business successfully" });
   } catch (error) {
     console.error("Error removing user from business:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+const getUsersFromBusiness = async (req, res) => {
+  const businessId = req.params.business_id;
+  console.log(businessId);
+  try {
+    const business = await viewBusinessQuery(businessId);
+    if (!business) {
+      return res.status(404).json({ message: "Business not found" });
+    }
+    const users = await viewUsersQuery(businessId);
+    res.json(users);
+  } catch (error) {
+    console.error("Error getting users:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+const getSingleUser = async (req, res) => {
+  const businessId = req.params.business_id;
+  const userId = req.params.user_id;
+
+  try {
+    const business = await viewBusinessQuery(businessId);
+    if (!business) {
+      return res.status(404).json({ message: "Business not found" });
+    }
+
+    const user = await getSingleUserQuery(businessId, userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json(user);
+  } catch (error) {
+    console.error("Error getting user:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
@@ -150,4 +199,6 @@ module.exports = {
   deleteBusiness,
   addUsers,
   removeUsers,
+  getUsersFromBusiness,
+  getSingleUser,
 };

@@ -108,6 +108,38 @@ const removeUserQuery = async (businessId, userId) => {
   }
 };
 
+const viewUsersQuery = async (businessId) => {
+  try {
+    const query = `
+    SELECT u.id, u.email, u.account_type
+    FROM "user" u
+    JOIN "userBusiness" ub ON u.id = ub.user_id
+    WHERE ub.business_id = $1; 
+  `;
+    const result = await db.query(query, [businessId]);
+    return result.rows;
+  } catch (error) {
+    console.error("Error retreiving users from business:", error);
+    throw error;
+  }
+};
+
+const getSingleUserQuery = async (businessId, userId) => {
+  try {
+    const query = `
+    SELECT u.id, u.email, u.account_type
+    FROM "user" u
+    JOIN "userBusiness" ub ON u.id = ub.user_id
+    WHERE ub.business_id = $1 AND u.id = $2;
+`;
+    const result = await db.query(query, [businessId, userId]);
+    return result.rows[0];
+  } catch (error) {
+    console.error("Error retreiving single user from business:", error);
+    throw error;
+  }
+};
+
 module.exports = {
   createBusinessQuery,
   viewBusinessQuery,
@@ -116,4 +148,6 @@ module.exports = {
   removeUserQuery,
   userBusinessQuery,
   getUserBusiness,
+  viewUsersQuery,
+  getSingleUserQuery,
 };

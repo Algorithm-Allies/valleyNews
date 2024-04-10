@@ -10,7 +10,7 @@ const {
 } = require("../controllers/commentControllers");
 
 router.get("/:comment_id", viewCommentById);
-router.get("/getComments/:article_id", viewCommentsInArticle);
+router.get("/:article_id", viewCommentsInArticle);
 router.post("/:article_id", addComment);
 router.put("/:comment_id", editComment);
 router.delete("/:comment_id", deleteComment);

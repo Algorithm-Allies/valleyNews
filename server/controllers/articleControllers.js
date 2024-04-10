@@ -5,7 +5,7 @@ const { insertArticle } = require("../services/articleService");
 // POST /api/articles
 // Create articles -- bulk insert into database
 async function createArticles(req, res) {
-  const articlesData = req.body;
+  const articlesData = await req.body;
   console.log(articlesData[0]);
   try {
     const insertedIds = [];

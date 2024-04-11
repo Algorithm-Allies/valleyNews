@@ -35,6 +35,7 @@ async function createArticles(req, res) {
 async function getArticles(req, res) {
   const query = `
     SELECT * FROM article
+    ORDER BY date_published DESC
   `;
 
   try {
@@ -54,6 +55,7 @@ async function getArticlesByCategory(req, res) {
   const query = `
     SELECT * FROM article
     WHERE category = $1
+    ORDER BY date_published DESC
   `;
 
   try {
@@ -96,6 +98,7 @@ async function getArticlesBySubcategory(req, res) {
     SELECT * FROM article
     WHERE category = $1
     AND subcategory = $2
+    ORDER BY date_published DESC
   `;
 
   try {
@@ -171,7 +174,6 @@ async function getArticleUrls(req, res) {
 
 module.exports = {
   createArticles,
-  createNewArticles,
   getArticles,
   getArticlesByCategory,
   getArticlesBySubcategory,

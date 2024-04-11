@@ -21,9 +21,10 @@ CREATE TABLE IF NOT EXISTS article (
     category VARCHAR(50) CHECK (category IN ('SPORTS', 'NEWS')),
     subcategory VARCHAR(50) CHECK (
         subcategory IN ('CRIME', 'GOVERNMENT', 'EDUCATION', 'LOCAL SPORTS', 'LOCAL NEWS', 'HIGH SCHOOL SPORTS')
-    ),,
-    author VARCHAR(100),
+    ),
+    author VARCHAR(255),
     date_published DATE,
+    date_time_published TIMESTAMP,
     image_url VARCHAR(255),
     image_alt_description TEXT,
     thumbnail_url VARCHAR(255),

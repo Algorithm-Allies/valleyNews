@@ -1,7 +1,7 @@
 const db = require("../config/database");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const nodemailer = require("nodemailer");
+const dotenv = require("dotenv");
 const {
   sendPasswordResetEmail,
   sendVerificationEmail,
@@ -92,8 +92,8 @@ const verify = async (req, res) => {
     }
 
     await deleteVerificationToken(token);
-
-    res.redirect("https://example.com/verification-success");
+    const successUrl = process.env.LOGIN_HREF;
+    res.redirect(successUrl);
   } catch (error) {
     console.error("Error verifying email:", error);
     res.status(500).json({ message: "Internal server error" });

@@ -17,7 +17,7 @@ router.get("/:id", viewBusiness);
 router.put("/:id", editBusiness);
 router.delete("/:id", deleteBusiness);
 router.post("/user/add", addUsers);
-router.put("/user/remove", removeUsers);
+router.put("/user/remove/", removeUsers);
 router.get("/users/:business_id", getUsersFromBusiness);
 router.get("/:business_id/user/:user_id", getSingleUser);
 

@@ -120,8 +120,8 @@ const addUsers = async (req, res) => {
     }
 
     let permissionData = {
-      role: "viewer",
-      description: "temporary full access",
+      role: "Viewer",
+      description: "User can only view",
     };
     const permission = await createPermissionQuery(permissionData);
     await userBusinessQuery(businessId, userId, permission.id);

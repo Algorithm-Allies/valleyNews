@@ -2,10 +2,10 @@ const db = require("../config/database");
 
 async function insertArticle(article) {
   const query = `
-    INSERT INTO article (source, publisher, headline, subheading, category, subcategory, author, date_published, image_url, image_alt_description,
+    INSERT INTO article (source, publisher, headline, subheading, category, subcategory, author, date_published, date_time_published, image_url, image_alt_description,
     thumbnail_url, thumbnail_alt_description,
     paragraphs)
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
     RETURNING id
   `;
 
@@ -18,6 +18,7 @@ async function insertArticle(article) {
     article.subcategory,
     article.author,
     article.date,
+    article.datetime,
     article.img.src,
     article.img.alt,
     article.thumbnail.src,

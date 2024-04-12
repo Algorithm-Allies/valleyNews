@@ -12,8 +12,15 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(cookie());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+var bodyParser = require("body-parser");
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(
+  bodyParser.urlencoded({
+    limit: "50mb",
+    extended: true,
+    parameterLimit: 50000,
+  })
+);
 
 // Database
 db.connect((err) => {
@@ -32,6 +39,7 @@ app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/articles", require("./routes/articleRoutes"));
 app.use("/api/comments", require("./routes/commentRoutes"));
 app.use("/api/subscription", require("./routes/subsriptionRoutes"));
+app.use("/api/business", require("./routes/businessRoutes"));
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

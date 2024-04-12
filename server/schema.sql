@@ -7,9 +7,7 @@ CREATE TABLE IF NOT EXISTS user (
   email VARCHAR(255) NOT NULL UNIQUE,
   password VARCHAR(255) NOT NULL,
   account_type VARCHAR(20) NOT NULL CHECK (account_type IN ('User', 'Business')),
-  mobile_phone_number VARCHAR(20),
-  business_name VARCHAR(255),
-  business_website VARCHAR(255)
+
 );  
 
 
@@ -23,14 +21,16 @@ CREATE TABLE IF NOT EXISTS article (
     category VARCHAR(50) CHECK (category IN ('SPORTS', 'NEWS')),
     subcategory VARCHAR(50) CHECK (
         subcategory IN ('CRIME', 'GOVERNMENT', 'EDUCATION', 'LOCAL SPORTS', 'LOCAL NEWS', 'HIGH SCHOOL SPORTS')
-    ),,
-    author VARCHAR(100),
+    ),
+    author VARCHAR(255),
     date_published DATE,
+    date_time_published TIMESTAMP,
     image_url VARCHAR(255),
     image_alt_description TEXT,
     thumbnail_url VARCHAR(255),
     thumbnail_alt_description TEXT,
-    paragraphs TEXT[]
+    paragraphs TEXT[];
+    business_id
 );
 
 -- Create the verification_token table
@@ -43,8 +43,6 @@ CREATE TABLE IF NOT EXISTS verification_tokens (
 -- Create Comment Table 
 CREATE TABLE IF NOT EXISTS comment (
     id SERIAL PRIMARY KEY,
-    user_id INT,
-    article_id INT,
     comment TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -60,4 +58,40 @@ CREATE TABLE IF NOT EXISTS subscription (
   frequency VARCHAR(100) CHECK (frequency IN ('Hourly', 'Daily', 'Weekly', 'Biweekly', 'Monthly')),
   delivery_method VARCHAR(100) CHECK (delivery_method IN ('Email', 'SMS')),
   FOREIGN KEY (user_id) REFERENCES public."user"(id)
+);
+
+-- Create Business Table
+CREATE TABLE IF NOT EXISTS Business (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    phone_number VARCHAR(20),
+    website VARCHAR(255),
+
+);
+
+-- Create User Business Table many to many
+CREATE TABLE IF NOT EXISTS userBusiness (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER,
+  business_id INTEGER,
+  user_permission INTEGER,
+  FOREIGN KEY (user_id) REFERENCES public."user"(id),
+  FOREIGN KEY (business_id) REFERENCES business(id),
+  FOREIGN KEY (user_permission) REFERENCES permissions(id)
+);
+
+
+-- Create permissions table
+CREATE TABLE IF NOT EXISTS permissions (
+  id SERIAL PRIMARY KEY,
+  role TEXT,
+  description TEXT
+);
+
+-- Business settings
+CREATE TABLE IF NOT EXISTS business_settings (
+  id SERIAL PRIMARY KEY,
+  business_id INTEGER,
+  FOREIGN KEY (business_id) REFERENCES business(id),
+  new_comment_notification TEXT
 );

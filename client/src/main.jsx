@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import {
   createBrowserRouter,
+  Outlet,
   redirect,
   RouterProvider,
 } from "react-router-dom";
@@ -16,9 +17,27 @@ import PageNotFound from "./pages/PageNotFound.jsx";
 import NewPassword, {
   action as NewPasswordAction,
 } from "./pages/NewPassword.jsx";
-import AboutUs from './pages/AboutUs.jsx'
-
 import NewsPage from "./pages/NewsPage.jsx";
+import HomePage from "./pages/Homepage.jsx";
+import Subscribe from "./pages/Subscribe.jsx";
+import AboutUs from './pages/AboutUs.jsx'
+import {
+  getAllArticles,
+  getArticleById,
+  getArticlesByCategory,
+} from "./services/articleService.js";
+import ArticlePage from "./pages/ArticlePage.jsx";
+import NavBar from "./components/NavBar.jsx";
+import RootLayout from "./components/RootLayout.jsx";
+
+function ArticleFeedPage() {
+  return null;
+}
+
+function ArticleViewPage() {
+  return null;
+}
+
 import BusinessPanel from "./pages/Business/BusinessPanel.jsx";
 const router = createBrowserRouter([
   {
@@ -55,18 +74,51 @@ const router = createBrowserRouter([
         element: <ResetPassword />,
         errorElement: <ResetPassword />,
         action: ResetPasswordAction,
-      },{
-        path: "/auth/home",
-        element: <NewsPage/>
       },
       {
-        path: "/auth/about-us",
-        element: <AboutUs />
+        path: "/auth/home",
+        element: <NewsPage />,
+      },
+    ],
+  },
+  {
+    path: "/",
+    element: <RootLayout />,
+    children: [
+      {
+        index: true,
+        element: <NewsPage />,
+        loader: async () => {
+          try {
+            const res = await getAllArticles();
+            if (res.ok) {
+              console.log(res.data);
+              return { data: res.data };
+            }
+          } catch (e) {}
+        },
+      },
+      {
+        path: "/:category",
+        element: <NewsPage />,
+      },
+      {
+        path: "/:category/:subcategory",
+        element: <NewsPage />,
+      },
+      {
+        path: "/:category/:subcategory/:id",
+        element: <ArticlePage />,
+      },
+      {
+        path: "/staff",
+        element: <AboutUs />,
       },
       {
         path: "/auth/business/dashboard",
         element: <BusinessPanel />
-      }
+      },
+      { path: "/subscribe", element: <Subscribe /> },
     ],
   },
   {

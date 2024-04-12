@@ -6,6 +6,7 @@ const dotenv = require("dotenv").config();
 const { scrapeAndCreateArticles } = require("./scheduler");
 
 const port = process.env.PORT || 8000;
+const DB = process.env.DB_HOST;
 
 const app = express();
 
@@ -20,7 +21,7 @@ db.connect((err) => {
   if (err) {
     console.error("Error connecting to database:", err);
   } else {
-    console.log("Connected to database");
+    console.log(`Connected to database ${DB}`);
   }
 });
 

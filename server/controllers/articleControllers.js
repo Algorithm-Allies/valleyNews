@@ -3,10 +3,19 @@ const db = require("../config/database");
 const { insertArticle } = require("../services/articleService");
 
 // POST /api/articles
+async function createNewArticles(req, res) {
+  try {
+    await createArticles(articles);
+    res.status(201).json({ message: "Articles created successfully" });
+  } catch (error) {
+    console.error("Error creating articles:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
 // Create articles -- bulk insert into database
 async function createArticles(req, res) {
   const articlesData = await req.body;
-  console.log(articlesData[0]);
   try {
     const insertedIds = [];
     for (const article of articlesData) {

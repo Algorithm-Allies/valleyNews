@@ -1,4 +1,3 @@
-const db = require("../config/database");
 const {
   findCommentById,
   findArticleById,
@@ -45,9 +44,8 @@ const viewCommentsInArticle = async (req, res) => {
 //add comment to article
 const addComment = async (req, res) => {
   const articleId = req.params.article_id;
+  const userId = req.params.user_id;
   const commentData = req.body;
-  //const userId = req.user.id;
-  const userId = 19;
   const timestamp = new Date();
 
   try {

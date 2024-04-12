@@ -12,7 +12,7 @@ async function insertArticle(article) {
   const values = [
     article.source,
     article.publisher,
-    article.headline,
+    article.heading,
     article.subHeading,
     article.category,
     article.subcategory,

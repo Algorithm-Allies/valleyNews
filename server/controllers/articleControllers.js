@@ -10,8 +10,11 @@ async function createArticles(req, res) {
       try {
         const insertedId = await insertArticle(article);
         insertedIds.push(insertedId);
+        console.log(`Article inserted with ID: ${insertedId}`);
       } catch (error) {
         console.error("Error inserting article:", error);
+        // Continue to the next iteration of the loop
+        continue;
       }
     }
     console.log(`Inserted ${insertedIds.length} articles`);

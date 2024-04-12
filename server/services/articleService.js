@@ -13,7 +13,7 @@ async function insertArticle(article) {
     article.source,
     article.publisher,
     article.headline,
-    article.subheading,
+    article.subHeading,
     article.category,
     article.subcategory,
     article.author,

@@ -7,8 +7,12 @@ async function createArticles(req, res) {
   try {
     const insertedIds = [];
     for (const article of articlesData) {
-      const insertedId = await insertArticle(article);
-      insertedIds.push(insertedId);
+      try {
+        const insertedId = await insertArticle(article);
+        insertedIds.push(insertedId);
+      } catch (error) {
+        console.error("Error inserting article:", error);
+      }
     }
     console.log(`Inserted ${insertedIds.length} articles`);
     res.status(201).json({ message: "Articles created successfully" });

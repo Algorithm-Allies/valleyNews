@@ -3,13 +3,15 @@ const { insertArticle } = require("../services/articleService");
 
 // Create articles -- bulk insert into database
 async function createArticles(req, res) {
-  const articlesData = await req.body;
   try {
+    const articlesData = await req.body;
     const insertedIds = [];
+
     for (const article of articlesData) {
       const insertedId = await insertArticle(article);
       insertedIds.push(insertedId);
     }
+
     console.log(`Inserted ${insertedIds.length} articles`);
     res.status(201).json({ message: "Articles created successfully" });
   } catch (error) {

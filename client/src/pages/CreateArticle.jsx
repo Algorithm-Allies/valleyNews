@@ -1,5 +1,5 @@
 
-function PageNotFound() {
+export default function CreateArticle() {
   return (
     <div className="h-screen bg-brown-100">
       <div className="h-full flex flex-col pt-8 max-w-[70vw] w-full mx-auto">
@@ -28,5 +28,3 @@ function PageNotFound() {
     </div>
   );
 }
-
-export default PageNotFound;

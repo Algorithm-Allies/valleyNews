@@ -1,4 +1,3 @@
-import { Root } from "@radix-ui/react-radio-group";
 import React from "react";
 import { Outlet } from "react-router-dom";
 import NavBar from "./NavBar";

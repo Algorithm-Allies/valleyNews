@@ -4,7 +4,6 @@ const { insertArticle } = require("../services/articleService");
 
 // POST /api/articles
 async function createNewArticles(req, res) {
-  console.log(articles);
   try {
     await createArticles(articles);
     res.status(201).json({ message: "Articles created successfully" });
@@ -17,7 +16,6 @@ async function createNewArticles(req, res) {
 // Create articles -- bulk insert into database
 async function createArticles(req, res) {
   const articlesData = await req.body;
-  console.log(articlesData);
   try {
     const insertedIds = [];
     for (const article of articlesData) {
@@ -37,6 +35,7 @@ async function createArticles(req, res) {
 async function getArticles(req, res) {
   const query = `
     SELECT * FROM article
+    ORDER BY date_published DESC
   `;
 
   try {
@@ -56,6 +55,7 @@ async function getArticlesByCategory(req, res) {
   const query = `
     SELECT * FROM article
     WHERE category = $1
+    ORDER BY date_published DESC
   `;
 
   try {
@@ -98,6 +98,7 @@ async function getArticlesBySubcategory(req, res) {
     SELECT * FROM article
     WHERE category = $1
     AND subcategory = $2
+    ORDER BY date_published DESC
   `;
 
   try {
@@ -173,7 +174,6 @@ async function getArticleUrls(req, res) {
 
 module.exports = {
   createArticles,
-  createNewArticles,
   getArticles,
   getArticlesByCategory,
   getArticlesBySubcategory,

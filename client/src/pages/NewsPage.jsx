@@ -12,7 +12,7 @@ import {
 function NewsPage() {
   const { category, subcategory } = useParams();
   const [loading, setLoading] = useState(true);
-  const [latestArticle, setLatestArticle] = useState([]);
+  const [latestArticles, setLatestArticles] = useState([]);
   const [articles, setArticles] = useState([]);
 
   useEffect(() => {
@@ -29,7 +29,7 @@ function NewsPage() {
         }
         if (res.ok) {
           setArticles(res.data);
-          setLatestArticle([res.data[0]]);
+          setLatestArticles(res.data.slice(0, 5));
         }
       } catch (error) {
         console.error("Error fetching articles:", error);
@@ -92,7 +92,7 @@ function NewsPage() {
           )
         )}
       </div>
-      {LatestArticle(latestArticle)}
+      <LatestArticle articles={latestArticles} />
       <div className=" text-2xl leading-6 text-center text-custom-orange  m-4 items-stretch">
         {subcategory ? subcategory.toUpperCase() : null}
       </div>
@@ -104,19 +104,11 @@ function NewsPage() {
       >
         {articles.map((article) => (
           <ArticleThumbnail
-            id={article.id}
             category={category}
             subcategory={subcategory}
             key={article.id}
-            url={article.source}
-            author={article.author}
-            publisher={article.publisher}
-            title={article.headline}
-            imgUrl={article.image_url}
-            imgDescription={article.image_alt_description}
-            date={article.date}
-            thumbnail={article.thumbnail_url}
-            body={article.paragraphs}
+            id={article.id}
+            article={article}
           />
         ))}
       </div>

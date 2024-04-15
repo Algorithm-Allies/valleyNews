@@ -4,7 +4,7 @@ import MobileNavLink from "./MobileNavLink";
 import MobileNavSubLink from "./MobileNavSubLink";
 import React from "react";
 export default function ModalNav({ links }) {
-  // state to control
+  // state to control when the nav is open.  Nav will be closed manually when the user clicks on the link otherwise radix will just close it.
   const [isOpen, setIsOpen] = React.useState(false);
 
   return (

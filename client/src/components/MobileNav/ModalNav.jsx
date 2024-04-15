@@ -9,9 +9,9 @@ export default function ModalNav({ links }) {
         <Bars3Icon className="size-6 fill-gray-300 group-hover:fill-gray-50 group-focus-visible:fill-gray-50" />
       </Dialog.Trigger>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-black/80 backdrop-blur-sm" />
+        <Dialog.Overlay className="fixed z-10 inset-0 bg-black/80 backdrop-blur-sm" />
         <Dialog.Content asChild>
-          <nav className="fixed top-4 right-4 w-full max-w-xs bg-white text-stone-900 rounded-lg shadow-lg p-6 text-base font-semibold">
+          <nav className="fixed z-20 top-4 right-4 w-full max-w-xs bg-white text-stone-900 rounded-lg shadow-lg p-6 text-base font-semibold">
             <Dialog.Close className="absolute top-7 right-6 size-8  flex items-center justify-center text-gray-500 outline-none rounded-sm focus-visible:outline focus-visible:outline-1 focus-visible:outline-custom-orange hover:text-gray-600">
               <span className="sr-only">Close Navigation</span>
               <XMarkIcon className="size-5 stroke-2 overflow-visible" />

@@ -1,5 +1,5 @@
 
-function PageNotFound() {
+export default function CreateArticle() {
   return (
     <div className="h-screen bg-brown-100">
       <div className="h-full flex flex-col pt-8 max-w-[70vw] w-full mx-auto">
@@ -17,6 +17,8 @@ function PageNotFound() {
                     <option value="author1">author1</option>
                     <option value="author2">author2</option>
                 </select>
+                <label className="mt-4">Upload Article Image</label>
+                <input className="mt-4" type="file" id="image" name="filename"/>
                 <div className="flex flex-row">
                     <button className="w-1/4 py-2 mr-8 mt-6  rounded bg-yellow-600/50 ">Save</button>
                     <button className="w-1/4 py-2 mr-8 mt-6  rounded bg-brown-400">Cancel</button>
@@ -28,5 +30,3 @@ function PageNotFound() {
     </div>
   );
 }
-
-export default PageNotFound;

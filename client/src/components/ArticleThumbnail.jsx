@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import NewsImage from '../assets/newspaper.jpg';
+
 function ArticleThumbnail({ id, category, subcategory, article }) {
   return (
     <>
@@ -7,7 +7,7 @@ function ArticleThumbnail({ id, category, subcategory, article }) {
         <div className="shadow-gray-700 shadow-md bg-brown-100 p-3 rounded-lg flex md:justify-between flex-col h-full">
           <img
             className="object-cover h-48 w-100"
-            src={[article.image_url ?? NewsImage] }
+            src={[article.image_url]}
             alt={article.image_alt_description}
           ></img>
           <div className="text-lg py-1.5 font-bold line-clamp-2">

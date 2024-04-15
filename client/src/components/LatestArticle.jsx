@@ -5,12 +5,12 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
-
+import NewsImage from '../assets/newspaper.jpg';
 function LatestArticle({ articles }) {
   return (
     <Swiper
       modules = {[Navigation,Pagination,Scrollbar]}
-      className="w-[60vw] unset-border-box  shadow-gray-700 shadow-md rounded-lg bg-black"
+      className="w-[40vw] unset-border-box  shadow-gray-700 shadow-md rounded-lg bg-black mb-8"
       slidesPerView={1}
       autoplay={{
         delay: 4000,
@@ -24,16 +24,18 @@ function LatestArticle({ articles }) {
       navigation={true}
 
     >
+   
       {articles.map((article) => (
         <SwiperSlide
-          className="shadow-gray-700 shadow-md bg-brown-100 p-3 rounded-lg flex md:justify-between flex-col w-[50%]"
+          className="shadow-gray-700 shadow-md bg-brown-100 p-3 rounded-lg flex-col justify-center items-center w-[50%]"
           key={article.id}
         >
           <img
-            className="flex w-[30vw] object-contain"
-            src={article.image_url}
+            className="max-w-[20vw] object-cover m-8"
+            src={article.image_url ?? NewsImage}
             alt={`Slide ${article.id}`}
           />
+         
           <div className="flex flex-col px-[2em] justify-center">
             <div className="text-lg py-1.5 font-bold flex self-center ">
               {article.headline}

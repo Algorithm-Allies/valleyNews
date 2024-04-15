@@ -15,8 +15,10 @@ export async function getAllArticles() {
 export async function getArticlesByCategory({ category, page, perPage }) {
   try {
     const res = await fetch(
-      //`${import.meta.env.VITE_API_URL}/articles/${category}?page=${page}&perPage=${perPage}`
-      `http://localhost:4500/api/articles/${category}?page=${page}&perPage=${perPage}`
+      `${
+        import.meta.env.VITE_API_URL
+      }/articles/${category}?page=${page}&perPage=${perPage}`
+      //`http://localhost:4500/api/articles/${category}?page=${page}&perPage=${perPage}`
     );
     if (res.ok) {
       const articles = await res.json();
@@ -34,8 +36,10 @@ export async function getArticlesByCategoryAndSubcategory({
 }) {
   try {
     const res = await fetch(
-      //`${import.meta.env.VITE_API_URL}/articles/${category}/${subcategory}?page=${page}&perPage=${perPage}`
-      `http://localhost:4500/api/articles/${category}/${subcategory}?page=${page}&perPage=${perPage}`
+      `${
+        import.meta.env.VITE_API_URL
+      }/articles/${category}/${subcategory}?page=${page}&perPage=${perPage}`
+      //`http://localhost:4500/api/articles/${category}/${subcategory}?page=${page}&perPage=${perPage}`
     );
     if (res.ok) {
       const articles = await res.json();

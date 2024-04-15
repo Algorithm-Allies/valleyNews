@@ -2,9 +2,13 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
 import MobileNavLink from "./MobileNavLink";
 import MobileNavSubLink from "./MobileNavSubLink";
+import React from "react";
 export default function ModalNav({ links }) {
+  // state to control
+  const [isOpen, setIsOpen] = React.useState(false);
+
   return (
-    <Dialog.Root>
+    <Dialog.Root onOpenChange={setIsOpen} open={isOpen}>
       <Dialog.Trigger className="group ml-auto outline-none rounded-sm  focus-visible:outline focus-visble:outline-1  focus-visible:outline-custom-orange">
         <Bars3Icon className="size-6 fill-gray-300 group-hover:fill-gray-50 group-focus-visible:fill-gray-50" />
       </Dialog.Trigger>
@@ -16,7 +20,7 @@ export default function ModalNav({ links }) {
               <span className="sr-only">Close Navigation</span>
               <XMarkIcon className="size-5 stroke-2 overflow-visible" />
             </Dialog.Close>
-            <ModalLinks links={links} />
+            <ModalLinks closeNav={() => setIsOpen(false)} links={links} />
           </nav>
         </Dialog.Content>
       </Dialog.Portal>
@@ -24,7 +28,7 @@ export default function ModalNav({ links }) {
   );
 }
 
-function ModalLinks({ links }) {
+function ModalLinks({ links, closeNav }) {
   return (
     <ul className="space-y-3">
       {links.map((link) => {
@@ -32,10 +36,16 @@ function ModalLinks({ links }) {
           <li key={link.href}>
             {"subLinks" in link ? (
               <div>
-                <MobileNavLink href={link.href}>{link.label}</MobileNavLink>
+                <MobileNavLink closeNav={closeNav} href={link.href}>
+                  {link.label}
+                </MobileNavLink>
                 <ul className="ml-6 space-y-2 my-2">
                   {link.subLinks.map(({ href, label }) => (
-                    <MobileNavSubLink key={href} href={href}>
+                    <MobileNavSubLink
+                      closeNav={closeNav}
+                      key={href}
+                      href={href}
+                    >
                       {label}
                     </MobileNavSubLink>
                   ))}

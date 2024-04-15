@@ -10,7 +10,7 @@ function LatestArticle({ articles }) {
   return (
     <Swiper
       modules = {[Navigation,Pagination,Scrollbar]}
-      className="w-[60vw] unset-border-box  shadow-gray-700 shadow-md rounded-lg bg-black"
+      className="w-[40vw] unset-border-box  shadow-gray-700 shadow-md rounded-lg bg-black mb-8"
       slidesPerView={1}
       autoplay={{
         delay: 4000,

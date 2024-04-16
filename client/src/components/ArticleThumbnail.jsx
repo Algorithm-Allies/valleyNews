@@ -8,6 +8,7 @@ function ArticleThumbnail({ id, category, subcategory, article }) {
           <img
             className="object-cover h-48 w-100"
             src={[article.image_url]}
+            sadf
             alt={article.image_alt_description}
           ></img>
           <div className="text-lg py-1.5 font-bold line-clamp-2">

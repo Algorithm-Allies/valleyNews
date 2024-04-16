@@ -1,9 +1,16 @@
 import { ChevronRightIcon } from "@heroicons/react/16/solid";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
-export default function MobileNavSubLink({ href, children }) {
+export default function MobileNavSubLink({ href, children, closeNav }) {
+  const navigate = useNavigate();
   return (
     <NavLink
+      // intercept the link request and use reacts router navigation and close the nav.
+      onClick={(e) => {
+        e.preventDefault();
+        navigate(href);
+        closeNav();
+      }}
       to={href}
       className={({ isActive }) => {
         return `group text-sm font-semibold leading-none rounded-sm flex items-center p-2 outline-none hover:bg-stone-100 focus-visible:bg-stone-100  ${

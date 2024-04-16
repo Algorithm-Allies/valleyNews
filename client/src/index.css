@@ -15,8 +15,3 @@
 .swiper-button-prev, .swiper-button-next {
     color:rgb(73, 62, 53) !important;
   }
-
-.swiper-slide{
-    height: unset !important;
-    display: flex !important;
-}

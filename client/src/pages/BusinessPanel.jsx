@@ -13,31 +13,33 @@ function BusinessPanel() {
         <button className="w-1/4 py-2 mr-8 rounded bg-orange-400 text-white m-0">New Article</button>
       </div>
 
-      <hr className="rounded-md border-y-8 border-brown-400 mb-10 "/>
-      <table class="table-auto border-collapse border border-[#FCFCFC] bg-[#FCFCFC]">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>TITLE</th>
-            <th>ENGAGEMENTS</th>
-            <th>ACTIONS</th>
-          </tr>
-        </thead>
-        <tbody>
-        {articleData.map((item, i) =>
-          <tr key={i} className="even:bg-[#F2F2F2] odd:bg-[#FCFCFC]">
-            <td className="border border-[#FCFCFC] ">{item.id}</td>
-            <td className="border border-[#FCFCFC] ">{item.title}</td>
-            <td className="border border-[#FCFCFC] ">{item.engagements}</td>
-            <td className="border border-[#FCFCFC] flex flex-row justify-evenly">
-              <button><img src={Trash}/></button>
-              <button><img src={Pencil}/></button>
-              <button><img src={NewsPaper}/></button>
-            </td>
-          </tr>
-        )}
-        </tbody>
-      </table>
+      <hr className="rounded-md border-y-8 border-brown-400 mb-5 "/>
+      <div className="flex justify-center">
+        <table class="table-auto w-[70vw] border-collapse border border-[#FCFCFC] bg-[#FCFCFC]">
+          <thead>
+            <tr className="text-left py-3">
+              <th>ID</th>
+              <th>TITLE</th>
+              <th>ENGAGEMENTS</th>
+              <th>ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody>
+          {articleData.map((item, i) =>
+            <tr key={i} className="even:bg-[#F2F2F2] odd:bg-[#FCFCFC] border border-[#FCFCFC] py-4">
+              <td>{item.id}</td>
+              <td>{item.title}</td>
+              <td>{item.engagements}</td>
+              <td className="flex flex-row justify-around">
+                <button><img className="w-5" src={Trash}/></button>
+                <button><img className="w-5" src={Pencil}/></button>
+                <button><img className="w-5" src={NewsPaper}/></button>
+              </td>
+            </tr>
+          )}
+          </tbody>
+        </table>
+      </div>
     </div>
 
   </div>

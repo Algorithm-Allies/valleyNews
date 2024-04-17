@@ -29,6 +29,7 @@ import {
 import ArticlePage from "./pages/ArticlePage.jsx";
 import NavBar from "./components/NavBar.jsx";
 import RootLayout from "./components/RootLayout.jsx";
+import CreateArticle from './pages/CreateArticle.jsx'
 
 function ArticleFeedPage() {
   return null;
@@ -114,6 +115,7 @@ const router = createBrowserRouter([
         element: <AboutUs />,
       },
       { path: "/subscribe", element: <Subscribe /> },
+      { path: "/createarticle", element: <CreateArticle /> },
     ],
   },
   {

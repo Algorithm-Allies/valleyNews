@@ -10,6 +10,7 @@ const {
   removeUsers,
   getUsersFromBusiness,
   getSingleUser,
+  changeUserPermission,
 } = require("../controllers/businessControllers");
 
 router.post("/", createBusiness);
@@ -20,5 +21,6 @@ router.post("/user/add", addUsers);
 router.put("/user/remove/", removeUsers);
 router.get("/users/:business_id", getUsersFromBusiness);
 router.get("/:business_id/user/:user_id", getSingleUser);
+router.put("/:business_id/user/:user_id", changeUserPermission);
 
 module.exports = router;

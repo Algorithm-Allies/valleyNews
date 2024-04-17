@@ -117,7 +117,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/auth/business/dashboard",
-        element: <BusinessPanel />
+        element: <BusinessPanel dataType={'articles'} />
+      },
+      {
+        path: "/auth/business/users",
+        element: <BusinessPanel dataType={'users'} />
       },
       { path: "/subscribe", element: <Subscribe /> },
       { path: "/createarticle", element: <CreateArticle /> },

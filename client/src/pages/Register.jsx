@@ -37,9 +37,9 @@ export async function action({ request }) {
     });
   }
   // Just for testing to show the email verification message
-  return { data: { email } };
-  /*
-const res = await fetch(`${import.meta.env.VITE_API_URL}/users/register`, {
+  //return { data: { email } };
+
+  const res = await fetch(`http://localhost:4500/api/users/register`, {
     method: "POST",
     body: JSON.stringify({ email, password }),
     headers: {
@@ -48,7 +48,7 @@ const res = await fetch(`${import.meta.env.VITE_API_URL}/users/register`, {
   });
   // If, the user was successful in registering in, we redirect them to home page
   if (res.ok) {
-    return redirect("/");
+    return { data: { email } };
   }
   // If, the user was not successful in registering in, we display the error message
   else {
@@ -60,7 +60,6 @@ const res = await fetch(`${import.meta.env.VITE_API_URL}/users/register`, {
       message: errorMessage,
     });
   }
-  */
 }
 
 function Register() {

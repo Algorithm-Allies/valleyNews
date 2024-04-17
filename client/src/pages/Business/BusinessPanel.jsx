@@ -69,7 +69,7 @@ function BusinessPanel({dataType}) {
             <tr className="">
               {
                 headers.map(header=>(
-                  <td>{item[header]}</td>
+                  <td className="p-4">{item[header]}</td>
                 ))
               }
               <td className="p-4">

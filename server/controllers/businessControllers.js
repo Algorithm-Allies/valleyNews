@@ -10,7 +10,10 @@ const {
   viewUsersQuery,
   getSingleUserQuery,
 } = require("../services/businessService");
-const { createPermissionQuery } = require("../services/permissionService");
+const {
+  createPermissionQuery,
+  updatePermissionQuery,
+} = require("../services/permissionService");
 const { getUserById } = require("../services/userService");
 
 //Create Business
@@ -192,6 +195,36 @@ const getSingleUser = async (req, res) => {
   }
 };
 
+const changeUserPermission = async (req, res) => {
+  const userId = req.params.user_id;
+  const businessId = req.params.business_id;
+  const { role, description } = req.body;
+
+  try {
+    const business = await viewBusinessQuery(businessId);
+    if (!business) {
+      return res.status(404).json({ message: "Business not found" });
+    }
+
+    const user = await getSingleUserQuery(businessId, userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    let permissionData = {
+      userId: userId,
+      businessId: businessId,
+      role: role,
+      description: description,
+    };
+    const result = await updatePermissionQuery(permissionData);
+    res.json(result);
+  } catch (error) {
+    console.error("Error updating permision:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 module.exports = {
   createBusiness,
   viewBusiness,
@@ -201,4 +234,5 @@ module.exports = {
   removeUsers,
   getUsersFromBusiness,
   getSingleUser,
+  changeUserPermission,
 };

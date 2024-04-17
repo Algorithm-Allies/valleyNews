@@ -12,11 +12,13 @@ export async function getAllArticles() {
   } catch (e) {}
 }
 
-export async function getArticlesByCategory({ category }) {
+export async function getArticlesByCategory({ category, page, perPage }) {
   try {
     const res = await fetch(
-      `https://valleynews.onrender.com/api/articles/${category}`
-      //`https://valleynews.onrender.com/api/articles/${category}`
+      `${
+        import.meta.env.VITE_API_URL
+      }/articles/${category}?page=${page}&perPage=${perPage}`
+      //`http://localhost:4500/api/articles/${category}?page=${page}&perPage=${perPage}`
     );
     if (res.ok) {
       const articles = await res.json();
@@ -29,11 +31,15 @@ export async function getArticlesByCategory({ category }) {
 export async function getArticlesByCategoryAndSubcategory({
   category,
   subcategory,
+  page,
+  perPage,
 }) {
   try {
     const res = await fetch(
-      `${import.meta.env.VITE_API_URL}/articles/${category}/${subcategory}`
-      //`$https://valleynews.onrender.com/api/articles/${category}/${subcategory}`
+      `${
+        import.meta.env.VITE_API_URL
+      }/articles/${category}/${subcategory}?page=${page}&perPage=${perPage}`
+      //`http://localhost:4500/api/articles/${category}/${subcategory}?page=${page}&perPage=${perPage}`
     );
     if (res.ok) {
       const articles = await res.json();

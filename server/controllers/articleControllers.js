@@ -23,14 +23,17 @@ async function createArticles(req, res) {
 // GET /api/articles
 // Get all articles
 async function getArticles(req, res) {
+  const { page, perPge } = req.query;
+  const offset = (page - 1) * perPge;
   const query = `
     SELECT * FROM article
-    ORDER BY date_published DESC
+    ORDER BY date_time_published DESC
+    LIMIT $1 OFFSET $2
   `;
 
   try {
     const { rows } = await db.query(query);
-    res.status(200).json(rows); // Send the retrieved articles as JSON response
+    res.status(200).json(rows);
   } catch (error) {
     console.error("Error getting articles:", error);
     res.status(500).json({ error: "Internal server error" });
@@ -41,21 +44,42 @@ async function getArticles(req, res) {
 //Get articles by category
 async function getArticlesByCategory(req, res) {
   const category = req.params.category.toUpperCase();
+  const { page = 1, perPage = 20 } = req.query;
+  const offset = (page - 1) * perPage;
 
-  const query = `
+  const countQuery = `
+  SELECT COUNT(*) AS total FROM article
+  WHERE category = $1
+`;
+
+  const articlesQuery = `
     SELECT * FROM article
     WHERE category = $1
-    ORDER BY date_published DESC
+    ORDER BY date_time_published DESC
+    LIMIT $2 OFFSET $3
   `;
 
   try {
-    const { rows } = await db.query(query, [category]);
-    if (rows.length === 0) {
+    // Get total number of articles for this category
+    const countResult = await db.query(countQuery, [category]);
+    const totalArticles = countResult.rows[0].total;
+
+    // Calculate total number of pages
+    const totalPages = Math.ceil(totalArticles / perPage);
+
+    // Get articles for this category
+    const articlesResult = await db.query(articlesQuery, [
+      category,
+      perPage,
+      offset,
+    ]);
+
+    if (articlesResult.rows.length === 0) {
       return res
         .status(404)
         .json({ error: "No articles found for this category" });
     }
-    res.status(200).json(rows);
+    res.status(200).json({ totalPages, articles: articlesResult.rows });
   } catch (error) {
     console.error("Error getting articles by category:", error.message);
     res.status(500).json({ error: "Internal server error" });
@@ -66,6 +90,8 @@ async function getArticlesByCategory(req, res) {
 // Get articles by category and subcategory
 async function getArticlesBySubcategory(req, res) {
   const category = req.params.category.toUpperCase();
+  const { page = 1, perPage = 20 } = req.query;
+  const offset = (page - 1) * perPage;
   let subcategory;
 
   switch (req.params.subcategory.toLowerCase()) {
@@ -84,21 +110,42 @@ async function getArticlesBySubcategory(req, res) {
       return res.status(400).json({ error: "Invalid subcategory" });
   }
 
-  const query = `
+  const countQuery = `
+  SELECT COUNT(*) AS total FROM article
+    WHERE category = $1
+    AND subcategory = $2
+  `;
+
+  const articlesQuery = `
     SELECT * FROM article
     WHERE category = $1
     AND subcategory = $2
-    ORDER BY date_published DESC
+    ORDER BY date_time_published DESC
+    LIMIT $3 OFFSET $4
   `;
 
   try {
-    const { rows } = await db.query(query, [category, subcategory]);
-    if (rows.length === 0) {
+    // Get total number of articles for this subcategory
+    const countResult = await db.query(countQuery, [category, subcategory]);
+    const totalArticles = countResult.rows[0].total;
+
+    //Calculate total number of pages
+    const totalPages = Math.ceil(totalArticles / perPage);
+
+    // Get articles for this subcategory
+    const articlesResult = await db.query(articlesQuery, [
+      category,
+      subcategory,
+      perPage,
+      offset,
+    ]);
+
+    if (articlesResult.rows.length === 0) {
       return res
         .status(404)
         .json({ error: "No articles found for this subcategory" });
     }
-    res.status(200).json(rows);
+    res.status(200).json({ totalPages, articles: articlesResult.rows });
   } catch (error) {
     console.error(
       "Error getting articles for this subcategory:",

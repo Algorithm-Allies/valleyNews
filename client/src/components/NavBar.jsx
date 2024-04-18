@@ -22,7 +22,7 @@ const LINKS = [
     label: "Sports",
     href: "/sports",
     subLinks: [
-      { label: "High School", href: "/sports/highschool" },
+      { label: "High School", href: "/sports/high-school" },
       { label: "Local", href: "/sports/local" },
     ],
   },

@@ -21,7 +21,7 @@ import NewsPage from "./pages/NewsPage.jsx";
 import HomePage from "./pages/Homepage.jsx";
 import Subscribe from "./pages/Subscribe.jsx";
 import AboutUs from "./pages/AboutUs.jsx";
-import AboutUs from "./pages/AboutUs.jsx";
+
 import {
   getAllArticles,
   getArticleById,

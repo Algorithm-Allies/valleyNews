@@ -1,0 +1,14 @@
+
+export const createBusinessArticle = async(body) => {
+  const response = await fetch(`https://valleynews-dev.onrender.com/api/business`, {
+    method: 'POST',
+    headers: { 
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  });
+
+  const data = await response.json();
+
+  return data;
+}

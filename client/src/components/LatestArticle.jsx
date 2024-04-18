@@ -5,8 +5,9 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
+import { createArticleUrl } from "../lib/articleUrlHelper";
 import NewsImage from "../assets/newspaper.jpg";
-function LatestArticle({ articles, category, subcategory }) {
+function LatestArticle({ articles }) {
   return (
     <Swiper
       modules={[Navigation, Pagination, Scrollbar]}
@@ -29,7 +30,11 @@ function LatestArticle({ articles, category, subcategory }) {
           key={article.id}
         >
           <a
-            href={`/${category}/${subcategory}/${article.id}`}
+            href={`/${createArticleUrl({
+              category: article.category,
+              subcategory: article.subcategory,
+              id: article.id,
+            })}`}
             className="cursor-pointer"
           >
             <img
@@ -40,7 +45,11 @@ function LatestArticle({ articles, category, subcategory }) {
           </a>
           <div className="flex flex-col px-[2em] justify-center">
             <a
-              href={`/${category}/${subcategory}/${article.id}`}
+              href={`/${createArticleUrl({
+                category: article.category,
+                subcategory: article.subcategory,
+                id: article.id,
+              })}`}
               className="text-lg py-1.5 font-bold flex self-center cursor-pointer"
             >
               {article.headline}

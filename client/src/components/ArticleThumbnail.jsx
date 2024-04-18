@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import NewsImage from "../assets/newspaper.jpg";
-import { createArticleUrl } from "../lib/articleUrlHelper";
+import { createArticleUrl } from "../lib/articleUrlHelpers";
 function ArticleThumbnail({ id, article }) {
   return (
     <>

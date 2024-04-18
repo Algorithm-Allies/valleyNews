@@ -5,7 +5,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
-import { createArticleUrl } from "../lib/articleUrlHelper";
+import { createArticleUrl } from "../lib/articleUrlHelpers";
 import NewsImage from "../assets/newspaper.jpg";
 function LatestArticle({ articles }) {
   return (

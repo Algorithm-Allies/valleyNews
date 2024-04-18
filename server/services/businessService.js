@@ -17,14 +17,14 @@ const createBusinessQuery = async (businessData) => {
 };
 const userBusinessQuery = async (business_id, user_id, permission_id) => {
   try {
-    const query = `INSERT INTO public."userBusiness" ("business_id", "user_id", "permission_id")
+    const query = `INSERT INTO public."user_business" ("business_id", "user_id", "permission_id")
 VALUES ($1, $2, $3)
 RETURNING *;
 `;
     const result = await db.query(query, [business_id, user_id, permission_id]);
     return result.rows[0];
   } catch (error) {
-    console.error("Error adding creating userBusiness connection", error);
+    console.error("Error adding creating user_business connection", error);
     throw error;
   }
 };
@@ -32,13 +32,13 @@ RETURNING *;
 const getUserBusiness = async (businessId, userId) => {
   try {
     const query = `
-        SELECT * FROM "userBusiness"
+        SELECT * FROM "user_business"
         WHERE business_id = $1 AND user_id = $2
       `;
     const result = await db.query(query, [businessId, userId]);
     return result.rows[0];
   } catch (error) {
-    console.error("Error getting userBusiness:", error);
+    console.error("Error getting user_business:", error);
     throw error;
   }
 };
@@ -97,7 +97,7 @@ const deleteBusinessQuery = async (businessId) => {
 const removeUserQuery = async (businessId, userId) => {
   try {
     const query = `
-        DELETE FROM "userBusiness"
+        DELETE FROM "user_business"
         WHERE business_id = $1 AND user_id = $2;
       `;
     const result = await db.query(query, [businessId, userId]);
@@ -113,7 +113,7 @@ const viewUsersQuery = async (businessId) => {
     const query = `
     SELECT u.id, u.email, u.account_type
     FROM "user" u
-    JOIN "userBusiness" ub ON u.id = ub.user_id
+    JOIN "user_business" ub ON u.id = ub.user_id
     WHERE ub.business_id = $1; 
   `;
     const result = await db.query(query, [businessId]);

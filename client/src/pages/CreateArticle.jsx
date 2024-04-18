@@ -1,7 +1,7 @@
 
 export default function CreateArticle() {
   return (
-    <div className="h-screen bg-brown-100">
+    <div className="bg-brown-100">
       <div className="h-full flex flex-col pt-8 max-w-[70vw] w-full mx-auto">
         <div className="flex flex-col w-100">
             <h1 className="text-4xl text-black-100 flex">New Article</h1>
@@ -19,7 +19,7 @@ export default function CreateArticle() {
                 </select>
                 <label className="mt-4">Upload Article Image</label>
                 <input className="mt-4" type="file" id="image" name="filename"/>
-                <div className="flex flex-row">
+                <div className="flex flex-row pb-10">
                     <button className="w-1/4 py-2 mr-8 mt-6  rounded bg-yellow-600/50 ">Save</button>
                     <button className="w-1/4 py-2 mr-8 mt-6  rounded bg-brown-400">Cancel</button>
                 </div>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import ArticleThumbnail from "../components/ArticleThumbnail";
 import LatestArticle from "../components/LatestArticle";
 import { useParams, Link } from "react-router-dom";
@@ -10,10 +10,14 @@ import {
 
 //page for different news categories based on selected category i.e local, sports, crime, government, education, etc
 function NewsPage() {
+  const articlesContainerRef = useRef(null);
   const { category, subcategory } = useParams();
   const [loading, setLoading] = useState(true);
   const [latestArticles, setLatestArticles] = useState([]);
   const [articles, setArticles] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [perPage, setPerPage] = useState(20);
 
   useEffect(() => {
     const fetchArticles = async () => {
@@ -23,13 +27,20 @@ function NewsPage() {
           res = await getArticlesByCategoryAndSubcategory({
             category,
             subcategory,
+            page: currentPage,
+            perPage,
           });
         } else {
-          res = await getArticlesByCategory({ category });
+          res = await getArticlesByCategory({
+            category,
+            page: currentPage,
+            perPage,
+          });
         }
         if (res.ok) {
-          setArticles(res.data);
-          setLatestArticles(res.data.slice(0, 5));
+          setArticles(res.data.articles);
+          setLatestArticles(res.data.articles.slice(0, 5));
+          setTotalPages(res.data.totalPages);
         }
       } catch (error) {
         console.error("Error fetching articles:", error);
@@ -39,7 +50,22 @@ function NewsPage() {
     };
 
     fetchArticles();
-  }, [category, subcategory]);
+  }, [category, subcategory, currentPage, perPage]);
+
+  //Pagination
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+      articlesContainerRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+      articlesContainerRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   if (loading) {
     return (
@@ -50,7 +76,10 @@ function NewsPage() {
   }
 
   return (
-    <div className="flex justify-center flex-col items-center w-full">
+    <div
+      ref={articlesContainerRef}
+      className="flex justify-center flex-col items-center w-full mb-20"
+    >
       <div className="text-2xl leading-6 font-bold text-custom-orange m-4 ">
         <nav className="mb-4">
           <ul className="flex justify-center">
@@ -111,6 +140,28 @@ function NewsPage() {
             article={article}
           />
         ))}
+      </div>
+      <div className="flex justify-center mt-4">
+        <div className="flex items-baseline justify-between">
+          <button
+            className="py-2 px-6 bg-zinc-300 items-center rounded-lg disabled:bg-stone-200"
+            onClick={handlePrevPage}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </button>
+          <p className="text-sm text-stone-500 mx-2">
+            {" "}
+            Page {currentPage} of {totalPages}
+          </p>
+          <button
+            className="py-2 px-6 bg-zinc-300 items-center rounded-lg disabled:bg-stone-200"
+            onClick={handleNextPage}
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </button>
+        </div>
       </div>
     </div>
   );

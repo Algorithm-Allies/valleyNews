@@ -74,7 +74,6 @@ function NewsPage() {
       </div>
     );
   }
-
   return (
     <div
       ref={articlesContainerRef}
@@ -121,7 +120,11 @@ function NewsPage() {
           )
         )}
       </div>
-      <LatestArticle articles={latestArticles} />
+      <LatestArticle
+        category={category}
+        subcategory={subcategory}
+        articles={latestArticles}
+      />
       <div className=" text-2xl leading-6 text-center text-custom-orange  m-4 items-stretch">
         {subcategory ? subcategory.toUpperCase() : null}
       </div>

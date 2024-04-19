@@ -1,9 +1,16 @@
 import { Link } from "react-router-dom";
 import NewsImage from "../assets/newspaper.jpg";
-function ArticleThumbnail({ id, category, subcategory, article }) {
+import { createArticleUrl } from "../lib/articleUrlHelpers";
+function ArticleThumbnail({ id, article }) {
   return (
     <>
-      <Link to={`/${category}/${subcategory}/${id}`}>
+      <Link
+        to={`/${createArticleUrl({
+          category: article.category,
+          subcategory: article.subcategory,
+          id,
+        })}`}
+      >
         <div className="shadow-gray-700 shadow-md bg-brown-100 p-3 rounded-lg flex md:justify-between flex-col h-full">
           <img
             className="object-cover h-48 w-100"

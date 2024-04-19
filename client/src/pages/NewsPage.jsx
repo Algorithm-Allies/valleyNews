@@ -120,11 +120,7 @@ function NewsPage() {
           )
         )}
       </div>
-      <LatestArticle
-        category={category}
-        subcategory={subcategory}
-        articles={latestArticles}
-      />
+      <LatestArticle articles={latestArticles} />
       <div className=" text-2xl leading-6 text-center text-custom-orange  m-4 items-stretch">
         {subcategory ? subcategory.toUpperCase() : null}
       </div>
@@ -136,8 +132,6 @@ function NewsPage() {
       >
         {articles.map((article) => (
           <ArticleThumbnail
-            category={category}
-            subcategory={subcategory}
             key={article.id}
             id={article.id}
             article={article}

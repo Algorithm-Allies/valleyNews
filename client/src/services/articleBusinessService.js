@@ -1,6 +1,6 @@
 
 export const createBusinessArticle = async(body) => {
-  const response = await fetch(`https://valleynews-dev.onrender.com/api/`, {
+  const response = await fetch(`https://valleynews-dev.onrender.com/api/articles`, {
     method: 'POST',
     headers: { 
       'Content-Type': 'application/json'

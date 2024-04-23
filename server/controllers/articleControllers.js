@@ -209,6 +209,26 @@ async function getArticleUrls(req, res) {
   }
 }
 
+async function articleClicked(req, res) {
+  const { articleId } = req.params;
+
+  try {
+    const query = `
+      UPDATE article
+      SET click_count = click_count + 1
+      WHERE id = $1;
+    `;
+    await db.query(query, [articleId]);
+
+    res
+      .status(200)
+      .json({ message: "Article click count updated successfully" });
+  } catch (error) {
+    console.error("Error updating article click count:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
 module.exports = {
   createArticles,
   getArticles,
@@ -217,4 +237,5 @@ module.exports = {
   getArticleById,
   getArticleDetails,
   getArticleUrls,
+  articleClicked,
 };

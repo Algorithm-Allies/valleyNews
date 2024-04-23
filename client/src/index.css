@@ -21,3 +21,7 @@
   height: unset !important;
   display: flex !important;
 }
+.business-container{
+  display: flex;
+  flex-direction: row;
+}

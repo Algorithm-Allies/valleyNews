@@ -10,11 +10,13 @@ const {
   getArticleUrls,
   createArticles,
   createNewArticles,
+  articleClicked,
 } = require("../controllers/articleControllers");
 
 router.post("/", createArticles);
 router.get("/", getArticles);
 //router.get("/id/:id", getArticleById);
+router.get("/clicked/:articleId", articleClicked);
 router.get("/urls", getArticleUrls);
 router.get("/details", getArticleDetails);
 router.get("/:category", getArticlesByCategory);

@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS article (
     thumbnail_alt_description TEXT,
     paragraphs TEXT[];
     business_id INTEGER,
+    click_count INTEGER,
 );
 
 -- Create the verification_token table

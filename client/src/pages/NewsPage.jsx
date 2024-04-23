@@ -74,7 +74,6 @@ function NewsPage() {
       </div>
     );
   }
-
   return (
     <div
       ref={articlesContainerRef}
@@ -133,8 +132,6 @@ function NewsPage() {
       >
         {articles.map((article) => (
           <ArticleThumbnail
-            category={category}
-            subcategory={subcategory}
             key={article.id}
             id={article.id}
             article={article}

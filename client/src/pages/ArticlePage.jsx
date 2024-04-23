@@ -10,6 +10,7 @@ import {
 import React from "react";
 import CommentList from "../components/CommentList";
 import CommentForm from "../components/CommentForm";
+import { isValidArticleLink } from "../lib/articleUrlHelpers";
 
 export default function ArticlePage() {
   const [article, setArticle] = useState(null);
@@ -18,6 +19,14 @@ export default function ArticlePage() {
   const { category, subcategory, id } = useParams();
   useEffect(() => {
     setIsLoading(true);
+    if (!isValidArticleLink({ category, subcategory })) {
+      setError(
+        "You may have visited an outdated bookmark or mistyped the URL for this page."
+      );
+      setIsLoading(false);
+      return;
+    }
+
     const fetchArticle = async () => {
       try {
         const res = await getArticleById({ id, category, subcategory });

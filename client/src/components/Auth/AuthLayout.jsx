@@ -1,5 +1,15 @@
-import { Outlet } from "react-router-dom";
+import React from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 function AuthLayout() {
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    if (storedToken) {
+      navigate("/news");
+    }
+  }, []);
+
   return (
     <div className="min-h-screen pb-[5vh] bg-brown-100 ">
       <div className="flex flex-col items-center justify-center max-w-[80vw] w-full mx-auto pt-[15vh]">

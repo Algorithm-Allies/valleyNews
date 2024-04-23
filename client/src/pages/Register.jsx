@@ -13,7 +13,8 @@ import AuthButton from "../components/Auth/AuthButton";
 
 export async function action({ request }) {
   const formData = sanitizeFormData(await request.formData());
-  const { email, password, confirmPassword } = Object.fromEntries(formData);
+  const { email, password, confirmPassword, account_type } =
+    Object.fromEntries(formData);
   // email, password, and confirm password all are required
   if (!password || !email || !confirmPassword) {
     formValidationErrorResponse({
@@ -36,17 +37,19 @@ export async function action({ request }) {
       message,
     });
   }
-  // Just for testing to show the email verification message
-  //return { data: { email } };
+  console.log("Account: ", account_type);
 
-  const res = await fetch(`http://localhost:4500/api/users/register`, {
+  const res = await fetch(`${import.meta.env.VITE_API_URL}/users/register`, {
     method: "POST",
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({
+      email,
+      password,
+      account_type: account_type === "false" ? "User" : "Business",
+    }),
     headers: {
       "Content-Type": "application/json",
     },
   });
-  // If, the user was successful in registering in, we redirect them to home page
   if (res.ok) {
     return { data: { email } };
   }
@@ -54,7 +57,6 @@ export async function action({ request }) {
   else {
     const errorResponse = await res.json();
     const errorMessage = errorResponse.message;
-
     formValidationErrorResponse({
       data: { email },
       message: errorMessage,
@@ -105,6 +107,7 @@ function Register() {
           placeholder="Confirm Password"
           label="Password"
         />
+        <input type="hidden" name="account_type" value={businessCheck} />
         {businessCheck && (
           <>
             <AuthInput

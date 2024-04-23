@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 import NavDropdown from "./NavDropdown";
 import DesktopNavLink from "./DesktopNavLink";
+import { useAuth } from "../AuthProvider";
 
 export default function DesktopNav({ links }) {
+  const { logout } = useAuth();
   return (
     <div className="hidden lg:flex lg:max-w-7xl lg:mx-auto lg:items-baseline">
       <Link
@@ -26,7 +28,10 @@ export default function DesktopNav({ links }) {
           );
         })}
         <li>
-          <button className="text-base border-2 py-2 px-3 border-stone-400 rounded outline-none transition-colors text-gray-100 hover:bg-custom-orange hover:border-transparent hover:text-gray-50 focus-visible:border-custom-orange">
+          <button
+            onClick={logout}
+            className="text-base border-2 py-2 px-3 border-stone-400 rounded outline-none transition-colors text-gray-100 hover:bg-custom-orange hover:border-transparent hover:text-gray-50 focus-visible:border-custom-orange"
+          >
             Logout
           </button>
         </li>

@@ -7,6 +7,7 @@ import {
   sanitizeFormData,
 } from "../lib/formHelpers";
 import AuthButton from "../components/Auth/AuthButton";
+import { useEffect } from "react";
 
 export async function action({ request }) {
   const formData = sanitizeFormData(await request.formData());
@@ -17,7 +18,7 @@ export async function action({ request }) {
       message: "Please enter your email and password",
     });
   }
-  const res = await fetch(`${import.meta.env.VITE_API_URL}/users/login`, {
+  const req = await fetch(`${import.meta.env.VITE_API_URL}/users/login`, {
     method: "POST",
     body: JSON.stringify({ email, password }),
     headers: {
@@ -25,13 +26,17 @@ export async function action({ request }) {
     },
   });
   // If, the user was succesful in logging in, we redirect them to home page
-  if (res.ok) {
+  if (req.ok) {
+    const res = await req.json();
+    localStorage.setItem("token", res.token);
     return redirect("/");
   }
+  const { message } = await res.json();
+
   // Otherwise, something went wrong on the server, we will return whatever message the server returns.  For example, email already in use.
   formValidationErrorResponse({
     data: { email },
-    message: "The server error message",
+    message,
   });
 }
 

@@ -41,7 +41,9 @@ function NewsPage() {
           setArticles(res.data.articles);
           setLatestArticles(res.data.articles.slice(0, 5));
           setTotalPages(res.data.totalPages);
+          return;
         }
+        alert(res.message);
       } catch (error) {
         console.error("Error fetching articles:", error);
       } finally {

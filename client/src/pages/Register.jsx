@@ -37,7 +37,6 @@ export async function action({ request }) {
       message,
     });
   }
-  console.log("Account: ", account_type);
 
   const res = await fetch(`${import.meta.env.VITE_API_URL}/users/register`, {
     method: "POST",

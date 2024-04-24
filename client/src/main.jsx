@@ -95,7 +95,6 @@ const router = createBrowserRouter([
           try {
             const res = await getAllArticles();
             if (res.ok) {
-              console.log(res.data);
               return { data: res.data };
             }
           } catch (e) {}

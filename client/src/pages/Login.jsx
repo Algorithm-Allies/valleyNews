@@ -25,7 +25,7 @@ export async function action({ request }) {
       "Content-Type": "application/json",
     },
   });
-  console.log(req);
+
   // If, the user was succesful in logging in, we redirect them to home page
   if (req.ok) {
     const res = await req.json();
@@ -44,7 +44,7 @@ export async function action({ request }) {
 
 function Login() {
   const error = useRouteError();
-  console.log(error);
+
   let formError;
   if (error) {
     formError = JSON.parse(error.data);

@@ -30,7 +30,7 @@ export async function action({ request }) {
   if (req.ok) {
     const res = await req.json();
     localStorage.setItem("token", res.token);
-    return redirect("/");
+    return redirect("/news");
   }
   const { message } = await req.json();
 

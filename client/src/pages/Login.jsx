@@ -25,15 +25,17 @@ export async function action({ request }) {
       "Content-Type": "application/json",
     },
   });
+  console.log(req);
   // If, the user was succesful in logging in, we redirect them to home page
   if (req.ok) {
     const res = await req.json();
     localStorage.setItem("token", res.token);
     return redirect("/");
   }
-  const { message } = await res.json();
+  const { message } = await req.json();
 
   // Otherwise, something went wrong on the server, we will return whatever message the server returns.  For example, email already in use.
+
   formValidationErrorResponse({
     data: { email },
     message,
@@ -42,6 +44,7 @@ export async function action({ request }) {
 
 function Login() {
   const error = useRouteError();
+  console.log(error);
   let formError;
   if (error) {
     formError = JSON.parse(error.data);

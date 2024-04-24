@@ -16,7 +16,6 @@ const sendVerificationEmail = async (email, verificationToken) => {
   // Construct verification link
   const encodedToken = encodeURIComponent(verificationToken);
   const verificationLink = `https://valleynews-dev.onrender.com/api/users/verify?token=${encodedToken}`;
-
   // Email options
   const mailOptions = {
     from: process.env.EMAIL,

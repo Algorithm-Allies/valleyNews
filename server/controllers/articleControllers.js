@@ -23,8 +23,9 @@ async function createArticles(req, res) {
 // GET /api/articles
 // Get all articles
 async function getArticles(req, res) {
-  const { page, perPge } = req.query;
-  const offset = (page - 1) * perPge;
+  const { page, perPage } = req.query;
+  const offset = (page - 1) * perPage;
+  const limit = perPage;
   const query = `
     SELECT * FROM article
     ORDER BY date_time_published DESC
@@ -32,7 +33,7 @@ async function getArticles(req, res) {
   `;
 
   try {
-    const { rows } = await db.query(query);
+    const { rows } = await db.query(query, [limit, offset]);
     res.status(200).json(rows);
   } catch (error) {
     console.error("Error getting articles:", error);
@@ -209,6 +210,26 @@ async function getArticleUrls(req, res) {
   }
 }
 
+async function articleClicked(req, res) {
+  const { articleId } = req.params;
+
+  try {
+    const query = `
+      UPDATE article
+      SET click_count = click_count + 1
+      WHERE id = $1;
+    `;
+    await db.query(query, [articleId]);
+
+    res
+      .status(200)
+      .json({ message: "Article click count updated successfully" });
+  } catch (error) {
+    console.error("Error updating article click count:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
 module.exports = {
   createArticles,
   getArticles,
@@ -217,4 +238,5 @@ module.exports = {
   getArticleById,
   getArticleDetails,
   getArticleUrls,
+  articleClicked,
 };

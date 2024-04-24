@@ -8,14 +8,15 @@ export default function CreateArticle() {
   const fileInputRef = useRef(null);
 
   const initialFormData = {
-    "source": "",
-    "publisher": "",
-    "headline": "",
+    "source": "https://www.turlockjournal.com/sports/community/more-cars-action-at-fairs-annual-demo-derby/",
+    "publisher": "mobin journal",
+    "heading": "",
     "subHeading": "",
-    "category": "",
-    "subcategory": "",
+    "category": "SPORTS",
+    "subcategory": "LOCAL SPORTS",
     "author": "",
     "date": "",
+    "datetime":"2024-04-24 14:30:00.000000",
     "img": {
       "src": null,
       "alt": ""
@@ -35,7 +36,8 @@ export default function CreateArticle() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await createBusinessArticle(formData);
+      console.log(formData)
+      const response = await createBusinessArticle([formData]);
       console.log('Article created successfully:', response);
       setSuccess('Article created successfully');
       setError(''); // Clear error

@@ -23,8 +23,9 @@ async function createArticles(req, res) {
 // GET /api/articles
 // Get all articles
 async function getArticles(req, res) {
-  const { page, perPge } = req.query;
-  const offset = (page - 1) * perPge;
+  const { page, perPage } = req.query;
+  const offset = (page - 1) * perPage;
+  const limit = perPage;
   const query = `
     SELECT * FROM article
     ORDER BY date_time_published DESC
@@ -32,7 +33,7 @@ async function getArticles(req, res) {
   `;
 
   try {
-    const { rows } = await db.query(query);
+    const { rows } = await db.query(query, [limit, offset]);
     res.status(200).json(rows);
   } catch (error) {
     console.error("Error getting articles:", error);

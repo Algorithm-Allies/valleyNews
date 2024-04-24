@@ -140,6 +140,22 @@ const getSingleUserQuery = async (businessId, userId) => {
   }
 };
 
+const getBusinessByUser = async (userId) => {
+  try {
+    const query = `
+      SELECT b.*
+      FROM business b
+      JOIN "user_business" ub ON b.id = ub.business_id
+      WHERE ub.user_id = $1;
+    `;
+    const { rows } = await db.query(query, [userId]);
+    return rows;
+  } catch (error) {
+    console.error("Error fetching businesses by user:", error);
+    throw error;
+  }
+};
+
 module.exports = {
   createBusinessQuery,
   viewBusinessQuery,
@@ -150,4 +166,5 @@ module.exports = {
   getUserBusiness,
   viewUsersQuery,
   getSingleUserQuery,
+  getBusinessByUser,
 };

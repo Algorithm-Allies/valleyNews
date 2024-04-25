@@ -1,6 +1,9 @@
 export async function getAllArticles() {
   try {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/articles`);
+    const res = await fetch(
+      `${import.meta.env.VITE_API_URL}/articles`
+      //`https://valleynews.onrender.com/api/articles`
+    );
     if (res.ok) {
       const articles = await res.json();
       return { ok: true, data: articles };
@@ -9,10 +12,13 @@ export async function getAllArticles() {
   } catch (e) {}
 }
 
-export async function getArticlesByCategory({ category }) {
+export async function getArticlesByCategory({ category, page, perPage }) {
   try {
     const res = await fetch(
-      `${import.meta.env.VITE_API_URL}/articles/${category}`
+      `${
+        import.meta.env.VITE_API_URL
+      }/articles/${category}?page=${page}&perPage=${perPage}`
+      //`http://localhost:4500/api/articles/${category}?page=${page}&perPage=${perPage}`
     );
     if (res.ok) {
       const articles = await res.json();
@@ -25,10 +31,15 @@ export async function getArticlesByCategory({ category }) {
 export async function getArticlesByCategoryAndSubcategory({
   category,
   subcategory,
+  page,
+  perPage,
 }) {
   try {
     const res = await fetch(
-      `${import.meta.env.VITE_API_URL}/articles/${category}/${subcategory}`
+      `${
+        import.meta.env.VITE_API_URL
+      }/articles/${category}/${subcategory}?page=${page}&perPage=${perPage}`
+      //`http://localhost:4500/api/articles/${category}/${subcategory}?page=${page}&perPage=${perPage}`
     );
     if (res.ok) {
       const articles = await res.json();
@@ -37,12 +48,27 @@ export async function getArticlesByCategoryAndSubcategory({
   } catch (e) {}
 }
 
-export async function getArticleById({ id }) {
+export async function getArticleById({ id, category, subcategory }) {
   try {
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/articles/${id}`);
+    const res = await fetch(
+      `${
+        import.meta.env.VITE_API_URL
+      }/articles/${category}/${subcategory}/${id}`
+    );
     if (res.ok) {
       const articles = await res.json();
       return { ok: true, data: articles };
     }
-  } catch (e) {}
+    return {
+      ok: false,
+      error:
+        "You may have visited an outdated bookmark or mistyped the URL for this page.",
+    };
+  } catch (e) {
+    return {
+      ok: false,
+      error:
+        "You may have visited an outdated bookmark or mistyped the URL for this page.",
+    };
+  }
 }

@@ -15,7 +15,7 @@ const transporter = nodemailer.createTransport({
 const sendVerificationEmail = async (email, verificationToken) => {
   // Construct verification link
   const encodedToken = encodeURIComponent(verificationToken);
-  const verificationLink = `http://localhost:${port}/api/users/verify?token=${encodedToken}`;
+  const verificationLink = `https://valleynews-dev.onrender.com/api/users/verify?token=${encodedToken}`;
 
   // Email options
   const mailOptions = {
@@ -37,7 +37,7 @@ const sendVerificationEmail = async (email, verificationToken) => {
 
 // Send password reset email
 const sendPasswordResetEmail = async (email, token) => {
-  const resetLink = `http://localhost:8000/reset-password?token=${token}`;
+  const resetLink = process.env.RESET_PASSWORD_HREF;
   const mailOptions = {
     from: process.env.EMAIL,
     to: email,

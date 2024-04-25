@@ -1,14 +1,27 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-.checkbox-container{
-    display: flex;
-    gap: 1em;
-    flex-direction: row;
-    color: white;
-    padding: 1em;
-    padding-left: 0;
+.checkbox-container {
+  display: flex;
+  gap: 1em;
+  flex-direction: row;
+  color: white;
+  padding: 1em;
+  padding-left: 0;
 }
-.unset-border-box{
-    box-sizing: unset !important;
+.unset-border-box {
+  box-sizing: unset !important;
+}
+.swiper-button-prev,
+.swiper-button-next {
+  color: rgb(73, 62, 53) !important;
+}
+
+.swiper-slide {
+  height: unset !important;
+  display: flex !important;
+}
+.business-container{
+  display: flex;
+  flex-direction: row;
 }

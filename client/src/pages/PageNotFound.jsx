@@ -1,8 +1,6 @@
-import React from "react";
+
 import { Link } from "react-router-dom";
 import AuthForm from "../components/Auth/AuthForm";
-import AuthLayout from "../components/Auth/AuthLayout";
-
 
 function PageNotFound() {
   return (

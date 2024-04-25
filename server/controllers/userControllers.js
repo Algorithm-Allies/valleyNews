@@ -1,7 +1,7 @@
 const db = require("../config/database");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const nodemailer = require("nodemailer");
+const dotenv = require("dotenv");
 const {
   sendPasswordResetEmail,
   sendVerificationEmail,
@@ -14,8 +14,12 @@ const {
 } = require("../services/tokenService");
 const { getUserByEmail, createUser } = require("../services/userService");
 
-const { createBusinessQuery } = require("../services/businessService");
+const {
+  createBusinessQuery,
+  userBusinessQuery,
+} = require("../services/businessService");
 
+const { createPermissionQuery } = require("../services/permissionService");
 // POST /api/users/register
 const register = async (req, res) => {
   try {
@@ -33,7 +37,7 @@ const register = async (req, res) => {
         .status(400)
         .json({ message: "Please enter email and password" });
     }
-    if (account_type === "business") {
+    if (account_type === "Business") {
       if (!business_name) {
         return res.status(400).json({ message: "Please enter business name" });
       }
@@ -88,8 +92,8 @@ const verify = async (req, res) => {
     }
 
     await deleteVerificationToken(token);
-
-    res.redirect("https://example.com/verification-success");
+    const successUrl = process.env.LOGIN_HREF;
+    res.redirect(successUrl);
   } catch (error) {
     console.error("Error verifying email:", error);
     res.status(500).json({ message: "Internal server error" });
@@ -97,18 +101,27 @@ const verify = async (req, res) => {
 };
 
 const handleBusinessVerification = async (decoded) => {
-  await createUser(decoded.email, decoded.hashedPassword, decoded.account_type);
+  const user = await createUser(
+    decoded.email,
+    decoded.hashedPassword,
+    decoded.account_type
+  );
 
-  const user = await getUserByEmail(decoded.email);
   const user_id = user.id;
 
   const businessData = {
-    admin_id: user_id,
     phone_number: decoded.phone_number,
     name: decoded.business_name,
     website: decoded.business_website,
   };
-  await createBusinessQuery(businessData);
+  const business = await createBusinessQuery(businessData);
+
+  const permissionData = {
+    role: "Admin",
+    description: "full access",
+  };
+  const permission = await createPermissionQuery(permissionData);
+  await userBusinessQuery(business.id, user_id, permission.id);
 };
 
 const handleUserVerification = async (decoded) => {
@@ -125,8 +138,13 @@ const login = async (req, res) => {
         .json({ message: "Please enter email and password" });
     }
 
-    const query = `SELECT email, password, id
-    FROM public."user" where email = $1`;
+    const query = `
+    SELECT u.id, u.email, u.password, ub.business_id
+    FROM public."user" u
+    LEFT JOIN "user_business" ub ON u.id = ub.user_id
+    WHERE u.email = $1
+  `;
+
     const result = await db.query(query, [email]);
     if (result.rows.length === 0) {
       return res.status(400).json({ message: "Invalid email or password" });
@@ -137,20 +155,25 @@ const login = async (req, res) => {
     }
 
     const user = result.rows[0];
-
-    const token = jwt.sign(
-      { userId: user.id, email: user.email },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: "3h",
-      }
-    );
+    const tokenPayload = {
+      userId: user.id,
+      email: user.email,
+      businessId: user.business_id || null, // Include business ID or null
+    };
+    const token = jwt.sign(tokenPayload, process.env.JWT_SECRET, {
+      expiresIn: "3h",
+    });
 
     res.cookie("token", token, {
       httpOnly: true,
       sameSite: "strict",
     });
-    res.status(200).json({ message: "Login successful", token });
+    res.status(200).json({
+      message: "Login successful",
+      token,
+      userId: user.id,
+      businessId: user.business_id || null,
+    });
     console.log("Login successful");
   } catch (error) {
     console.error("Error logging in:", error);

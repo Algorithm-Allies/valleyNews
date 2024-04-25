@@ -1,48 +1,42 @@
 import React from "react";
 
+import DesktopNav from "./DesktopNav/DesktopNav";
+import MobileNav from "./MobileNav/MobileNav";
+
+const LINKS = [
+  {
+    label: "Home",
+    href: "/",
+  },
+  {
+    label: "News",
+    href: "/news",
+    subLinks: [
+      { label: "Local", href: "/news/local" },
+      { label: "Crime", href: "/news/crime" },
+      { label: "Government", href: "/news/government" },
+      { label: "Education", href: "/news/education" },
+    ],
+  },
+  {
+    label: "Sports",
+    href: "/sports",
+    subLinks: [
+      { label: "High School", href: "/sports/high-school" },
+      { label: "Local", href: "/sports/local" },
+    ],
+  },
+  {
+    label: "Staff",
+    href: "/staff",
+  },
+];
+
 function NavBar() {
   return (
-    <nav>
-      <ul className="flex *:text-gray-600 border-blue-300 justify-center pt-2">
-        <li className="py-2 border-r-2 border-gray-300">
-          <a href="#" className="hover:text-yellow-600">
-            Home
-          </a>
-        </li>
-        <li className="py-2  border-r-2 border-gray-300">
-          <a href="#" className=" hover:text-yellow-600">
-            Local
-          </a>
-        </li>
-        <li className="py-2 border-r-2 border-gray-300">
-          <a href="#" className="hover:text-yellow-600">
-            Sports
-          </a>
-        </li>
-        <li className="py-2 border-r-2 border-gray-300">
-          <a href="#" className="hover:text-yellow-600">
-            Crime
-          </a>
-        </li>
-        <li className="py-2 border-r-2 border-gray-300">
-          <a href="#" className="hover:text-yellow-600">
-            Subscribe
-          </a>
-        </li>
-        <li className="py-2 border-r-2 border-gray-300">
-          <a href="#" className="hover:text-yellow-600">
-            Staff
-          </a>
-        </li>
-        <li className="py-2">
-          <a
-            href="#"
-            className="text-yellow-600 font-medium hover:text-yellow-600"
-          >
-            Login
-          </a>
-        </li>
-      </ul>
+    <nav className="bg-stone-700 p-4">
+      <DesktopNav links={LINKS} />
+      <MobileNav links={LINKS} />
     </nav>
   );
 }

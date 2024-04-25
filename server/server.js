@@ -4,6 +4,7 @@ const cookie = require("cookie-parser");
 const cors = require("cors");
 const dotenv = require("dotenv").config();
 const { scrapeAndCreateArticles } = require("./scheduler");
+const { protect } = require("./middleware/authMiddleware");
 
 const port = process.env.PORT || 8000;
 const DB = process.env.DB_HOST;

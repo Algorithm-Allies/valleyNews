@@ -20,6 +20,10 @@ function NewsPage() {
   const [perPage, setPerPage] = useState(20);
 
   useEffect(() => {
+    setCurrentPage(1);
+  }, [category, subcategory]);
+
+  useEffect(() => {
     const fetchArticles = async () => {
       try {
         let res;

@@ -3,19 +3,16 @@ import { createBusinessArticle } from '../services/articleBusinessService.js';
 import BusinessNavBar from '../components/BusinessNavBar';
 
 export default function CreateArticle() {
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
-  const fileInputRef = useRef(null);
-
-  const initialFormData = {
+  const [formData, setFormData] = useState([{
     "source": "",
     "publisher": "",
-    "headline": "",
+    "heading": "",
     "subHeading": "",
     "category": "",
     "subcategory": "",
     "author": "",
     "date": "",
+    "datetime":"",
     "img": {
       "src": null,
       "alt": ""
@@ -28,9 +25,11 @@ export default function CreateArticle() {
       ""
     ],
     "business_id": null
-  };
-
-  const [formData, setFormData] = useState(initialFormData);
+  }]);
+  
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const fileInputRef = useRef(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -45,16 +44,16 @@ export default function CreateArticle() {
       setSuccess(''); // Clear success message in case of error
     }
   };
-  
 
-  const handleChange = (e) => {
+  const handleChange = (e, index) => {
     const { name, value } = e.target;
-    if (name === "paragraphs") {
-      const paragraphs = value.split('\n');
-      setFormData({ ...formData, paragraphs });
-    } else {
-      setFormData({ ...formData, [name]: value });
-    }
+    const updatedFormData = formData.map((item, i) => {
+      if (i === index) {
+        return { ...item, [name]: value };
+      }
+      return item;
+    });
+    setFormData(updatedFormData);
   };
 
   const handleCancel = () => {
@@ -76,15 +75,29 @@ export default function CreateArticle() {
           <hr className="rounded-md border-r-[60vw] border-y-8 border-brown-400 mb-10 " />
           <form className="flex flex-col w-100" onSubmit={handleSubmit}>
             <label>New article heading</label>
-            <input value={formData.heading || ''} onChange={handleChange} name="heading" placeholder="Enter article heading ..." className="mb-4" />
+            <input value={formData[0].heading} onChange={(e) => handleChange(e, 0)} name="heading" placeholder="Enter article heading ..." className="mb-4" />
             <label>New article sub heading</label>
-            <input value={formData.subHeading} onChange={handleChange} name="subHeading" placeholder="Enter article sub heading ..." className="mb-4" />
+            <input value={formData[0].subHeading} onChange={(e) => handleChange(e, 0)} name="subHeading" placeholder="Enter article sub heading ..." className="mb-4" />
             <label>New article body</label>
-            <textarea value={formData.paragraphs.join('\n')} onChange={handleChange} name="paragraphs" rows={10} cols={40} placeholder="Enter article body ..." className="mb-8" />
-            <select value={formData.author} onChange={handleChange} name="author" className="border-y-8 w-[20vw]">
-              <option value="author1">author1</option>
-              <option value="author2">author2</option>
-            </select>
+            <textarea value={formData[0].paragraphs[0]} onChange={(e) => handleChange(e, 0)} name="paragraphs" rows={10} cols={40} placeholder="Enter article body ..." className="mb-8" />
+            <div className='flex flex-row'>
+              <select value={formData[0].author} onChange={(e) => handleChange(e, 0)} name="author" className="border-y-8 w-[20vw]">
+                <option value="author1">author1</option>
+                <option value="author2">author2</option>
+              </select>
+              <select value={formData[0].category} onChange={(e) => handleChange(e, 0)} name="category" className="border-y-8 w-[20vw]">
+              <optgroup value="NEWS" label="NEWS">
+                  <option value="LOCAL">LOCAL</option>
+                  <option value="CRIME">CRIME</option>
+                  <option value="GOVERNMENT">GOVERNMENT</option>
+                  <option value="EDUCATION">EDUCATION</option>
+                </optgroup>
+                <optgroup value="SPORTS" label="SPORTS">
+                  <option value="LOCAL">LOCAL</option>
+                  <option value="HIGH SCHOOL">HIGH SCHOOL</option>
+                </optgroup>
+              </select>
+            </div>
             <label className="mt-4">Upload Article Image</label>
             <input ref={fileInputRef} className="mt-4" type="file" id="image" name="filename" />
             {success && <p className="text-green-500">{success}</p>}

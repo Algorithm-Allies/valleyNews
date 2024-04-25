@@ -45,11 +45,17 @@ export default function CreateArticle() {
     }
   };
 
-  const handleChange = (e, index) => {
+  const handleChange = (e, index, paragraphIndex) => {
     const { name, value } = e.target;
     const updatedFormData = formData.map((item, i) => {
       if (i === index) {
-        return { ...item, [name]: value };
+        if (name === "paragraphs") {
+          const updatedParagraphs = [...item.paragraphs];
+          updatedParagraphs[paragraphIndex] = value;
+          return { ...item, paragraphs: updatedParagraphs };
+        } else {
+          return { ...item, [name]: value };
+        }
       }
       return item;
     });
@@ -79,7 +85,7 @@ export default function CreateArticle() {
             <label>New article sub heading</label>
             <input value={formData[0].subHeading} onChange={(e) => handleChange(e, 0)} name="subHeading" placeholder="Enter article sub heading ..." className="mb-4" />
             <label>New article body</label>
-            <textarea value={formData[0].paragraphs[0]} onChange={(e) => handleChange(e, 0)} name="paragraphs" rows={10} cols={40} placeholder="Enter article body ..." className="mb-8" />
+            <textarea value={formData[0].paragraphs[0]} onChange={(e) => handleChange(e, 0, 0)} name="paragraphs" rows={10} cols={40} placeholder="Enter article body ..." className="mb-8" />
             <div className='flex flex-row'>
               <select value={formData[0].author} onChange={(e) => handleChange(e, 0)} name="author" className="border-y-8 w-[20vw]">
                 <option value="author1">author1</option>

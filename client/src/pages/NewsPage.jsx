@@ -10,8 +10,18 @@ import {
 
 //page for different news categories based on selected category i.e local, sports, crime, government, education, etc
 function NewsPage() {
-  const articlesContainerRef = useRef(null);
   const { category, subcategory } = useParams();
+  return (
+    <NewsContent
+      key={category + subcategory}
+      category={category}
+      subcategory={subcategory}
+    />
+  );
+}
+
+function NewsContent({ category, subcategory }) {
+  const articlesContainerRef = useRef(null);
   const [loading, setLoading] = useState(true);
   const [latestArticles, setLatestArticles] = useState([]);
   const [articles, setArticles] = useState([]);

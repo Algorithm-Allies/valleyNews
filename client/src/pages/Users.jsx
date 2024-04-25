@@ -13,7 +13,7 @@ function Users() {
           <div className="flex flex-row justify-between pb-4">
             <h1 className="text-4xl text-black-100 m-0">Users</h1>
             <button className="w-1/4 py-2 mr-8 rounded bg-orange-400 text-white m-0">
-              New User
+              <a href="/adduser">New User</a>
             </button>
           </div>
 

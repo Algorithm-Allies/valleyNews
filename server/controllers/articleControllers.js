@@ -161,19 +161,33 @@ async function getArticlesBySubcategory(req, res) {
 async function getArticleById(req, res) {
   const articleId = req.params.id;
 
-  const query = `
-    SELECT * FROM article
-    WHERE id = $1
-  `;
-
   try {
-    const { rows } = await db.query(query, [articleId]);
+    // Update click count
+    const updateQuery = `
+      UPDATE article
+      SET click_count = click_count + 1
+      WHERE id = $1;
+    `;
+    await db.query(updateQuery, [articleId]);
+
+    // Get article by ID
+    const selectQuery = `
+      SELECT * FROM article
+      WHERE id = $1
+    `;
+    const { rows } = await db.query(selectQuery, [articleId]);
+
     if (rows.length === 0) {
       return res.status(404).json({ error: "Article not found" });
     }
+
+    // Send article data with updated click count
     res.status(200).json(rows[0]);
   } catch (error) {
-    console.error("Error fetching article by ID:", error.message);
+    console.error(
+      "Error fetching article by ID and updating click count:",
+      error.message
+    );
     res.status(500).json({ error: "Internal server error" });
   }
 }
@@ -230,6 +244,29 @@ async function articleClicked(req, res) {
   }
 }
 
+async function getArticleClickCount(req, res) {
+  const articleId = req.params.id;
+
+  try {
+    const query = `
+      SELECT click_count FROM article
+      WHERE id = $1
+    `;
+
+    const { rows } = await db.query(query, [articleId]);
+    if (rows.length === 0) {
+      return res.status(404).json({ error: "Article not found" });
+    }
+
+    const clickCount = rows[0].click_count;
+
+    res.status(200).json({ click_count: clickCount });
+  } catch (error) {
+    console.error("Error fetching article click count:", error.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
 module.exports = {
   createArticles,
   getArticles,
@@ -239,4 +276,5 @@ module.exports = {
   getArticleDetails,
   getArticleUrls,
   articleClicked,
+  getArticleClickCount,
 };

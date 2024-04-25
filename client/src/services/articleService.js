@@ -48,15 +48,27 @@ export async function getArticlesByCategoryAndSubcategory({
   } catch (e) {}
 }
 
-export async function getArticleById({ id }) {
+export async function getArticleById({ id, category, subcategory }) {
   try {
     const res = await fetch(
-      `${import.meta.env.VITE_API_URL}/articles/${id}`
-      //`https://valleynews.onrender.com/api/articles/${id}`
+      `${
+        import.meta.env.VITE_API_URL
+      }/articles/${category}/${subcategory}/${id}`
     );
     if (res.ok) {
       const articles = await res.json();
       return { ok: true, data: articles };
     }
-  } catch (e) {}
+    return {
+      ok: false,
+      error:
+        "You may have visited an outdated bookmark or mistyped the URL for this page.",
+    };
+  } catch (e) {
+    return {
+      ok: false,
+      error:
+        "You may have visited an outdated bookmark or mistyped the URL for this page.",
+    };
+  }
 }

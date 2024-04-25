@@ -15,7 +15,7 @@ const transporter = nodemailer.createTransport({
 const sendVerificationEmail = async (email, verificationToken) => {
   // Construct verification link
   const encodedToken = encodeURIComponent(verificationToken);
-  const verificationLink = `http://localhost:${port}/api/users/verify?token=${encodedToken}`;
+  const verificationLink = `https://valleynews-dev.onrender.com/api/users/verify?token=${encodedToken}`;
 
   // Email options
   const mailOptions = {

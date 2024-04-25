@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
-const UserActivation = require("../models/userModel.js");
+const UserActivation = require("../services/userService.js");
+const BusinessActivation = require("../services/businessService.js");
 const asyncHandler = require("express-async-handler");
 
 const protect = asyncHandler(async (req, res, next) => {
@@ -18,10 +19,11 @@ const protect = asyncHandler(async (req, res, next) => {
       // Check if the decoded token has the correct property for user ID
       if (decoded && decoded.userId) {
         // Use the correct model here (UserActivation instead of uer)
-        req.user = await UserActivation.findById(decoded.userId).select(
-          "-password"
+        console.log(decoded);
+        req.user = await UserActivation.getUserById(decoded.userId);
+        req.business = await BusinessActivation.viewBusinessQuery(
+          decoded.businessId
         );
-        console.log(req.user);
 
         next();
       } else {

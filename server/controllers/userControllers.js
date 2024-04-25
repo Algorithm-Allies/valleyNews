@@ -138,8 +138,13 @@ const login = async (req, res) => {
         .json({ message: "Please enter email and password" });
     }
 
-    const query = `SELECT email, password, id
-    FROM public."user" where email = $1`;
+    const query = `
+    SELECT u.id, u.email, u.password, ub.business_id
+    FROM public."user" u
+    LEFT JOIN "user_business" ub ON u.id = ub.user_id
+    WHERE u.email = $1
+  `;
+
     const result = await db.query(query, [email]);
     if (result.rows.length === 0) {
       return res.status(400).json({ message: "Invalid email or password" });
@@ -150,20 +155,25 @@ const login = async (req, res) => {
     }
 
     const user = result.rows[0];
-
-    const token = jwt.sign(
-      { userId: user.id, email: user.email },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: "3h",
-      }
-    );
+    const tokenPayload = {
+      userId: user.id,
+      email: user.email,
+      businessId: user.business_id || null, // Include business ID or null
+    };
+    const token = jwt.sign(tokenPayload, process.env.JWT_SECRET, {
+      expiresIn: "3h",
+    });
 
     res.cookie("token", token, {
       httpOnly: true,
       sameSite: "strict",
     });
-    res.status(200).json({ message: "Login successful", token });
+    res.status(200).json({
+      message: "Login successful",
+      token,
+      userId: user.id,
+      businessId: user.business_id || null,
+    });
     console.log("Login successful");
   } catch (error) {
     console.error("Error logging in:", error);

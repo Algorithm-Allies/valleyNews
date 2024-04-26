@@ -7,7 +7,6 @@ import {
   getArticlesByCategoryAndSubcategory,
   getArticlesByCategory,
 } from "../services/articleService";
-
 //page for different news categories based on selected category i.e local, sports, crime, government, education, etc
 function NewsPage() {
   const articlesContainerRef = useRef(null);
@@ -77,49 +76,8 @@ function NewsPage() {
   return (
     <div
       ref={articlesContainerRef}
-      className="flex justify-center flex-col items-center w-full mb-20"
+      className="flex justify-center flex-col items-center w-full my-20"
     >
-      <div className="text-2xl leading-6 font-bold text-custom-orange m-4 ">
-        <nav className="mb-4">
-          <ul className="flex justify-center">
-            <li className="mr-4">
-              <Link to="/news">NEWS</Link>
-            </li>
-            <li>
-              <Link to="/sports">SPORTS</Link>
-            </li>
-          </ul>
-        </nav>
-
-        {category === "news" ? (
-          <nav className="mb-4">
-            <ul className="flex">
-              <li className="mr-4">
-                <Link to="/news/government">Government</Link>
-              </li>
-              <li className="mr-4">
-                <Link to="/news/education">Education</Link>
-              </li>
-              <li>
-                <Link to="/news/crime">Crime</Link>
-              </li>
-            </ul>
-          </nav>
-        ) : (
-          category === "sports" && (
-            <nav className="mb-4">
-              <ul className="flex">
-                <li className="mr-4">
-                  <Link to="/sports/high-school">High School</Link>
-                </li>
-                <li>
-                  <Link to="/sports/local">Local</Link>
-                </li>
-              </ul>
-            </nav>
-          )
-        )}
-      </div>
       <LatestArticle articles={latestArticles} />
       <div className=" text-2xl leading-6 text-center text-custom-orange  m-4 items-stretch">
         {subcategory ? subcategory.toUpperCase() : null}

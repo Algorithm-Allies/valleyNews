@@ -71,6 +71,38 @@ export default function CreateArticle() {
       fileInputRef.current.value = ''; // Clear the file input field
     }
   };
+  /*handles Category and Subcategories */
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedSubCategory, setSelectedSubCategory] = useState("");
+
+  const handleCategoryChange = (e) => {
+    const updatedCategory = e.target.value;
+    const updatedFormData = formData.map((item, index) => {
+      if (index === 0) { 
+        return { ...item, category: updatedCategory, subcategory: '' }; // Reset subcategory
+      }
+      return item;
+    });
+    setFormData(updatedFormData);
+    setSelectedCategory(updatedCategory);
+    setSelectedSubCategory('');
+  };
+  
+  const handleSubCategoryChange = (e) => {
+    const updatedSubCategory = e.target.value;
+    const updatedFormData = formData.map((item, index) => {
+      if (index === 0) {
+        return { ...item, subcategory: updatedSubCategory };
+      }
+      return item;
+    });
+    setFormData(updatedFormData);
+    setSelectedSubCategory(updatedSubCategory);
+  };
+  const categories = {
+    NEWS: ["LOCAL", "CRIME", "GOVERNMENT", "EDUCATION"],
+    SPORTS: ["LOCAL", "HIGH SCHOOL"]
+  };
 
   return (
     <div className="bg-brown-100">
@@ -91,17 +123,18 @@ export default function CreateArticle() {
                 <option value="author1">author1</option>
                 <option value="author2">author2</option>
               </select>
-              <select value={formData[0].category} onChange={(e) => handleChange(e, 0)} name="category" className="border-y-8 w-[20vw]">
-              <optgroup value="NEWS" label="NEWS">
-                  <option value="LOCAL">LOCAL</option>
-                  <option value="CRIME">CRIME</option>
-                  <option value="GOVERNMENT">GOVERNMENT</option>
-                  <option value="EDUCATION">EDUCATION</option>
-                </optgroup>
-                <optgroup value="SPORTS" label="SPORTS">
-                  <option value="LOCAL">LOCAL</option>
-                  <option value="HIGH SCHOOL">HIGH SCHOOL</option>
-                </optgroup>
+              <select value={selectedCategory} onChange={handleCategoryChange} className="border-y-8 w-[20vw]">
+                <option value="">Select Category</option>
+                {Object.keys(categories).map((category) => (
+                  <option key={category} value={category}>{category}</option>
+                ))}
+              </select>
+
+              <select value={selectedSubCategory} onChange={handleSubCategoryChange} className="border-y-8 w-[20vw] ml-4">
+                <option value="">Select Subcategory</option>
+                {selectedCategory && categories[selectedCategory].map((subcategory) => (
+                  <option key={subcategory} value={subcategory}>{subcategory}</option>
+                ))}
               </select>
             </div>
             <label className="mt-4">Upload Article Image</label>

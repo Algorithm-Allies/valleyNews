@@ -31,7 +31,7 @@ const getAllBusinesses = async (req, res) => {
     res.json(businesses);
   } catch (error) {
     console.error("Error fetching all businesses:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: error });
   }
 };
 

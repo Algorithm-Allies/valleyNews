@@ -5,7 +5,7 @@ import BusinessNavBar from '../components/BusinessNavBar';
 export default function CreateArticle() {
   const now = new Date();
   const dateString = now.toLocaleDateString('en-GB'); //dd/MM/yyyy
-  const timeString = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+  const timeString = now;
 
   const [formData, setFormData] = useState([{
     "source": "source1",

@@ -3,28 +3,32 @@ import { createBusinessArticle } from '../services/articleBusinessService.js';
 import BusinessNavBar from '../components/BusinessNavBar';
 
 export default function CreateArticle() {
+  const now = new Date();
+  const dateString = now.toLocaleDateString('en-GB'); //dd/MM/yyyy
+  const timeString = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+
   const [formData, setFormData] = useState([{
-    "source": "",
-    "publisher": "",
+    "source": "source1",
+    "publisher": "publisher1",
     "heading": "",
     "subHeading": "",
     "category": "",
     "subcategory": "",
-    "author": "",
-    "date": "",
-    "datetime":"",
+    "author": "author1",
+    "date": dateString,
+    "datetime": `${dateString} ${timeString}`,
     "img": {
-      "src": null,
-      "alt": ""
+      "src": "https://t4.ftcdn.net/jpg/01/77/47/67/360_F_177476718_VWfYMWCzK32bfPI308wZljGHvAUYSJcn.jpg",
+      "alt": "image"
     },
     "thumbnail": {
-      "src": "",
-      "alt": ""
+      "src": "https://t4.ftcdn.net/jpg/01/77/47/67/360_F_177476718_VWfYMWCzK32bfPI308wZljGHvAUYSJcn.jpg",
+      "alt": "thumbnail"
     },
     "paragraphs": [
       ""
     ],
-    "business_id": null
+    "business_id": 6,
   }]);
   
   const [error, setError] = useState('');

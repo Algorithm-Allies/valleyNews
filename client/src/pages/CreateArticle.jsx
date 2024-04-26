@@ -5,7 +5,6 @@ import BusinessNavBar from '../components/BusinessNavBar';
 export default function CreateArticle() {
   const now = new Date();
   const dateString = now.toLocaleDateString('en-GB'); //dd/MM/yyyy
-  const timeString = now;
 
   const [formData, setFormData] = useState([{
     "source": "source1",
@@ -16,7 +15,7 @@ export default function CreateArticle() {
     "subcategory": "",
     "author": "author1",
     "date": dateString,
-    "datetime": `${dateString} ${timeString}`,
+    "datetime": now,
     "img": {
       "src": "https://t4.ftcdn.net/jpg/01/77/47/67/360_F_177476718_VWfYMWCzK32bfPI308wZljGHvAUYSJcn.jpg",
       "alt": "image"
@@ -104,8 +103,8 @@ export default function CreateArticle() {
     setSelectedSubCategory(updatedSubCategory);
   };
   const categories = {
-    NEWS: ["LOCAL", "CRIME", "GOVERNMENT", "EDUCATION"],
-    SPORTS: ["LOCAL", "HIGH SCHOOL"]
+    NEWS: ["LOCAL NEWS", "CRIME", "GOVERNMENT", "EDUCATION"],
+    SPORTS: ["LOCAL SPORTS", "HIGH SCHOOL SPORTS"]
   };
 
   return (
@@ -121,7 +120,7 @@ export default function CreateArticle() {
             <label>New article sub heading</label>
             <input value={formData[0].subHeading} onChange={(e) => handleChange(e, 0)} name="subHeading" placeholder="Enter article sub heading ..." className="mb-4" />
             <label>New article body</label>
-            <textarea value={formData[0].paragraphs[0]} onChange={(e) => handleChange(e, 0, 0)} name="paragraphs" rows={10} cols={40} placeholder="Enter article body ..." className="mb-8" />
+            <textarea value={formData[0].paragraphs} onChange={(e) => handleChange(e, 0, 0)} name="paragraphs" rows={10} cols={40} placeholder="Enter article body ..." className="mb-8" />
             <div className='flex flex-row'>
               <select value={formData[0].author} onChange={(e) => handleChange(e, 0)} name="author" className="border-y-8 w-[20vw]">
                 <option value="author1">author1</option>

@@ -17,7 +17,7 @@ export async function action({ request }) {
       message: "Please enter your email and password",
     });
   }
-  const res = await fetch(`${import.meta.env.VITE_API_URL}/users/login`, {
+  const req = await fetch(`${import.meta.env.VITE_API_URL}/users/login`, {
     method: "POST",
     body: JSON.stringify({ email, password }),
     headers: {
@@ -25,13 +25,19 @@ export async function action({ request }) {
     },
   });
   // If, the user was succesful in logging in, we redirect them to home page
-  if (res.ok) {
-    return redirect("/");
+  if (req.ok) {
+    const res = await req.json();
+    const { userId, businessId } = res;
+    localStorage.setItem("user", JSON.stringify({ userId, businessId }));
+    return redirect("/news");
   }
+
+  const { message } = await req.json();
+
   // Otherwise, something went wrong on the server, we will return whatever message the server returns.  For example, email already in use.
   formValidationErrorResponse({
     data: { email },
-    message: "The server error message",
+    message,
   });
 }
 

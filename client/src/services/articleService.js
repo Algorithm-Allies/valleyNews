@@ -39,7 +39,6 @@ export async function getArticlesByCategoryAndSubcategory({
       `${
         import.meta.env.VITE_API_URL
       }/articles/${category}/${subcategory}?page=${page}&perPage=${perPage}`
-      //`http://localhost:4500/api/articles/${category}/${subcategory}?page=${page}&perPage=${perPage}`
     );
     if (res.ok) {
       const articles = await res.json();

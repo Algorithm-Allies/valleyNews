@@ -9,12 +9,31 @@ const {
   getUserBusiness,
   viewUsersQuery,
   getSingleUserQuery,
+  getBusinessByUser,
+  getAllBusinessesQuery,
 } = require("../services/businessService");
 const {
   createPermissionQuery,
   updatePermissionQuery,
 } = require("../services/permissionService");
 const { getUserById } = require("../services/userService");
+
+//Get all Businesses
+const getAllBusinesses = async (req, res) => {
+  try {
+    
+    const businesses = await getAllBusinessesQuery(); 
+    
+    if (businesses.length === 0) {
+      return res.status(404).json({ message: "No businesses found" });
+    }
+
+    res.json(businesses);
+  } catch (error) {
+    console.error("Error fetching all businesses:", error);
+    res.status(500).json({ message: error });
+  }
+};
 
 //Create Business
 const createBusiness = async (req, res) => {
@@ -225,6 +244,22 @@ const changeUserPermission = async (req, res) => {
   }
 };
 
+const getBusinessByUserId = async (req, res) => {
+  const userId = req.params.id;
+  try {
+    const businesses = await getBusinessByUser(userId);
+    if (businesses.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No businesses found for the user" });
+    }
+    res.status(200).json(businesses);
+  } catch (error) {
+    console.error("Error fetching businesses by user:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 module.exports = {
   createBusiness,
   viewBusiness,
@@ -235,4 +270,6 @@ module.exports = {
   getUsersFromBusiness,
   getSingleUser,
   changeUserPermission,
+  getBusinessByUserId,
+  getAllBusinesses,
 };

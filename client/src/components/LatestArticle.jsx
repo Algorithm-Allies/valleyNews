@@ -5,6 +5,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
+import { createArticleUrl } from "../lib/articleUrlHelpers";
 import NewsImage from "../assets/newspaper.jpg";
 function LatestArticle({ articles }) {
   return (
@@ -28,15 +29,31 @@ function LatestArticle({ articles }) {
           className="shadow-gray-700 shadow-md bg-brown-100 p-3 rounded-lg flex-col justify-center items-center w-[50%]"
           key={article.id}
         >
-          <img
-            className="max-w-[20vw] object-cover m-8"
-            src={article.image_url ?? NewsImage}
-            alt={`Slide ${article.id}`}
-          />
+          <a
+            href={`/${createArticleUrl({
+              category: article.category,
+              subcategory: article.subcategory,
+              id: article.id,
+            })}`}
+            className="cursor-pointer"
+          >
+            <img
+              className="max-w-[20vw] object-cover m-8"
+              src={article.image_url ?? NewsImage}
+              alt={`Slide ${article.id}`}
+            />
+          </a>
           <div className="flex flex-col px-[2em] justify-center">
-            <div className="text-lg py-1.5 font-bold flex self-center ">
+            <a
+              href={`/${createArticleUrl({
+                category: article.category,
+                subcategory: article.subcategory,
+                id: article.id,
+              })}`}
+              className="text-lg py-1.5 font-bold flex self-center cursor-pointer"
+            >
               {article.headline}
-            </div>
+            </a>
             <div className="flex items-end justify-end">
               <div className="text-sm flex items-stretch flex-col">
                 <p className="text-gray-900 leading-none">{article.author}</p>

@@ -10,7 +10,7 @@ const {
   viewUsersQuery,
   getSingleUserQuery,
   getBusinessByUser,
-  getALlBusinesses,
+  getAllBusinesses,
 } = require("../services/businessService");
 const {
   createPermissionQuery,

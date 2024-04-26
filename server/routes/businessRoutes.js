@@ -12,6 +12,7 @@ const {
   getSingleUser,
   changeUserPermission,
   getBusinessByUserId,
+  getAllBusinesses,
 } = require("../controllers/businessControllers");
 
 router.post("/", createBusiness);
@@ -24,5 +25,7 @@ router.get("/users/:business_id", getUsersFromBusiness);
 router.get("/:business_id/user/:user_id", getSingleUser);
 router.put("/:business_id/user/:user_id", changeUserPermission);
 router.get("/user_id/:id", getBusinessByUserId);
+
+router.get("/businesses", getAllBusinesses);
 
 module.exports = router;

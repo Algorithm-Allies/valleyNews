@@ -1,5 +1,16 @@
 const db = require("../config/database");
 
+const getAllBusinessesQuery = async () => {
+  try {
+    const query = ` SELECT * FROM business `; // Get all columns from the 'business' table
+    const { rows } = await db.query(query);
+    return rows;
+  } catch (error) {
+    console.error("Error fetching all businesses:", error);
+    throw error;
+  }
+};
+
 const createBusinessQuery = async (businessData) => {
   try {
     const query = `

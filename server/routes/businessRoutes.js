@@ -28,4 +28,8 @@ router.get("/user_id/:id", getBusinessByUserId);
 
 router.get("/businesses", getAllBusinesses);
 
+// Add the test route
+router.get("/businessTest", (req, res) => {
+  res.status(200).json({ message: "Test successful!" });
+});
 module.exports = router;

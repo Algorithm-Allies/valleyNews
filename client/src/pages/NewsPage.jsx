@@ -51,20 +51,8 @@ function NewsPage() {
     fetchArticles();
   }, [category, subcategory, currentPage, perPage]);
 
-  //Pagination
-  const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-      articlesContainerRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  };
 
-  const handlePrevPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-      articlesContainerRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  };
+
 
   if (loading) {
     return (
@@ -98,24 +86,27 @@ function NewsPage() {
       </div>
       <div className="flex justify-center mt-4">
         <div className="flex items-baseline justify-between">
-          <button
-            className="py-2 px-6 bg-zinc-300 items-center rounded-lg disabled:bg-stone-200"
-            onClick={handlePrevPage}
-            disabled={currentPage === 1}
-          >
-            Previous
-          </button>
-          <p className="text-sm text-stone-500 mx-2">
-            {" "}
-            Page {currentPage} of {totalPages}
-          </p>
-          <button
-            className="py-2 px-6 bg-zinc-300 items-center rounded-lg disabled:bg-stone-200"
-            onClick={handleNextPage}
-            disabled={currentPage === totalPages}
-          >
-            Next
-          </button>
+          <div className="flex items-center mx-2">
+            <div className="flex items-center mx-2">
+  <input
+    type="number"
+    className="w-16 text-center border border-gray-300 rounded-md mr-2 focus:outline-none"
+    value={currentPage}
+    onChange={(e) => {
+      const pageNumber = parseInt(e.target.value);
+      if (
+        !isNaN(pageNumber) &&
+        pageNumber >= 1 &&
+        pageNumber <= totalPages
+      ) {
+        setCurrentPage(pageNumber);
+      }
+    }}
+  />
+  <p className="text-sm text-stone-500">of {totalPages}</p>
+</div>
+
+          </div>
         </div>
       </div>
     </div>

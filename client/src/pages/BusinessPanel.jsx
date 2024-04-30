@@ -65,6 +65,7 @@ function BusinessPanel() {
     </div>
   );
 }
+
 const articleData = [
   {
     id: 1,

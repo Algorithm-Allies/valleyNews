@@ -14,9 +14,22 @@ function NewsPage() {
   const [loading, setLoading] = useState(true);
   const [latestArticles, setLatestArticles] = useState([]);
   const [articles, setArticles] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(null);
+  const [temporaryPageNumber, setTemporaryPageNumber] = useState(1)
   const [totalPages, setTotalPages] = useState(1);
   const [perPage, setPerPage] = useState(20);
+
+  useEffect(() => {
+    const savedPageNumber = localStorage.getItem('paginationPageNumber')
+    if (savedPageNumber) {
+      setCurrentPage(parseInt(savedPageNumber))
+      setTemporaryPageNumber(parseInt(savedPageNumber))
+    } else {
+      setCurrentPage(1)
+      setTemporaryPageNumber(1)
+    }
+
+  }, [])
 
   useEffect(() => {
     const fetchArticles = async () => {
@@ -37,34 +50,42 @@ function NewsPage() {
           });
         }
         if (res.ok) {
+          localStorage.setItem('paginationPageNumber', currentPage)
           setArticles(res.data.articles);
           setLatestArticles(res.data.articles.slice(0, 5));
           setTotalPages(res.data.totalPages);
         }
       } catch (error) {
-        console.error("Error fetching articles:", error);
       } finally {
         setLoading(false);
       }
     };
+    if (currentPage) {
+      fetchArticles();
+      setTemporaryPageNumber(currentPage)
+    }
 
-    fetchArticles();
   }, [category, subcategory, currentPage, perPage]);
+
 
   //Pagination
   const handleNextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
-      articlesContainerRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   const handlePrevPage = () => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
-      articlesContainerRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
+
+  const handleGoToPage = (e) => {
+    if (temporaryPageNumber >= 1 && temporaryPageNumber <= totalPages) {
+      setCurrentPage(temporaryPageNumber)
+    }
+  }
 
   if (loading) {
     return (
@@ -105,10 +126,13 @@ function NewsPage() {
           >
             Previous
           </button>
-          <p className="text-sm text-stone-500 mx-2">
-            {" "}
-            Page {currentPage} of {totalPages}
-          </p>
+          <div className="mx-4 flex items-center">
+            <p className="text-sm text-stone-500">
+              Page <input type="number" className="border border-black w-10 text-center" value={temporaryPageNumber} onChange={(e) => setTemporaryPageNumber(parseInt(e.target.value))} /> of {totalPages}
+            </p>
+            <button onClick={handleGoToPage} className="border border-black ml-2 px-2">Go</button>
+          </div>
+
           <button
             className="py-2 px-6 bg-zinc-300 items-center rounded-lg disabled:bg-stone-200"
             onClick={handleNextPage}

@@ -2,7 +2,17 @@ import React from "react";
 import Trash from "../assets/trash-fill.png";
 import Pencil from "../assets/pencil-square.png";
 import NewsPaper from "../assets/newspaper.png";
+import { useUser } from "../hooks/useUserContext";
+import { useNavigate } from "react-router-dom";
 function BusinessPanel() {
+  const { businessId } = useUser();
+  const navigate = useNavigate();
+  React.useEffect(() => {
+    if (!businessId) {
+      navigate("/news");
+    }
+  }, [businessId]);
+
   return (
     <div className="h-screen bg-brown-100">
       <div className="h-full flex flex-col pt-8 max-w-[70vw] w-full mx-auto">

@@ -3,15 +3,15 @@ import BusinessNavBar from "../components/BusinessNavBar";
 import Trash from "../assets/trash-fill.png";
 import Pencil from "../assets/pencil-square.png";
 import NewsPaper from "../assets/newspaper.png";
+import { getArticlesByBusiness } from "../services/articleService";
+
 function BusinessPanel() {
   const [articleData, setArticleData] = useState([]);
 
   useEffect(() => {
-    fetch("/api/articles")
-      .then((response) => response.json())
-      .then((data) => setArticles(data))
-      .catch((error) => console.error("Error fetching articles:", error));
-    setArticleData(articles);
+    getArticlesByBusiness(18)
+      .then((data) => setArticleData(data))
+      .catch((error) => console.log("Error fetching articles", error));
   }, []);
 
   return (
@@ -28,7 +28,7 @@ function BusinessPanel() {
 
           <hr className="rounded-md border-y-8 border-brown-400 mb-5 " />
           <div className="flex justify-center">
-            <table class="table-auto w-[70vw] border-collapse border border-[#FCFCFC] bg-[#FCFCFC]">
+            <table className="table-auto w-[70vw] border-collapse border border-[#FCFCFC] bg-[#FCFCFC]">
               <thead>
                 <tr className="text-left py-3">
                   <th>ID</th>
@@ -44,8 +44,8 @@ function BusinessPanel() {
                     className="even:bg-[#F2F2F2] odd:bg-[#FCFCFC] border border-[#FCFCFC] py-4"
                   >
                     <td>{item.id}</td>
-                    <td>{item.title}</td>
-                    <td>{item.engagements}</td>
+                    <td className="flex-grow">{item.headline}</td>
+                    <td>{item.click_count}</td>
                     <td className="flex flex-row justify-around">
                       <button>
                         <img className="w-5" src={Trash} />
@@ -67,26 +67,5 @@ function BusinessPanel() {
     </div>
   );
 }
-const articles = [
-  {
-    id: 1,
-    title: "Test Article",
-    engagements: 100,
-  },
-  {
-    id: 2,
-    title: "Test Article",
-    engagements: 100,
-  },
-  {
-    id: 3,
-    title: "Test Article",
-    engagements: 100,
-  },
-  {
-    id: 4,
-    title: "Test Article",
-    engagements: 100,
-  },
-];
+
 export default BusinessPanel;

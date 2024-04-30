@@ -20,7 +20,7 @@ function NewsPage() {
   const [perPage, setPerPage] = useState(20);
 
   useEffect(() => {
-    const savedPageNumber = localStorage.getItem('paginationPageNumber')
+    const savedPageNumber = Number(sessionStorage.getItem('paginationPageNumber'))
     if (savedPageNumber) {
       setCurrentPage(parseInt(savedPageNumber))
       setTemporaryPageNumber(parseInt(savedPageNumber))
@@ -50,7 +50,7 @@ function NewsPage() {
           });
         }
         if (res.ok) {
-          localStorage.setItem('paginationPageNumber', currentPage)
+          sessionStorage.setItem('paginationPageNumber', currentPage.toString())
           setArticles(res.data.articles);
           setLatestArticles(res.data.articles.slice(0, 5));
           setTotalPages(res.data.totalPages);

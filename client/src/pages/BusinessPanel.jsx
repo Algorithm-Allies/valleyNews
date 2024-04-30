@@ -4,12 +4,14 @@ import Trash from "../assets/trash-fill.png";
 import Pencil from "../assets/pencil-square.png";
 import NewsPaper from "../assets/newspaper.png";
 import { getArticlesByBusiness } from "../services/articleService";
+import { useUser } from "../hooks/useUserContext";
 
 function BusinessPanel() {
   const [articleData, setArticleData] = useState([]);
+  const userInfo = useUser();
 
   useEffect(() => {
-    getArticlesByBusiness(18)
+    getArticlesByBusiness(userInfo.bussinessId)
       .then((data) => setArticleData(data))
       .catch((error) => console.log("Error fetching articles", error));
   }, []);

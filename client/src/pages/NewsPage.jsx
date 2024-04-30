@@ -128,7 +128,7 @@ function NewsPage() {
           </button>
           <div className="mx-4 flex items-center">
             <p className="text-sm text-stone-500">
-              Page <input type="number" className="border border-black w-10 text-center" value={temporaryPageNumber} onChange={(e) => setTemporaryPageNumber(parseInt(e.target.value))} /> of {totalPages}
+              Page <input type="number" min={1} max={totalPages} className="border border-black w-10 text-center" value={temporaryPageNumber} onChange={(e) => setTemporaryPageNumber(parseInt(e.target.value))} /> of {totalPages}
             </p>
             <button onClick={handleGoToPage} className="border border-black ml-2 px-2">Go</button>
           </div>

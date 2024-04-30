@@ -108,8 +108,8 @@ export default function CreateArticle() {
   };
 
   return (
-    <div className="bg-brown-100">
-      <div className="h-full flex flex-col pt-8 max-w-[70vw] w-full mx-auto">
+    <div className="bg-brown-100 pb-[5vh]">
+      <div className="flex flex-col pt-8 max-w-[70vw] w-full mx-auto">
         <BusinessNavBar />
         <div className="flex flex-col w-100">
           <h1 className="text-4xl text-black-100 flex pt-20">New Article</h1>
@@ -126,7 +126,7 @@ export default function CreateArticle() {
                 <option value="author1">author1</option>
                 <option value="author2">author2</option>
               </select>
-              <select value={selectedCategory} onChange={handleCategoryChange} className="border-y-8 w-[20vw]">
+              <select value={selectedCategory} onChange={handleCategoryChange} className="border-y-8 w-[20vw] ml-4">
                 <option value="">Select Category</option>
                 {Object.keys(categories).map((category) => (
                   <option key={category} value={category}>{category}</option>

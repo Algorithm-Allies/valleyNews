@@ -77,10 +77,10 @@ CREATE TABLE IF NOT EXISTS user_business (
   id SERIAL PRIMARY KEY,
   user_id INTEGER,
   business_id INTEGER,
-  user_permission INTEGER,
+  permission_id INTEGER,
   FOREIGN KEY (user_id) REFERENCES "user"(id),
   FOREIGN KEY (business_id) REFERENCES business(id),
-  FOREIGN KEY (user_permission) REFERENCES permissions(id)
+  FOREIGN KEY (permission_id) REFERENCES permissions(id)
 );
 
 

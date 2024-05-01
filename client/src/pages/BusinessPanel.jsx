@@ -1,23 +1,21 @@
-import React, { useState, useEffect } from "react";
-import BusinessNavBar from "../components/BusinessNavBar";
+import React from "react";
 import Trash from "../assets/trash-fill.png";
 import Pencil from "../assets/pencil-square.png";
 import NewsPaper from "../assets/newspaper.png";
+import { useUser } from "../hooks/useUserContext";
+import { useNavigate } from "react-router-dom";
 function BusinessPanel() {
-  const [articleData, setArticleData] = useState([]);
-
-  useEffect(() => {
-    fetch("/api/articles")
-      .then((response) => response.json())
-      .then((data) => setArticles(data))
-      .catch((error) => console.error("Error fetching articles:", error));
-    setArticleData(articles);
-  }, []);
+  const { businessId } = useUser();
+  const navigate = useNavigate();
+  React.useEffect(() => {
+    if (!businessId) {
+      navigate("/news");
+    }
+  }, [businessId]);
 
   return (
     <div className="h-screen bg-brown-100">
       <div className="h-full flex flex-col pt-8 max-w-[70vw] w-full mx-auto">
-        <BusinessNavBar />
         <div className="flex flex-col w-100 pt-[10vh]">
           <div className="flex flex-row justify-between pb-4">
             <h1 className="text-4xl text-black-100 m-0">Articles</h1>

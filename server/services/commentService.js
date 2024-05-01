@@ -54,13 +54,13 @@ const addCommentIntoArticle = async (commentData) => {
         RETURNING *;
       `;
 
-    const { article_id, user_id, comment, created_at } = commentData;
+    const { article_id, user_id, comment, timestamp } = commentData;
 
     const addedComment = await db.query(query, [
       article_id,
       user_id,
       comment,
-      created_at,
+      timestamp,
     ]);
 
     return addedComment.rows;

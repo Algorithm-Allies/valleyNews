@@ -27,7 +27,7 @@ export default function CreateArticle() {
     "paragraphs": [
       ""
     ],
-    "business_id": 6,
+    "business_id": 12,
   }]);
   
   const [error, setError] = useState('');

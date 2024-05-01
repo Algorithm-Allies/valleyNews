@@ -7,5 +7,6 @@ export default function UserProvider({ children }) {
     const user = JSON.parse(localStorage.getItem("user"));
     setUser(user);
   }, []);
+
   return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
 }

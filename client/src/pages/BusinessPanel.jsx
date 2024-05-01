@@ -67,7 +67,8 @@ function BusinessPanel() {
     </div>
   );
 }
-const articles = [
+
+const articleData = [
   {
     id: 1,
     title: "Test Article",

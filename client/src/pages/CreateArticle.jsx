@@ -6,14 +6,8 @@ import { useNavigate } from 'react-router-dom';
 export default function CreateArticle() {
   const now = new Date();
   const dateString = now.toLocaleDateString('en-GB'); //dd/MM/yyyy
-  const {business_id} = useUser();
-  const navigate = useNavigate();
-  React.useEffect(() => {
-    if (!business_id) {
-      navigate("/news");
-    }
-  }, [business_id]);
-  console.log("UserInfo's Business ID from useUser:", business_id);
+  const {businessId} = useUser();
+  console.log("UserInfo's Business ID from useUser:", [businessId]);
   const [formData, setFormData] = useState([{
     "source": "source1",
     "publisher": "publisher1",
@@ -35,7 +29,7 @@ export default function CreateArticle() {
     "paragraphs": [
       ""
     ],
-    "business_id": business_id,
+    "business_id": [businessId],
   }]);
   
   const [error, setError] = useState('');

@@ -6,8 +6,8 @@ import {useUser} from "../hooks/useUserContext";
 export default function CreateArticle() {
   const now = new Date();
   const dateString = now.toLocaleDateString('en-GB'); //dd/MM/yyyy
-  const userInfo = useUser();
-  console.log("UserInfo's Business ID from useUser:", userInfo.business_id);
+  const {business_id} = useUser();
+  console.log("UserInfo's Business ID from useUser:", {business_id});
   const [formData, setFormData] = useState([{
     "source": "source1",
     "publisher": "publisher1",
@@ -29,7 +29,7 @@ export default function CreateArticle() {
     "paragraphs": [
       ""
     ],
-    "business_id": userInfo.business_id,
+    "business_id": business_id,
   }]);
   
   const [error, setError] = useState('');

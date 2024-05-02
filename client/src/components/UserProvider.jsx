@@ -1,16 +1,12 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React from "react";
+export const UserContext = React.createContext(null);
+export default function UserProvider({ children }) {
+  const [user, setUser] = React.useState({ userId: null, businessId: null });
 
-export const UserContext = createContext(null);
+  React.useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    setUser(user);
+  }, []);
 
-const UserProvider = ({ children }) => {
-    const [user, setUser] = useState({ userId: null, businessId: null });
-
-    useEffect(() => {
-        const storedUser = localStorage.getItem('user');
-        setUser(storedUser ? JSON.parse(storedUser) : { userId: 'default', businessId: 'default' });
-    }, []);
-
-    return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
-};
-
-export default UserProvider;
+  return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
+}

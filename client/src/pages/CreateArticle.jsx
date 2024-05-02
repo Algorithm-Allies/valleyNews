@@ -1,16 +1,13 @@
 import React, { useState, useRef } from 'react';
 import { createBusinessArticle } from '../services/articleBusinessService.js';
 import BusinessNavBar from '../components/BusinessNavBar';
-import {useUser} from "../hooks/useUserContext.js";
+import {useUser} from "../hooks/useUserContext";
 
 export default function CreateArticle() {
   const now = new Date();
   const dateString = now.toLocaleDateString('en-GB'); //dd/MM/yyyy
   const userInfo = useUser();
-  console.log("UserInfo from useUser in CreateArticle:", userInfo);
-  if (!userInfo) {
-    console.error("CreateArticle is being rendered outside the UserProvider.");
-  }
+  console.log("UserInfo's Business ID from useUser:", userInfo.business_id);
   const [formData, setFormData] = useState([{
     "source": "source1",
     "publisher": "publisher1",

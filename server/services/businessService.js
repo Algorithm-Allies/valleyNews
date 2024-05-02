@@ -1,5 +1,16 @@
 const db = require("../config/database");
 
+const getAllBusinessesQuery = async () => {
+  try {
+    const query = `SELECT * FROM business`; // Get all columns from the 'business' table
+    const { rows } = await db.query(query);
+    return rows;
+  } catch (error) {
+    console.error("Error fetching all businesses:", error);
+    throw error;
+  }
+};
+
 const createBusinessQuery = async (businessData) => {
   try {
     const query = `
@@ -111,14 +122,11 @@ const removeUserQuery = async (businessId, userId) => {
 const viewUsersQuery = async (businessId) => {
   try {
     const query = `
-      SELECT u.id, u.email, b.phone_number, p.role
-      FROM "user" u
-      JOIN "user_business" ub ON u.id = ub.user_id
-      JOIN "permissions" p ON ub.permission_id = p.id
-      JOIN "business" b ON ub.business_id = b.id
-      WHERE ub.business_id = $1;
-    `;
-
+    SELECT u.id, u.email, u.account_type
+    FROM "user" u
+    JOIN "user_business" ub ON u.id = ub.user_id
+    WHERE ub.business_id = $1; 
+  `;
     const result = await db.query(query, [businessId]);
     return result.rows;
   } catch (error) {
@@ -132,7 +140,7 @@ const getSingleUserQuery = async (businessId, userId) => {
     const query = `
     SELECT u.id, u.email, u.account_type
     FROM "user" u
-    JOIN "user_business" ub ON u.id = ub.user_id
+    JOIN "userBusiness" ub ON u.id = ub.user_id
     WHERE ub.business_id = $1 AND u.id = $2;
 `;
     const result = await db.query(query, [businessId, userId]);
@@ -170,4 +178,5 @@ module.exports = {
   viewUsersQuery,
   getSingleUserQuery,
   getBusinessByUser,
+  getAllBusinessesQuery,
 };

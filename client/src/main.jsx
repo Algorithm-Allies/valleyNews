@@ -33,7 +33,6 @@ import RootLayout from "./components/RootLayout.jsx";
 import CreateArticle from "./pages/CreateArticle.jsx";
 import BusinessPanel from "./pages/BusinessPanel.jsx";
 import Users from "./pages/Users.jsx";
-import AddUser from "./pages/AddUser.jsx";
 
 function ArticleFeedPage() {
   return null;
@@ -123,7 +122,6 @@ const router = createBrowserRouter([
       { path: "/createarticle", element: <CreateArticle /> },
       { path: "/businesspanel", element: <BusinessPanel /> },
       { path: "/users", element: <Users /> },
-      { path: "/adduser", element: <AddUser /> },
     ],
   },
   {

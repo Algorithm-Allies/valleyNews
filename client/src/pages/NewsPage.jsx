@@ -7,6 +7,7 @@ import {
   getArticlesByCategoryAndSubcategory,
   getArticlesByCategory,
 } from "../services/articleService";
+
 //page for different news categories based on selected category i.e local, sports, crime, government, education, etc
 function NewsPage() {
   const articlesContainerRef = useRef(null);
@@ -14,8 +15,7 @@ function NewsPage() {
   const [loading, setLoading] = useState(true);
   const [latestArticles, setLatestArticles] = useState([]);
   const [articles, setArticles] = useState([]);
-  const [currentPage, setCurrentPage] = useState(null);
-  const [temporaryPageNumber, setTemporaryPageNumber] = useState(1)
+  const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [perPage, setPerPage] = useState(20);
 
@@ -38,78 +38,34 @@ function NewsPage() {
           });
         }
         if (res.ok) {
-          sessionStorage.setItem('paginationPageNumber', currentPage.toString())
-          sessionStorage.setItem('category', category)
-          sessionStorage.setItem('subcategory', subcategory)
           setArticles(res.data.articles);
           setLatestArticles(res.data.articles.slice(0, 5));
           setTotalPages(res.data.totalPages);
         }
       } catch (error) {
+        console.error("Error fetching articles:", error);
       } finally {
         setLoading(false);
       }
     };
-    if (currentPage) {
-      fetchArticles();
-      setTemporaryPageNumber(currentPage)
-    }
 
+    fetchArticles();
   }, [category, subcategory, currentPage, perPage]);
-
-  useEffect(() => {
-    const savedPageNumber = Number(sessionStorage.getItem('paginationPageNumber'))
-    if (savedPageNumber) {
-      setCurrentPage(parseInt(savedPageNumber))
-      setTemporaryPageNumber(parseInt(savedPageNumber))
-    } else {
-      setCurrentPage(1)
-      setTemporaryPageNumber(1)
-    }
-
-  }, [])
-
-  useEffect(() => {
-    const savedCategory = sessionStorage.getItem('category')
-    const savedSubCategory = sessionStorage.getItem('subcategory')
-    if (savedCategory != category) {
-      setCurrentPage(1)
-      setTemporaryPageNumber(1)
-      return
-    }
-    if (savedSubCategory != subcategory && subcategory != undefined) {
-      setCurrentPage(1)
-      setTemporaryPageNumber(1)
-    }
-  }, [category, subcategory])
-
 
   //Pagination
   const handleNextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
+      articlesContainerRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
 
   const handlePrevPage = () => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
+      articlesContainerRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
-
-  const handleGoToPage = (e) => {
-    if (temporaryPageNumber >= 1 && temporaryPageNumber <= totalPages) {
-      setCurrentPage(temporaryPageNumber)
-    }
-  }
-
-  const handleGoToPageKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      if (temporaryPageNumber >= 1 && temporaryPageNumber <= totalPages) {
-        setCurrentPage(temporaryPageNumber)
-      }
-    }
-  }
 
   if (loading) {
     return (
@@ -121,8 +77,49 @@ function NewsPage() {
   return (
     <div
       ref={articlesContainerRef}
-      className="flex justify-center flex-col items-center w-full my-20"
+      className="flex justify-center flex-col items-center w-full mb-20"
     >
+      <div className="text-2xl leading-6 font-bold text-custom-orange m-4 ">
+        <nav className="mb-4">
+          <ul className="flex justify-center">
+            <li className="mr-4">
+              <Link to="/news">NEWS</Link>
+            </li>
+            <li>
+              <Link to="/sports">SPORTS</Link>
+            </li>
+          </ul>
+        </nav>
+
+        {category === "news" ? (
+          <nav className="mb-4">
+            <ul className="flex">
+              <li className="mr-4">
+                <Link to="/news/government">Government</Link>
+              </li>
+              <li className="mr-4">
+                <Link to="/news/education">Education</Link>
+              </li>
+              <li>
+                <Link to="/news/crime">Crime</Link>
+              </li>
+            </ul>
+          </nav>
+        ) : (
+          category === "sports" && (
+            <nav className="mb-4">
+              <ul className="flex">
+                <li className="mr-4">
+                  <Link to="/sports/high-school">High School</Link>
+                </li>
+                <li>
+                  <Link to="/sports/local">Local</Link>
+                </li>
+              </ul>
+            </nav>
+          )
+        )}
+      </div>
       <LatestArticle articles={latestArticles} />
       <div className=" text-2xl leading-6 text-center text-custom-orange  m-4 items-stretch">
         {subcategory ? subcategory.toUpperCase() : null}
@@ -150,13 +147,10 @@ function NewsPage() {
           >
             Previous
           </button>
-          <div className="mx-4 flex items-center">
-            <p className="text-sm text-stone-500">
-              Page <input type="number" min={1} max={totalPages} className="border border-black w-10 text-center" value={temporaryPageNumber} onChange={(e) => setTemporaryPageNumber(parseInt(e.target.value))} onKeyUp={handleGoToPageKeyPress} /> of {totalPages}
-            </p>
-            <button onClick={handleGoToPage} className="border border-black ml-2 px-2">Go</button>
-          </div>
-
+          <p className="text-sm text-stone-500 mx-2">
+            {" "}
+            Page {currentPage} of {totalPages}
+          </p>
           <button
             className="py-2 px-6 bg-zinc-300 items-center rounded-lg disabled:bg-stone-200"
             onClick={handleNextPage}

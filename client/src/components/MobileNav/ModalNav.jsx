@@ -52,9 +52,7 @@ function ModalLinks({ links, closeNav }) {
                 </ul>
               </div>
             ) : (
-              <MobileNavLink closeNav={closeNav} href={link.href}>
-                {link.label}
-              </MobileNavLink>
+              <MobileNavLink href={link.href}>{link.label}</MobileNavLink>
             )}
           </li>
         );

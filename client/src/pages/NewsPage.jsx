@@ -20,18 +20,6 @@ function NewsPage() {
   const [perPage, setPerPage] = useState(20);
 
   useEffect(() => {
-    const savedPageNumber = Number(sessionStorage.getItem('paginationPageNumber'))
-    if (savedPageNumber) {
-      setCurrentPage(parseInt(savedPageNumber))
-      setTemporaryPageNumber(parseInt(savedPageNumber))
-    } else {
-      setCurrentPage(1)
-      setTemporaryPageNumber(1)
-    }
-
-  }, [])
-
-  useEffect(() => {
     const fetchArticles = async () => {
       try {
         let res;
@@ -51,6 +39,8 @@ function NewsPage() {
         }
         if (res.ok) {
           sessionStorage.setItem('paginationPageNumber', currentPage.toString())
+          sessionStorage.setItem('category', category)
+          sessionStorage.setItem('subcategory', subcategory)
           setArticles(res.data.articles);
           setLatestArticles(res.data.articles.slice(0, 5));
           setTotalPages(res.data.totalPages);
@@ -66,6 +56,32 @@ function NewsPage() {
     }
 
   }, [category, subcategory, currentPage, perPage]);
+
+  useEffect(() => {
+    const savedPageNumber = Number(sessionStorage.getItem('paginationPageNumber'))
+    if (savedPageNumber) {
+      setCurrentPage(parseInt(savedPageNumber))
+      setTemporaryPageNumber(parseInt(savedPageNumber))
+    } else {
+      setCurrentPage(1)
+      setTemporaryPageNumber(1)
+    }
+
+  }, [])
+
+  useEffect(() => {
+    const savedCategory = sessionStorage.getItem('category')
+    const savedSubCategory = sessionStorage.getItem('subcategory')
+    if (savedCategory != category) {
+      setCurrentPage(1)
+      setTemporaryPageNumber(1)
+      return
+    }
+    if (savedSubCategory != subcategory && subcategory != undefined) {
+      setCurrentPage(1)
+      setTemporaryPageNumber(1)
+    }
+  }, [category, subcategory])
 
 
   //Pagination

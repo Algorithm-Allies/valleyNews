@@ -267,7 +267,7 @@ async function getArticleClickCount(req, res) {
     res.status(500).json({ error: "Internal server error" });
   }
 }
-
+//test
 async function getArticlesByBusiness(req, res) {
   const { businessId } = req.params;
 

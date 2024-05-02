@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { createBusinessArticle } from '../services/articleBusinessService.js';
 import BusinessNavBar from '../components/BusinessNavBar';
 import {useUser} from "../hooks/useUserContext";
-import { useNavigate } from 'react-router-dom';
+
 export default function CreateArticle() {
   const now = new Date();
   const dateString = now.toLocaleDateString('en-GB'); //dd/MM/yyyy
@@ -29,7 +29,7 @@ export default function CreateArticle() {
     "paragraphs": [
       ""
     ],
-    "business_id": [businessId],
+    "business_id": businessId,
   }]);
   
   const [error, setError] = useState('');

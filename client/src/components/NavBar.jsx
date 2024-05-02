@@ -2,9 +2,12 @@ import React from "react";
 
 import DesktopNav from "./DesktopNav/DesktopNav";
 import MobileNav from "./MobileNav/MobileNav";
-import { useUser } from "../hooks/useUserContext";
 
 const LINKS = [
+  {
+    label: "Home",
+    href: "/",
+  },
   {
     label: "News",
     href: "/news",
@@ -27,26 +30,13 @@ const LINKS = [
     label: "Staff",
     href: "/staff",
   },
-  {
-    label: "Business",
-    href: "/businesspanel",
-    subLinks: [{ label: "Users", href: "/users" }],
-  },
 ];
 
 function NavBar() {
-  const { businessId } = useUser();
-  const links = LINKS.filter((link) => {
-    return link.label === "Business"
-      ? businessId !== null
-        ? true
-        : false
-      : true;
-  });
   return (
     <nav className="bg-stone-700 p-4">
-      <DesktopNav links={links} />
-      <MobileNav links={links} />
+      <DesktopNav links={LINKS} />
+      <MobileNav links={LINKS} />
     </nav>
   );
 }

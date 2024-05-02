@@ -2,12 +2,18 @@ import React, { useState, useRef } from 'react';
 import { createBusinessArticle } from '../services/articleBusinessService.js';
 import BusinessNavBar from '../components/BusinessNavBar';
 import {useUser} from "../hooks/useUserContext";
-
+import { useNavigate } from 'react-router-dom';
 export default function CreateArticle() {
   const now = new Date();
   const dateString = now.toLocaleDateString('en-GB'); //dd/MM/yyyy
   const {business_id} = useUser();
-  console.log("UserInfo's Business ID from useUser:", {business_id});
+  const navigate = useNavigate();
+  React.useEffect(() => {
+    if (!business_id) {
+      navigate("/news");
+    }
+  }, [business_id]);
+  console.log("UserInfo's Business ID from useUser:", business_id);
   const [formData, setFormData] = useState([{
     "source": "source1",
     "publisher": "publisher1",

@@ -33,7 +33,7 @@ import CreateArticle from "./pages/CreateArticle.jsx";
 import BusinessPanel from "./pages/BusinessPanel.jsx";
 import Users from "./pages/Users.jsx";
 import AddUser from "./pages/AddUser.jsx";
-import UserProvider from "./components/UserProvider.jsx";
+
 
 function ArticleFeedPage() {
   return null;
@@ -89,9 +89,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: ( 
-      <UserProvider>
-        <RootLayout />
-      </UserProvider>),
+      <RootLayout />),
     children: [
       {
         index: true,

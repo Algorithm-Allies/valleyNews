@@ -1,11 +1,16 @@
 import React, { useState, useRef } from 'react';
 import { createBusinessArticle } from '../services/articleBusinessService.js';
 import BusinessNavBar from '../components/BusinessNavBar';
+import {useUser} from "../hooks/useUserContext.js";
 
 export default function CreateArticle() {
   const now = new Date();
   const dateString = now.toLocaleDateString('en-GB'); //dd/MM/yyyy
-
+  const userInfo = useUser();
+  console.log("UserInfo from useUser in CreateArticle:", userInfo);
+  if (!userInfo) {
+    console.error("CreateArticle is being rendered outside the UserProvider.");
+  }
   const [formData, setFormData] = useState([{
     "source": "source1",
     "publisher": "publisher1",
@@ -27,7 +32,7 @@ export default function CreateArticle() {
     "paragraphs": [
       ""
     ],
-    "business_id": 12,
+    "business_id": userInfo.business_id,
   }]);
   
   const [error, setError] = useState('');

@@ -122,11 +122,14 @@ const removeUserQuery = async (businessId, userId) => {
 const viewUsersQuery = async (businessId) => {
   try {
     const query = `
-    SELECT u.id, u.email, u.account_type
-    FROM "user" u
-    JOIN "user_business" ub ON u.id = ub.user_id
-    WHERE ub.business_id = $1; 
-  `;
+      SELECT u.id, u.email, b.phone_number, p.role
+      FROM "user" u
+      JOIN "user_business" ub ON u.id = ub.user_id
+      JOIN "permissions" p ON ub.permission_id = p.id
+      JOIN "business" b ON ub.business_id = b.id
+      WHERE ub.business_id = $1;
+    `;
+
     const result = await db.query(query, [businessId]);
     return result.rows;
   } catch (error) {
@@ -140,7 +143,7 @@ const getSingleUserQuery = async (businessId, userId) => {
     const query = `
     SELECT u.id, u.email, u.account_type
     FROM "user" u
-    JOIN "userBusiness" ub ON u.id = ub.user_id
+    JOIN "user_business" ub ON u.id = ub.user_id
     WHERE ub.business_id = $1 AND u.id = $2;
 `;
     const result = await db.query(query, [businessId, userId]);

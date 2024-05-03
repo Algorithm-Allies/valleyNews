@@ -1,12 +1,15 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import NavBar from "./NavBar";
+import UserProvider from "./UserProvider";
 
 function RootLayout() {
   return (
     <div>
-      <NavBar />
-      <Outlet />
+      <UserProvider>
+        <NavBar />
+        <Outlet />
+      </UserProvider>
       {/* Footer component */}
     </div>
   );

@@ -1,5 +1,6 @@
 const db = require("../config/database");
 const { insertArticle } = require("../services/articleService");
+const { viewBusinessQuery } = require("../services/businessService");
 
 // Create articles -- bulk insert into database
 async function createArticles(req, res) {
@@ -270,6 +271,30 @@ async function getArticleClickCount(req, res) {
     res.status(500).json({ error: "Internal server error" });
   }
 }
+//test
+async function getArticlesByBusiness(req, res) {
+  const { businessId } = req.params;
+
+  try {
+    const business = viewBusinessQuery(businessId);
+    if (!business) {
+      return res.status(404).json({ error: "business doesnt exist" });
+    }
+
+    const query = `
+      SELECT *
+      FROM article
+      WHERE business_id = $1
+    `;
+
+    const result = await db.query(query, [businessId]);
+
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error("Error fetching articles by business:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
 
 module.exports = {
   createArticles,
@@ -281,4 +306,5 @@ module.exports = {
   getArticleUrls,
   articleClicked,
   getArticleClickCount,
+  getArticlesByBusiness,
 };

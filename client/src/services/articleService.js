@@ -71,3 +71,15 @@ export async function getArticleById({ id, category, subcategory }) {
     };
   }
 }
+
+export async function getArticlesByBusiness(id) {
+  try {
+    const res = await fetch(
+      `${import.meta.env.VITE_API_URL}/articles/business/${id}`
+    );
+    return res.json();
+  } catch (e) {
+    console.error("Error fetching articles by business:", e);
+    throw e;
+  }
+}

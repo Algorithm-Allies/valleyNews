@@ -39,6 +39,7 @@ export async function getArticlesByCategoryAndSubcategory({
       `${
         import.meta.env.VITE_API_URL
       }/articles/${category}/${subcategory}?page=${page}&perPage=${perPage}`
+      //`http://localhost:4500/api/articles/${category}/${subcategory}?page=${page}&perPage=${perPage}`
     );
     if (res.ok) {
       const articles = await res.json();
@@ -69,17 +70,5 @@ export async function getArticleById({ id, category, subcategory }) {
       error:
         "You may have visited an outdated bookmark or mistyped the URL for this page.",
     };
-  }
-}
-
-export async function getArticlesByBusiness(id) {
-  try {
-    const res = await fetch(
-      `${import.meta.env.VITE_API_URL}/articles/business/${id}`
-    );
-    return res.json();
-  } catch (e) {
-    console.error("Error fetching articles by business:", e);
-    throw e;
   }
 }

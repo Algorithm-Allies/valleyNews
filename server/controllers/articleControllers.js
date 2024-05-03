@@ -1,6 +1,5 @@
 const db = require("../config/database");
 const { insertArticle } = require("../services/articleService");
-const { viewBusinessQuery } = require("../services/businessService");
 
 // Create articles -- bulk insert into database
 async function createArticles(req, res) {
@@ -302,5 +301,4 @@ module.exports = {
   getArticleUrls,
   articleClicked,
   getArticleClickCount,
-  getArticlesByBusiness,
 };

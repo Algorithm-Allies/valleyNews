@@ -13,36 +13,7 @@ import AuthButton from "../components/Auth/AuthButton";
 
 export async function action({ request }) {
   const formData = sanitizeFormData(await request.formData());
-  const {
-    email,
-    password,
-    confirmPassword,
-    account_type,
-    business_website,
-    business_name,
-    phone,
-  } = Object.fromEntries(formData);
-
-  const isBusiness = account_type === "true";
-
-  if (
-    isBusiness &&
-    (!password ||
-      !email ||
-      !confirmPassword ||
-      !business_website ||
-      !business_name ||
-      !phone)
-  ) {
-    formValidationErrorResponse({
-      data: {
-        email,
-      },
-      message:
-        "Please enter email, password, confirmation password, phone number, business name, business website!",
-    });
-  }
-
+  const { email, password, confirmPassword } = Object.fromEntries(formData);
   // email, password, and confirm password all are required
   if (!password || !email || !confirmPassword) {
     formValidationErrorResponse({
@@ -65,29 +36,17 @@ export async function action({ request }) {
       message,
     });
   }
+  // Just for testing to show the email verification message
+  //return { data: { email } };
 
-  let body = {
-    email,
-    password,
-    account_type: isBusiness ? "Business" : "User",
-  };
-
-  if (isBusiness) {
-    body = {
-      ...body,
-      business_name,
-      business_website,
-      phone_number: phone,
-    };
-  }
-
-  const res = await fetch(`${import.meta.env.VITE_API_URL}/users/register`, {
+  const res = await fetch(`http://localhost:4500/api/users/register`, {
     method: "POST",
-    body: JSON.stringify(body),
+    body: JSON.stringify({ email, password }),
     headers: {
       "Content-Type": "application/json",
     },
   });
+  // If, the user was successful in registering in, we redirect them to home page
   if (res.ok) {
     return { data: { email } };
   }
@@ -95,6 +54,7 @@ export async function action({ request }) {
   else {
     const errorResponse = await res.json();
     const errorMessage = errorResponse.message;
+
     formValidationErrorResponse({
       data: { email },
       message: errorMessage,
@@ -145,7 +105,6 @@ function Register() {
           placeholder="Confirm Password"
           label="Password"
         />
-        <input type="hidden" name="account_type" value={businessCheck} />
         {businessCheck && (
           <>
             <AuthInput

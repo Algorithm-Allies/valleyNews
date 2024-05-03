@@ -20,8 +20,8 @@ Our goal is to streamline the consumption of news and empower users with access 
 - Local News
 - Education News
 - Sports Pages
-- Local
-- Highschool
+- Local Sports
+- Highschool Sports
 - Business/Staff Page
 - Create Article Page
 - Add User to Business Page

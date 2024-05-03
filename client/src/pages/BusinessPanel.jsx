@@ -11,7 +11,7 @@ function BusinessPanel() {
   const userInfo = useUser();
 
   useEffect(() => {
-    getArticlesByBusiness(userInfo.bussinessId)
+    getArticlesByBusiness(userInfo.businessId)
       .then((data) => setArticleData(data))
       .catch((error) => console.log("Error fetching articles", error));
   }, []);

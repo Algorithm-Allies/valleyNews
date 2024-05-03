@@ -13,7 +13,7 @@ export default function CommentForm({ articleId, addComment }) {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `http://localhost:4500/api/comments/${articleId}/${userId}`,
+        `https://valleynews.onrender.com/api/comments/${articleId}/${userId}`,
         { comment }
       );
       const commentData = response.data[0];

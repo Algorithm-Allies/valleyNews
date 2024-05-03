@@ -38,9 +38,11 @@ export default function Comment({
           </div>
           {userId === commentUserId && (
             <div className="flex gap-3 translate-y-1">
-              <button onClick={() => setIsEditing(true)}>
-                <PencilSquareIcon className="size-4" />
-              </button>
+              {
+                //<button onClick={() => setIsEditing(true)}>
+                //<PencilSquareIcon className="size-4" />
+                //</button>
+              }
               <button onClick={() => deleteComment(commentId)}>
                 {" "}
                 <XMarkIcon className="size-4" />

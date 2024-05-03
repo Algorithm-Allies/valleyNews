@@ -9,10 +9,6 @@ export default function CommentList({ comments, deleteComment }) {
       itemsPerPage: 5,
     });
 
-  useEffect(() => {
-    console.log("comments", comments);
-  }, [comments]);
-
   function formatDate(date) {
     const formattedDate = new Date(date).toLocaleTimeString("en-US", {
       month: "short",
@@ -53,29 +49,31 @@ export default function CommentList({ comments, deleteComment }) {
           </div>
         </div>
         <div className="flex items-baseline justify-between">
-          <p className="text-sm text-stone-500">
-            Showing {(currPage - 1) * countPerPage + 1} to out of comments
-          </p>
-          <div className="flex gap-4 text-stone-800">
-            <button
-              disabled={!hasPrev}
-              onClick={() => {
-                prevPage();
-              }}
-              className="py-2 px-6 bg-zinc-300 items-center rounded-lg disabled:bg-zinc-200"
-            >
-              Prev
-            </button>
-            <button
-              disabled={!hasNext}
-              onClick={() => {
-                nextPage();
-              }}
-              className="py-2 px-6 bg-zinc-300 items-center rounded-lg disabled:bg-stone-200"
-            >
-              Next
-            </button>
-          </div>
+          {
+            //<p className="text-sm text-stone-500">
+            //Showing {(currPage - 1) * countPerPage + 1} to out of comments
+            //</p>
+            //   <div className="flex gap-4 text-stone-800">
+            //   <button
+            //     disabled={!hasPrev}
+            //     onClick={() => {
+            //       prevPage();
+            //     }}
+            //     className="py-2 px-6 bg-zinc-300 items-center rounded-lg disabled:bg-zinc-200"
+            //   >
+            //     Prev
+            //   </button>
+            //   <button
+            //     disabled={!hasNext}
+            //     onClick={() => {
+            //       nextPage();
+            //     }}
+            //     className="py-2 px-6 bg-zinc-300 items-center rounded-lg disabled:bg-stone-200"
+            //   >
+            //     Next
+            //   </button>
+            // </div>
+          }
         </div>
       </div>
     </>

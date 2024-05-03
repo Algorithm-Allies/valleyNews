@@ -52,10 +52,9 @@ export default function ArticlePage() {
     async function fetchComments() {
       try {
         const response = await axios.get(
-          `http://localhost:4500/api/comments/article/${id}`
+          `https://valleynews.onrender.com/api/comments/article/${id}`
         );
         setComments(response.data);
-        console.log("comments", response.data);
       } catch (error) {
         console.error("Error fetching comments:", error);
         setError("Error fetching comments");

@@ -13,8 +13,36 @@ import AuthButton from "../components/Auth/AuthButton";
 
 export async function action({ request }) {
   const formData = sanitizeFormData(await request.formData());
-  const { email, password, confirmPassword, account_type } =
-    Object.fromEntries(formData);
+  const {
+    email,
+    password,
+    confirmPassword,
+    account_type,
+    business_website,
+    business_name,
+    phone,
+  } = Object.fromEntries(formData);
+
+  const isBusiness = account_type === "true";
+
+  if (
+    isBusiness &&
+    (!password ||
+      !email ||
+      !confirmPassword ||
+      !business_website ||
+      !business_name ||
+      !phone)
+  ) {
+    formValidationErrorResponse({
+      data: {
+        email,
+      },
+      message:
+        "Please enter email, password, confirmation password, phone number, business name, business website!",
+    });
+  }
+
   // email, password, and confirm password all are required
   if (!password || !email || !confirmPassword) {
     formValidationErrorResponse({
@@ -37,15 +65,25 @@ export async function action({ request }) {
       message,
     });
   }
-  console.log("Account: ", account_type);
+
+  let body = {
+    email,
+    password,
+    account_type: isBusiness ? "Business" : "User",
+  };
+
+  if (isBusiness) {
+    body = {
+      ...body,
+      business_name,
+      business_website,
+      phone_number: phone,
+    };
+  }
 
   const res = await fetch(`${import.meta.env.VITE_API_URL}/users/register`, {
     method: "POST",
-    body: JSON.stringify({
-      email,
-      password,
-      account_type: account_type === "false" ? "User" : "Business",
-    }),
+    body: JSON.stringify(body),
     headers: {
       "Content-Type": "application/json",
     },

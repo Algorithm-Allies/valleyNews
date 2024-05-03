@@ -54,10 +54,12 @@ async function getArticlesByCategory(req, res) {
 `;
 
   const articlesQuery = `
+  SELECT * FROM (
     SELECT * FROM article
     WHERE category = $1
     ORDER BY date_time_published DESC
-    LIMIT $2 OFFSET $3
+  ) AS ordered_articles
+  LIMIT $2 OFFSET $3
   `;
 
   try {
@@ -118,11 +120,13 @@ async function getArticlesBySubcategory(req, res) {
   `;
 
   const articlesQuery = `
+  SELECT * FROM (
     SELECT * FROM article
     WHERE category = $1
     AND subcategory = $2
     ORDER BY date_time_published DESC
-    LIMIT $3 OFFSET $4
+  ) AS ordered_articles
+  LIMIT $3 OFFSET $4
   `;
 
   try {

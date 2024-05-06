@@ -5,9 +5,12 @@ import BusinessNavBar from "../components/BusinessNavBar";
 import Trash from "../assets/trash-fill.png";
 import Pencil from "../assets/pencil-square.png";
 import NewsPaper from "../assets/newspaper.png";
+import { getUsersByBusinessId } from "../services/userService";
 
 function Users() {
   const { businessId } = useUser();
+
+  const [businessUsers, setBusinessUsers] = React.useState([]);
 
   const navigate = useNavigate();
   React.useEffect(() => {
@@ -15,6 +18,29 @@ function Users() {
       navigate("/news");
     }
   }, [businessId]);
+
+  React.useEffect(() => {
+    const getUsers = async () => {
+      const users = await getUsersByBusinessId(businessId);
+      console.log(users);
+      setBusinessUsers(users);
+    };
+    getUsers();
+  }, []);
+
+  // Deletes User from Business, needs businessId and UserId in body.
+  const deleteUserFromBusiness = async (userId, businessId) => {
+    fetch(`https://valleynews-dev.onrender.com/api/business/user/remove/`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId, businessId }),
+    });
+
+    setBusinessUsers((prev) => prev.filter((current) => current.id != userId));
+  };
+
   return (
     <div className="h-screen bg-brown-100">
       <div className="h-full flex flex-col pt-8 max-w-[70vw] w-full mx-auto">
@@ -39,7 +65,7 @@ function Users() {
                 </tr>
               </thead>
               <tbody>
-                {userData.map((user, i) => (
+                {businessUsers.map((user, i) => (
                   <tr
                     key={i}
                     className="even:bg-[#F2F2F2] odd:bg-[#FCFCFC] border border-[#FCFCFC] py-4"
@@ -50,7 +76,11 @@ function Users() {
                     <td>{user.phone}</td>
                     <td>{user.role}</td>
                     <td className="flex flex-row justify-around">
-                      <button>
+                      <button
+                        onClick={() =>
+                          deleteUserFromBusiness(user.id, businessId)
+                        }
+                      >
                         <img className="w-5" src={Trash} alt="Delete" />
                       </button>
                       <button>
@@ -76,6 +106,7 @@ function Users() {
   );
 }
 
+/*
 const userData = [
   {
     id: 1,
@@ -106,5 +137,6 @@ const userData = [
     role: "member",
   },
 ];
+*/
 
 export default Users;

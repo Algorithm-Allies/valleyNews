@@ -8,6 +8,7 @@ import NewsPaper from "../assets/newspaper.png";
 
 function Users() {
   const { businessId } = useUser();
+
   const navigate = useNavigate();
   React.useEffect(() => {
     if (!businessId) {

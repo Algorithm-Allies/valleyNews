@@ -85,7 +85,7 @@ const editComment = async (req, res) => {
       updatedCommentData.comment
     );
 
-    res.json(editedComment.rows);
+    res.json(editedComment);
   } catch (error) {
     console.error("Error editing comment:", error);
     res.status(500).json({ message: "Internal server error" });

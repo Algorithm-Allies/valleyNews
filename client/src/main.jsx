@@ -21,7 +21,6 @@ import NewsPage from "./pages/NewsPage.jsx";
 import HomePage from "./pages/Homepage.jsx";
 import Subscribe from "./pages/Subscribe.jsx";
 import AboutUs from "./pages/AboutUs.jsx";
-
 import {
   getAllArticles,
   getArticleById,
@@ -34,6 +33,7 @@ import CreateArticle from "./pages/CreateArticle.jsx";
 import BusinessPanel from "./pages/BusinessPanel.jsx";
 import Users from "./pages/Users.jsx";
 import AddUser from "./pages/AddUser.jsx";
+
 
 function ArticleFeedPage() {
   return null;
@@ -88,7 +88,8 @@ const router = createBrowserRouter([
   },
   {
     path: "/",
-    element: <RootLayout />,
+    element: ( 
+      <RootLayout />),
     children: [
       {
         index: true,
@@ -120,7 +121,11 @@ const router = createBrowserRouter([
         element: <AboutUs />,
       },
       { path: "/subscribe", element: <Subscribe /> },
-      { path: "/createarticle", element: <CreateArticle /> },
+      { path: "/createarticle", element: ( 
+       
+          <CreateArticle />
+         )
+      },
       { path: "/businesspanel", element: <BusinessPanel /> },
       { path: "/users", element: <Users /> },
       { path: "/adduser", element: <AddUser /> },

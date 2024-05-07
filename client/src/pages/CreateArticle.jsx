@@ -1,11 +1,13 @@
 import React, { useState, useRef } from 'react';
 import { createBusinessArticle } from '../services/articleBusinessService.js';
 import BusinessNavBar from '../components/BusinessNavBar';
+import {useUser} from "../hooks/useUserContext";
 
 export default function CreateArticle() {
   const now = new Date();
   const dateString = now.toLocaleDateString('en-GB'); //dd/MM/yyyy
-
+  const {businessId} = useUser();
+  console.log("UserInfo's Business ID from useUser:", [businessId]);
   const [formData, setFormData] = useState([{
     "source": "source1",
     "publisher": "publisher1",
@@ -27,7 +29,7 @@ export default function CreateArticle() {
     "paragraphs": [
       ""
     ],
-    "business_id": 12,
+    "business_id": businessId,
   }]);
   
   const [error, setError] = useState('');

@@ -17,7 +17,7 @@ export default function Comment({
   const deleteComment = async (commentId) => {
     try {
       const response = await axios.delete(
-        `http://localhost:4500/api/comments/${commentId}`
+        `${import.meta.env.VITE_API_URL}/comments/${commentId}`
       );
       onDeleteComment(commentId);
       return response.data;
@@ -33,7 +33,7 @@ export default function Comment({
       <div className="bg-brown-200 space-y-2 text-stone-500 p-4 rounded-lg">
         <div className="flex justify-between items-start ">
           <div className="flex flex-col space-y-0.5">
-            <h5 className="text-base font-semibold">Email</h5>
+            <h5 className="text-base font-semibold">Anonymous</h5>
             <time className="text-sm ">{time}</time>
           </div>
           {userId === commentUserId && (

@@ -34,7 +34,6 @@ import BusinessPanel from "./pages/BusinessPanel.jsx";
 import Users from "./pages/Users.jsx";
 import AddUser from "./pages/AddUser.jsx";
 
-
 function ArticleFeedPage() {
   return null;
 }
@@ -88,22 +87,8 @@ const router = createBrowserRouter([
   },
   {
     path: "/",
-    element: ( 
-      <RootLayout />),
+    element: <RootLayout />,
     children: [
-      {
-        index: true,
-        element: <NewsPage />,
-        loader: async () => {
-          try {
-            const res = await getAllArticles();
-            if (res.ok) {
-              console.log(res.data);
-              return { data: res.data };
-            }
-          } catch (e) {}
-        },
-      },
       {
         path: "/:category",
         element: <NewsPage />,
@@ -121,16 +106,17 @@ const router = createBrowserRouter([
         element: <AboutUs />,
       },
       { path: "/subscribe", element: <Subscribe /> },
-      { path: "/createarticle", element: ( 
-       
-          <CreateArticle />
-         )
-      },
+      { path: "/createarticle", element: <CreateArticle /> },
       { path: "/businesspanel", element: <BusinessPanel /> },
       { path: "/users", element: <Users /> },
       { path: "/adduser", element: <AddUser /> },
+      {
+        path: "/not-found",
+        element: <PageNotFound />,
+      },
     ],
   },
+
   {
     path: "*",
     element: <PageNotFound />,

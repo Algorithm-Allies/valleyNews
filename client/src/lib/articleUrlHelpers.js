@@ -1,4 +1,4 @@
-const LINKS = {
+export const LINKS = {
   NEWS: {
     subcategories: {
       GOVERNMENT: "government",

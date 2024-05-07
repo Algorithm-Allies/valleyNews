@@ -7,7 +7,7 @@ export default function CreateArticle() {
   const now = new Date();
   const dateString = now.toLocaleDateString('en-GB'); //dd/MM/yyyy
   const {businessId} = useUser();
-  console.log("UserInfo's Business ID from useUser:", [businessId]);
+  console.log("UserInfo's Business ID from useUser:", businessId);
   const [formData, setFormData] = useState([{
     "source": "source1",
     "publisher": "publisher1",

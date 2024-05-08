@@ -1,5 +1,9 @@
 const db = require("../config/database");
-const { insertArticle } = require("../services/articleService");
+const {
+  insertArticle,
+  getArticleByIdQuery,
+  editArticleQuery,
+} = require("../services/articleService");
 const { viewBusinessQuery } = require("../services/businessService");
 
 // Create articles -- bulk insert into database
@@ -296,6 +300,47 @@ async function getArticlesByBusiness(req, res) {
   }
 }
 
+async function deleteArticle(req, res) {
+  try {
+    const articleId = req.params.articleId;
+
+    const article = await getArticleByIdQuery(articleId);
+
+    if (!article) {
+      return res.status(404).json({ message: "Article not found" });
+    }
+    const deleteQuery = `
+      DELETE FROM article WHERE id = $1 RETURNING *`;
+    const deletedArticle = await db.query(deleteQuery, [articleId]);
+
+    res.json({
+      message: "Article deleted",
+      deletedArticle: deletedArticle.rows[0],
+    });
+  } catch (error) {
+    console.error("Error deleting article:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+async function editArticle(req, res) {
+  try {
+    const articleId = req.params.articleId;
+    const updatedArticleData = req.body;
+    const updatedArticleId = await editArticleQuery(
+      articleId,
+      updatedArticleData
+    );
+
+    res
+      .status(200)
+      .json({ message: "Article updated successfully", updatedArticleId });
+  } catch (error) {
+    console.error("Error editing article:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
 module.exports = {
   createArticles,
   getArticles,
@@ -307,4 +352,6 @@ module.exports = {
   articleClicked,
   getArticleClickCount,
   getArticlesByBusiness,
+  deleteArticle,
+  editArticle,
 };

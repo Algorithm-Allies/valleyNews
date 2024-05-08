@@ -6,7 +6,7 @@ import {useUser} from "../hooks/useUserContext";
 export default function CreateArticle() {
   const now = new Date();
   const dateString = now.toLocaleDateString('en-GB'); //dd/MM/yyyy
-  const {businessId, author} = useUser();
+  const {businessId, userId} = useUser();
   console.log("UserInfo's Business ID from useUser:", businessId);
   const initialFormData = [{
     "source": "source1",
@@ -15,7 +15,7 @@ export default function CreateArticle() {
     "subHeading": "",
     "category": "",
     "subcategory": "",
-    "author": author,
+    "author": userId,
     "date": dateString,
     "datetime": now,
     "img": {

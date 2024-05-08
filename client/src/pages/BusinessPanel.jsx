@@ -74,7 +74,7 @@ function BusinessPanel() {
                         {item.headline}
                       </Link>
                     </td>
-                    <td className="px-6 py-2">{item.click_count}</td>
+                    <td className="px-6 py-2">{item.click_count ?? 0}</td>
                     <td className="flex justify-center items-center  py-2 ">
                       <button className="translate-y-1">
                         <TrashIcon className="size-4" />

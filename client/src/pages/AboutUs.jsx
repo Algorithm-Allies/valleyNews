@@ -1,13 +1,13 @@
 import React from "react";
 import AboutUsCard from "../components/AboutUsCard";
 
-//import MobinImg from "../assets/Mobin.jpg";
+import MobinImg from "../assets/Mobin.jpg";
 import ManuelImg from "../assets/Manuel.jpg";
-//import AlanImg from "../assets/Alan.jpg";
+import AlanImg from "../assets/Alan.jpg";
 import AlissonImg from "../assets/Alisson.jpg";
-//import WilliamImg from "../assets/William.jpg";
+import WilliamImg from "../assets/William.jpg";
 import JonathanImg from "../assets/Jonathan.jpg";
-//import ChazzImg from "../assets/Chazz.jpg";
+import ChazzImg from "../assets/Chazz.jpg";
 
 function AboutUs() {
   const aboutUsDummyData = [
@@ -15,7 +15,7 @@ function AboutUs() {
       name: "Mobin Nicokar",
       role: "Team Lead",
       image:
-        "https://practicaltyping.com/wp-content/uploads/2023/05/cloud-strife-ff7remake.jpg",
+        MobinImg,
       imageAltText: "Mobin",
       githubLink: "https://github.com/mnicokar",
       linkedInLink: "https://www.linkedin.com/in/mnicokar/",
@@ -33,7 +33,7 @@ function AboutUs() {
     {
       name: "Alan Ibarra",
       role: "FullStack Developer",
-      image: "https://pbs.twimg.com/media/ExvZ1LlXMAAXgti.jpg",
+      image: AlanImg,
       imageAltText: "Alan",
       githubLink: "https://github.com/Ibarra11",
       linkedInLink: "https://www.linkedin.com/in/alanjibarra/",
@@ -52,7 +52,7 @@ function AboutUs() {
       name: "William Velichko",
       role: "FullStack Developer",
       image:
-        "https://cdn.vox-cdn.com/thumbor/nwO7aRQg8TefrPX1k5E-qSPK5uU=/1400x1050/filters:format(jpeg)/cdn.vox-cdn.com/uploads/chorus_asset/file/22658754/ff7rintergrade_aprilscreenshot_01_EeZEkS9e0.jpg",
+        WilliamImg,
       imageAltText: "William",
       githubLink: "https://github.com/williamvelichko",
       linkedInLink: "https://www.linkedin.com/in/williamvelichko/",
@@ -72,7 +72,7 @@ function AboutUs() {
       name: "Chazz Carrizales",
       role: "Frontend Developer",
       image:
-        "https://editors.dexerto.com/wp-content/uploads/2023/10/24/Copy-of-dexerto-feature-images-with-correct-dimensions-2023-10-24T140246.633.jpg",
+        ChazzImg,
       imageAltText: "Chazz",
       githubLink: "https://github.com/czcarrizales",
       linkedInLink: "https://www.linkedin.com/in/chazz-carrizales/",

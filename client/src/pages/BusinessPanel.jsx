@@ -2,8 +2,11 @@ import React, { useState, useEffect } from "react";
 import BusinessNavBar from "../components/BusinessNavBar";
 import Trash from "../assets/trash-fill.png";
 import Pencil from "../assets/pencil-square.png";
-import NewsPaper from "../assets/newspaper.png";
-import { getArticlesByBusiness } from "../services/articleService";
+
+import {
+  deleteArticle,
+  getArticlesByBusiness,
+} from "../services/articleService";
 import { useUser } from "../hooks/useUserContext";
 import { Link } from "react-router-dom";
 import { createArticleUrl } from "../lib/articleUrlHelpers";
@@ -30,14 +33,21 @@ function BusinessPanel() {
     setShowDeletePopup(true);
   };
 
-  const handleConfirmDelete = () => {
-    // Perform delete operation here
-    console.log("Deleting article with ID:", selectedArticleId);
-    setShowDeletePopup(false);
+  const handleConfirmDelete = async () => {
+    try {
+      console.log("Deleting article with ID:", selectedArticleId);
+      const response = await deleteArticle(selectedArticleId);
+      console.log(response.data);
+      setShowDeletePopup(false);
+      setArticleData(
+        articleData.filter((item) => item.id !== selectedArticleId)
+      );
+    } catch (error) {
+      console.error("Error confirming article deletion:", error);
+    }
   };
 
   const handleCancelDelete = () => {
-    // Close the delete popup
     setShowDeletePopup(false);
   };
 

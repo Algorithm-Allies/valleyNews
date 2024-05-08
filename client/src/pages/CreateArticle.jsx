@@ -40,10 +40,11 @@ export default function CreateArticle() {
     e.preventDefault();
     try {
       const response = await createBusinessArticle(formData);
-      console.log('Article created successfully:', response);
-      setSuccess('Article created successfully');
+  
       setError(''); // Clear error
       handleCancel();
+      console.log('Article created successfully:', response);
+      setSuccess('Article created successfully', response);
     } catch (error) {
       console.error('Error creating article:', error);
       setError(error.message);

@@ -7,9 +7,11 @@ import { getArticlesByBusiness } from "../services/articleService";
 import { useUser } from "../hooks/useUserContext";
 import { Link } from "react-router-dom";
 import { createArticleUrl } from "../lib/articleUrlHelpers";
-
+import DeletePopup from "../components/DeletePopUp";
 function BusinessPanel() {
   const [articleData, setArticleData] = useState([]);
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [selectedArticleId, setSelectedArticleId] = useState(null);
   const userInfo = useUser();
 
   useEffect(() => {
@@ -17,6 +19,27 @@ function BusinessPanel() {
       .then((data) => setArticleData(data))
       .catch((error) => console.log("Error fetching articles", error));
   }, []);
+
+  const handleEdit = (e) => {
+    e.preventDefault();
+    console.log("edit");
+  };
+
+  const handleDelete = (articleId) => {
+    setSelectedArticleId(articleId);
+    setShowDeletePopup(true);
+  };
+
+  const handleConfirmDelete = () => {
+    // Perform delete operation here
+    console.log("Deleting article with ID:", selectedArticleId);
+    setShowDeletePopup(false);
+  };
+
+  const handleCancelDelete = () => {
+    // Close the delete popup
+    setShowDeletePopup(false);
+  };
 
   return (
     <div className="h-screen bg-brown-100">
@@ -61,10 +84,10 @@ function BusinessPanel() {
                     </td>
                     <td>{item.click_count}</td>
                     <td className="flex flex-row justify-around">
-                      <button>
+                      <button onClick={() => handleDelete(item.id)}>
                         <img className="w-5" src={Trash} />
                       </button>
-                      <button>
+                      <button onClick={handleEdit}>
                         <img className="w-5" src={Pencil} />
                       </button>
                     </td>
@@ -75,6 +98,12 @@ function BusinessPanel() {
           </div>
         </div>
       </div>
+      {showDeletePopup && (
+        <DeletePopup
+          onDelete={handleConfirmDelete}
+          onCancel={handleCancelDelete}
+        />
+      )}
     </div>
   );
 }

@@ -83,3 +83,15 @@ export async function getArticlesByBusiness(id) {
     throw e;
   }
 }
+
+export async function deleteArticle(id) {
+  try {
+    const result = await fetch(
+      `${import.meta.env.VITE_API_URL}/articles/delete/${id}`
+    );
+    return result.json();
+  } catch (e) {
+    console.error("Error deleting article by business:", e);
+    throw e;
+  }
+}

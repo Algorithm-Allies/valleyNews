@@ -7,9 +7,24 @@ import { getArticlesByBusiness } from "../services/articleService";
 import { useUser } from "../hooks/useUserContext";
 import { Link } from "react-router-dom";
 import { createArticleUrl } from "../lib/articleUrlHelpers";
+import { TrashIcon } from "@heroicons/react/16/solid";
+import { usePagination } from "../hooks/usePagination";
 
 function BusinessPanel() {
   const [articleData, setArticleData] = useState([]);
+  const {
+    currPageItems,
+    nextPage,
+    prevPage,
+    currPage,
+    countPerPage,
+    hasNext,
+    hasPrev,
+  } = usePagination({
+    data: articleData,
+    itemsPerPage: 10,
+  });
+
   const userInfo = useUser();
 
   useEffect(() => {
@@ -19,8 +34,8 @@ function BusinessPanel() {
   }, []);
 
   return (
-    <div className="h-screen bg-brown-100">
-      <div className="h-full flex flex-col pt-8 max-w-[70vw] w-full mx-auto">
+    <div className="min-h-screen bg-brown-100">
+      <div className="h-full flex flex-col pt-8 max-w-[70vw] w-full mx-auto pb-12">
         <BusinessNavBar />
         <div className="flex flex-col w-100 pt-[10vh]">
           <div className="flex flex-row justify-between pb-4">
@@ -33,21 +48,21 @@ function BusinessPanel() {
           <div className="flex justify-center">
             <table className="table-auto w-[70vw] border-collapse border border-[#FCFCFC] bg-[#FCFCFC]">
               <thead>
-                <tr className="text-left py-3">
-                  <th>ID</th>
-                  <th>TITLE</th>
-                  <th>ENGAGEMENTS</th>
-                  <th>ACTIONS</th>
+                <tr className="border-b-2 border-gray-300">
+                  <th className="text-left px-6 py-3">ID</th>
+                  <th className="text-left px-6 py-3">TITLE</th>
+                  <th className="text-left px-6 py-3">ENGAGEMENTS</th>
+                  <th className="text-center px-6 py-3">ACTIONS</th>
                 </tr>
               </thead>
               <tbody>
-                {articleData.map((item, i) => (
+                {currPageItems.map((item, i) => (
                   <tr
                     key={i}
-                    className="even:bg-[#F2F2F2] odd:bg-[#FCFCFC] border border-[#FCFCFC] py-4"
+                    className="even:bg-[#F2F2F2] odd:bg-[#FCFCFC] border border-[#FCFCFC]"
                   >
-                    <td>{item.id}</td>
-                    <td className="flex-grow">
+                    <td className="px-6 py-2">{item.id}</td>
+                    <td className="flex-grow px-6 py-2">
                       <Link
                         className="underline"
                         to={`/${createArticleUrl({
@@ -59,19 +74,43 @@ function BusinessPanel() {
                         {item.headline}
                       </Link>
                     </td>
-                    <td>{item.click_count}</td>
-                    <td className="flex flex-row justify-around">
-                      <button>
-                        <img className="w-5" src={Trash} />
-                      </button>
-                      <button>
-                        <img className="w-5" src={Pencil} />
+                    <td className="px-6 py-2">{item.click_count}</td>
+                    <td className="flex justify-center items-center  py-2 ">
+                      <button className="translate-y-1">
+                        <TrashIcon className="size-4" />
                       </button>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
+          </div>
+          <div className="flex items-baseline justify-between mt-4">
+            <p className="text-sm text-stone-500">
+              Showing {(currPage - 1) * countPerPage + 1} to{" "}
+              {Math.min(currPage * countPerPage, articleData.length)} out of{" "}
+              {articleData.length} articles
+            </p>
+            <div className="flex gap-4 text-stone-800">
+              <button
+                disabled={!hasPrev}
+                onClick={() => {
+                  prevPage();
+                }}
+                className="py-2 px-6 bg-zinc-300 items-center rounded-lg disabled:bg-zinc-200"
+              >
+                Prev
+              </button>
+              <button
+                disabled={!hasNext}
+                onClick={() => {
+                  nextPage();
+                }}
+                className="py-2 px-6 bg-zinc-300 items-center rounded-lg disabled:bg-zinc-200"
+              >
+                Next
+              </button>
+            </div>
           </div>
         </div>
       </div>

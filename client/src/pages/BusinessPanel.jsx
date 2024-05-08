@@ -46,23 +46,23 @@ function BusinessPanel() {
           </div>
           <hr className="rounded-md border-y-8 border-brown-400 mb-5 " />
           <div className="flex justify-center">
-            <table className="table-auto w-[70vw] border-collapse border border-[#FCFCFC] bg-[#FCFCFC]">
+            <table className="table-auto w-[70vw] border-collapse  bg-[#FCFCFC] sh">
               <thead>
-                <tr className="border-b-2 border-gray-300">
-                  <th className="text-left px-6 py-3">ID</th>
-                  <th className="text-left px-6 py-3">TITLE</th>
-                  <th className="text-left px-6 py-3">ENGAGEMENTS</th>
-                  <th className="text-center px-6 py-3">ACTIONS</th>
+                <tr className="flex border-b-2 border-gray-300">
+                  <th className="text-left px-6 py-3 w-28">ID</th>
+                  <th className="text-left px-6 py-3 flex-1">TITLE</th>
+                  <th className="text-left px-6 py-3 w-40">ENGAGEMENTS</th>
+                  <th className="text-center px-6 py-3 w-40">ACTIONS</th>
                 </tr>
               </thead>
               <tbody>
                 {currPageItems.map((item, i) => (
                   <tr
                     key={i}
-                    className="even:bg-[#F2F2F2] odd:bg-[#FCFCFC] border border-[#FCFCFC]"
+                    className="flex w-full even:bg-[#F2F2F2] odd:bg-[#FCFCFC] "
                   >
-                    <td className="px-6 py-2">{item.id}</td>
-                    <td className="flex-grow px-6 py-2">
+                    <td className="w-28 px-6 py-2">{item.id}</td>
+                    <td className="flex-1 w-full px-6 py-2">
                       <Link
                         className="underline"
                         to={`/${createArticleUrl({
@@ -74,8 +74,10 @@ function BusinessPanel() {
                         {item.headline}
                       </Link>
                     </td>
-                    <td className="px-6 py-2">{item.click_count ?? 0}</td>
-                    <td className="flex justify-center items-center  py-2 ">
+                    <td className="w-40 px-6 py-2 text-center">
+                      {item.click_count ?? 0}
+                    </td>
+                    <td className="flex w-40 justify-center items-center  py-2">
                       <button className="translate-y-1">
                         <TrashIcon className="size-4" />
                       </button>

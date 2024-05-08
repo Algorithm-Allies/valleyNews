@@ -8,7 +8,7 @@ export default function CreateArticle() {
   const dateString = now.toLocaleDateString('en-GB'); //dd/MM/yyyy
   const {businessId} = useUser();
   console.log("UserInfo's Business ID from useUser:", businessId);
-  const [formData, setFormData] = useState([{
+  const initialFormData = [{
     "source": "source1",
     "publisher": "publisher1",
     "heading": "",
@@ -30,8 +30,8 @@ export default function CreateArticle() {
       ""
     ],
     "business_id": businessId,
-  }]);
-  
+  }];
+  const [formData, setFormData] = useState(initialFormData);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const fileInputRef = useRef(null);
@@ -43,6 +43,7 @@ export default function CreateArticle() {
       console.log('Article created successfully:', response);
       setSuccess('Article created successfully');
       setError(''); // Clear error
+      handleCancel();
     } catch (error) {
       console.error('Error creating article:', error);
       setError(error.message);
@@ -50,22 +51,23 @@ export default function CreateArticle() {
     }
   };
 
-  const handleChange = (e, index, paragraphIndex) => {
+  const handleChange = (e, index, paragraphIndex = null) => {
     const { name, value } = e.target;
-    const updatedFormData = formData.map((item, i) => {
-      if (i === index) {
-        if (name === "paragraphs") {
-          const updatedParagraphs = [...item.paragraphs];
-          updatedParagraphs[paragraphIndex] = value;
-          return { ...item, paragraphs: updatedParagraphs };
-        } else {
-          return { ...item, [name]: value };
-        }
-      }
-      return item;
-    });
-    setFormData(updatedFormData);
+
+    // Create a new copy of formData
+    let newData = [...formData];
+    
+    if (name === "paragraphs") {
+      let newParagraphs = [...newData[index].paragraphs];
+      newParagraphs[paragraphIndex] = value;
+      newData[index] = { ...newData[index], paragraphs: newParagraphs };
+    } else {
+      newData[index] = { ...newData[index], [name]: value };
+    }
+
+    setFormData(newData);
   };
+  
 
   const handleCancel = () => {
     setFormData(initialFormData); // Reset form data to initial values
@@ -122,7 +124,7 @@ export default function CreateArticle() {
             <label>New article sub heading</label>
             <input value={formData[0].subHeading} onChange={(e) => handleChange(e, 0)} name="subHeading" placeholder="Enter article sub heading ..." className="mb-4" />
             <label>New article body</label>
-            <textarea value={formData[0].paragraphs} onChange={(e) => handleChange(e, 0, 0)} name="paragraphs" rows={10} cols={40} placeholder="Enter article body ..." className="mb-8" />
+            <textarea value={formData[0].paragraphs[0]} onChange={(e) => handleChange(e, 0, 0)} name="paragraphs" rows={10} cols={40} placeholder="Enter article body ..." className="mb-8" />
             <div className='flex flex-row'>
               <select value={formData[0].author} onChange={(e) => handleChange(e, 0)} name="author" className="border-y-8 w-[20vw]">
                 <option value="author1">author1</option>

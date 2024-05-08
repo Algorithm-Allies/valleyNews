@@ -2,14 +2,19 @@ import React, { useState, useEffect } from "react";
 import BusinessNavBar from "../components/BusinessNavBar";
 import Trash from "../assets/trash-fill.png";
 import Pencil from "../assets/pencil-square.png";
-import NewsPaper from "../assets/newspaper.png";
-import { getArticlesByBusiness } from "../services/articleService";
+
+import {
+  deleteArticle,
+  getArticlesByBusiness,
+} from "../services/articleService";
 import { useUser } from "../hooks/useUserContext";
 import { Link } from "react-router-dom";
 import { createArticleUrl } from "../lib/articleUrlHelpers";
-
+import DeletePopup from "../components/DeletePopUp";
 function BusinessPanel() {
   const [articleData, setArticleData] = useState([]);
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [selectedArticleId, setSelectedArticleId] = useState(null);
   const userInfo = useUser();
 
   useEffect(() => {
@@ -17,6 +22,34 @@ function BusinessPanel() {
       .then((data) => setArticleData(data))
       .catch((error) => console.log("Error fetching articles", error));
   }, []);
+
+  const handleEdit = (e) => {
+    e.preventDefault();
+    console.log("edit");
+  };
+
+  const handleDelete = (articleId) => {
+    setSelectedArticleId(articleId);
+    setShowDeletePopup(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    try {
+      console.log("Deleting article with ID:", selectedArticleId);
+      const response = await deleteArticle(selectedArticleId);
+      console.log(response.data);
+      setShowDeletePopup(false);
+      setArticleData(
+        articleData.filter((item) => item.id !== selectedArticleId)
+      );
+    } catch (error) {
+      console.error("Error confirming article deletion:", error);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeletePopup(false);
+  };
 
   return (
     <div className="h-screen bg-brown-100">
@@ -61,10 +94,10 @@ function BusinessPanel() {
                     </td>
                     <td>{item.click_count}</td>
                     <td className="flex flex-row justify-around">
-                      <button>
+                      <button onClick={() => handleDelete(item.id)}>
                         <img className="w-5" src={Trash} />
                       </button>
-                      <button>
+                      <button onClick={handleEdit}>
                         <img className="w-5" src={Pencil} />
                       </button>
                     </td>
@@ -75,6 +108,12 @@ function BusinessPanel() {
           </div>
         </div>
       </div>
+      {showDeletePopup && (
+        <DeletePopup
+          onDelete={handleConfirmDelete}
+          onCancel={handleCancelDelete}
+        />
+      )}
     </div>
   );
 }

@@ -6,7 +6,7 @@ import {useUser} from "../hooks/useUserContext";
 export default function CreateArticle() {
   const now = new Date();
   const dateString = now.toLocaleDateString('en-GB'); //dd/MM/yyyy
-  const {businessId} = useUser();
+  const {businessId, author} = useUser();
   console.log("UserInfo's Business ID from useUser:", businessId);
   const initialFormData = [{
     "source": "source1",
@@ -15,7 +15,7 @@ export default function CreateArticle() {
     "subHeading": "",
     "category": "",
     "subcategory": "",
-    "author": "author1",
+    "author": author,
     "date": dateString,
     "datetime": now,
     "img": {
@@ -126,11 +126,11 @@ export default function CreateArticle() {
             <input value={formData[0].subHeading} onChange={(e) => handleChange(e, 0)} name="subHeading" placeholder="Enter article sub heading ..." className="mb-4" />
             <label>New article body</label>
             <textarea value={formData[0].paragraphs[0]} onChange={(e) => handleChange(e, 0, 0)} name="paragraphs" rows={10} cols={40} placeholder="Enter article body ..." className="mb-8" />
+            
             <div className='flex flex-row'>
-              <select value={formData[0].author} onChange={(e) => handleChange(e, 0)} name="author" className="border-y-8 w-[20vw]">
-                <option value="author1">author1</option>
-                <option value="author2">author2</option>
-              </select>
+              <span className="mr-4 font-bold my-8">Author:&ensp;
+              {formData[0].author}
+              </span>
               <select value={selectedCategory} onChange={handleCategoryChange} className="border-y-8 w-[20vw] ml-4">
                 <option value="">Select Category</option>
                 {Object.keys(categories).map((category) => (

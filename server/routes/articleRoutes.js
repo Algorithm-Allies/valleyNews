@@ -13,6 +13,8 @@ const {
   articleClicked,
   getArticleClickCount,
   getArticlesByBusiness,
+  deleteArticle,
+  editArticle,
 } = require("../controllers/articleControllers");
 
 router.post("/", createArticles);
@@ -26,5 +28,7 @@ router.get("/details", getArticleDetails);
 router.get("/:category", getArticlesByCategory);
 router.get("/:category/:subcategory", getArticlesBySubcategory);
 router.get("/:category/:subcategory/:id", getArticleById);
+router.delete("/delete/:articleId", deleteArticle);
+router.put("/edit/:articleId", editArticle);
 
 module.exports = router;

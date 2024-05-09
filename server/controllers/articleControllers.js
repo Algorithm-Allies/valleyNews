@@ -174,7 +174,7 @@ async function getArticleById(req, res) {
     // Update click count
     const updateQuery = `
       UPDATE article
-      SET click_count = click_count + 1
+      SET click_count = COALESCE(click_count, 0) + 1
       WHERE id = $1;
     `;
     await db.query(updateQuery, [articleId]);
@@ -252,7 +252,6 @@ async function articleClicked(req, res) {
     res.status(500).json({ error: "Internal server error" });
   }
 }
-
 
 async function getArticleClickCount(req, res) {
   const articleId = req.params.id;

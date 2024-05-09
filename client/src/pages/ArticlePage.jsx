@@ -6,6 +6,7 @@ import {
   NewspaperIcon,
   UserCircleIcon,
   ChevronRightIcon,
+  EyeIcon,
 } from "@heroicons/react/24/solid";
 import React from "react";
 import CommentList from "../components/CommentList";
@@ -29,7 +30,6 @@ export default function ArticlePage() {
       setIsLoading(false);
       return;
     }
-
     const fetchArticle = async () => {
       try {
         const res = await getArticleById({ id, category, subcategory });
@@ -96,6 +96,7 @@ export default function ArticlePage() {
     author,
     paragraphs,
     source,
+    click_count,
   } = article;
 
   return (
@@ -131,6 +132,11 @@ export default function ArticlePage() {
             <div className="flex items-center gap-2">
               <UserCircleIcon className="size-4" />
               <p className="font-semibold">{author}</p>
+            </div>
+            <span className="block h-4 bg-brown-200 w-[2px]"></span>
+            <div className="flex items-center gap-2">
+              <EyeIcon className="size-4" />
+              <p className="font-semibold">{click_count ?? 0}</p>
             </div>
           </div>
           <div className="space-y-4 mb-6">

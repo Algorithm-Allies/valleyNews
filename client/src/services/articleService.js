@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export async function getAllArticles() {
   try {
     const res = await fetch(
@@ -81,5 +83,18 @@ export async function getArticlesByBusiness(id) {
   } catch (e) {
     console.error("Error fetching articles by business:", e);
     throw e;
+  }
+}
+
+export async function deleteArticle(id) {
+  try {
+    const response = await axios.delete(
+      `${import.meta.env.VITE_API_URL}/articles/delete/${id}`
+    );
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting article:", error);
+    throw error;
   }
 }

@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from "react";
 import BusinessNavBar from "../components/BusinessNavBar";
-import Trash from "../assets/trash-fill.png";
-import Pencil from "../assets/pencil-square.png";
-import NewsPaper from "../assets/newspaper.png";
-import { getArticlesByBusiness } from "../services/articleService";
+
+import {
+  deleteArticle,
+  getArticlesByBusiness,
+} from "../services/articleService";
 import { useUser } from "../hooks/useUserContext";
 import { Link } from "react-router-dom";
 import { createArticleUrl } from "../lib/articleUrlHelpers";
+import DeletePopup from "../components/DeletePopUp";
 import { TrashIcon } from "@heroicons/react/16/solid";
 import { usePagination } from "../hooks/usePagination";
 
 function BusinessPanel() {
   const [articleData, setArticleData] = useState([]);
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [selectedArticleId, setSelectedArticleId] = useState(null);
   const {
     currPageItems,
     nextPage,
@@ -24,7 +28,6 @@ function BusinessPanel() {
     data: articleData,
     itemsPerPage: 10,
   });
-
   const userInfo = useUser();
 
   useEffect(() => {
@@ -32,6 +35,34 @@ function BusinessPanel() {
       .then((data) => setArticleData(data))
       .catch((error) => console.log("Error fetching articles", error));
   }, []);
+
+  const handleEdit = (e) => {
+    e.preventDefault();
+    console.log("edit");
+  };
+
+  const handleDelete = (articleId) => {
+    setSelectedArticleId(articleId);
+    setShowDeletePopup(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    try {
+      console.log("Deleting article with ID:", selectedArticleId);
+      const response = await deleteArticle(selectedArticleId);
+      console.log(response.data);
+      setShowDeletePopup(false);
+      setArticleData(
+        articleData.filter((item) => item.id !== selectedArticleId)
+      );
+    } catch (error) {
+      console.error("Error confirming article deletion:", error);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeletePopup(false);
+  };
 
   return (
     <div className="min-h-screen bg-brown-100">
@@ -78,7 +109,10 @@ function BusinessPanel() {
                       {item.click_count ?? 0}
                     </td>
                     <td className="flex w-40 justify-center items-center  py-2">
-                      <button className="translate-y-1">
+                      <button
+                        onClick={() => handleDelete(item.id)}
+                        className="translate-y-1"
+                      >
                         <TrashIcon className="size-4" />
                       </button>
                     </td>
@@ -116,6 +150,12 @@ function BusinessPanel() {
           </div>
         </div>
       </div>
+      {showDeletePopup && (
+        <DeletePopup
+          onDelete={handleConfirmDelete}
+          onCancel={handleCancelDelete}
+        />
+      )}
     </div>
   );
 }

@@ -299,7 +299,6 @@ async function getArticlesByBusiness(req, res) {
     res.status(500).json({ message: "Internal server error" });
   }
 }
-
 async function deleteArticle(req, res) {
   try {
     const articleId = req.params.articleId;
@@ -309,9 +308,14 @@ async function deleteArticle(req, res) {
     if (!article) {
       return res.status(404).json({ message: "Article not found" });
     }
+
     const deleteQuery = `
       DELETE FROM article WHERE id = $1 RETURNING *`;
     const deletedArticle = await db.query(deleteQuery, [articleId]);
+
+    if (deletedArticle.rows.length === 0) {
+      return res.status(500).json({ message: "Article could not be deleted" });
+    }
 
     res.json({
       message: "Article deleted",
@@ -319,7 +323,9 @@ async function deleteArticle(req, res) {
     });
   } catch (error) {
     console.error("Error deleting article:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
   }
 }
 

@@ -9,7 +9,7 @@ export default function CreateArticle() {
   const {businessId, userId} = useUser();
   console.log("UserInfo's Business ID from useUser:", businessId);
   const initialFormData = [{
-    "source": "source1",
+    "source": "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley",
     "publisher": "publisher1",
     "heading": "",
     "subHeading": "",
@@ -126,7 +126,6 @@ export default function CreateArticle() {
   return (
     <div className="bg-brown-100 pb-[5vh]">
       <div className="flex flex-col pt-8 max-w-[70vw] w-full mx-auto">
-        <BusinessNavBar />
         <div className="flex flex-col w-100">
           <h1 className="text-4xl text-black-100 flex pt-20">New Article</h1>
           <hr className="rounded-md border-r-[60vw] border-y-8 border-brown-400 mb-10 " />

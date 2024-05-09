@@ -29,6 +29,10 @@ export default function ModalNav({ links }) {
 }
 
 function ModalLinks({ links, closeNav }) {
+  const handleLogout = () => {
+    // Navigate to login page
+    window.location.href = "/auth/login";
+  };
   return (
     <ul className="space-y-3">
       {links.map((link) => {
@@ -60,7 +64,7 @@ function ModalLinks({ links, closeNav }) {
         );
       })}
       <li className="my-2">
-        <button className="w-full border-2 border-gray-400 py-2 rounded-sm outline-none transition-colors text-gray-700 hover:bg-custom-orange hover:border-transparent hover:text-white  focus-visible:border-custom-orange">
+        <button onClick= {handleLogout} className="w-full border-2 border-gray-400 py-2 rounded-sm outline-none transition-colors text-gray-700 hover:bg-custom-orange hover:border-transparent hover:text-white  focus-visible:border-custom-orange">
           Logout
         </button>
       </li>

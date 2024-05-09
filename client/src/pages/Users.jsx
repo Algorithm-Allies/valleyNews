@@ -61,10 +61,9 @@ function Users() {
               <thead>
                 <tr className="text-left py-3">
                   <th>ID</th>
-                  <th>Name</th>
+
                   <th>Email</th>
-                  <th>Phone</th>
-                  <th>Role</th>
+
                 </tr>
               </thead>
               <tbody>
@@ -74,10 +73,7 @@ function Users() {
                     className="even:bg-[#F2F2F2] odd:bg-[#FCFCFC] border border-[#FCFCFC] py-4"
                   >
                     <td>{user.id}</td>
-                    <td>{user.name}</td>
                     <td>{user.email}</td>
-                    <td>{user.phone}</td>
-                    <td>{user.role}</td>
                     <td className="flex flex-row justify-around">
                       <button
                         onClick={() =>
@@ -85,9 +81,6 @@ function Users() {
                         }
                       >
                         <img className="w-5" src={Trash} alt="Delete" />
-                      </button>
-                      <button>
-                        <img className="w-5" src={Pencil} alt="Edit" />
                       </button>
                     </td>
                   </tr>

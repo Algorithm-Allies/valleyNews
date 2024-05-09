@@ -67,7 +67,6 @@ function BusinessPanel() {
   return (
     <div className="min-h-screen bg-brown-100">
       <div className="h-full flex flex-col pt-8 max-w-[70vw] w-full mx-auto pb-12">
-        <BusinessNavBar />
         <div className="flex flex-col w-100 pt-[10vh]">
           <div className="flex flex-row justify-between pb-4">
             <h1 className="text-4xl text-black-100 m-0">Articles</h1>

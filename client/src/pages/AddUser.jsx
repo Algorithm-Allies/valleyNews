@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { addBusinessUser } from "../services/userService.js";
-import BusinessNavBar from "../components/BusinessNavBar.jsx";
+
 import { useUser } from "../hooks/useUserContext.js";
 
 export default function AddUser() {
@@ -51,21 +51,13 @@ export default function AddUser() {
   return (
     <div className="bg-brown-100">
       <div className="h-[100vh] flex flex-col pt-8 max-w-[70vw] w-full mx-auto">
-        <BusinessNavBar />
         <div className="flex flex-col w-100">
           <h1 className="text-4xl text-black-100 flex pt-20">
             Add User to Business
           </h1>
           <hr className="rounded-md border-r-[60vw] border-y-8 border-brown-400 mb-10 " />
           <form className="flex flex-col w-100" onSubmit={handleSubmit}>
-            <label>New User's Name</label>
-            <input
-              value={formData.name || ""}
-              onChange={handleChange}
-              name="name"
-              placeholder="Enter New User's Name ..."
-              className="mb-4"
-            />
+
             <label>User ID</label>
             <input
               value={formData.userId}

@@ -35,16 +35,27 @@ export default function CreateArticle() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const fileInputRef = useRef(null);
-
+  const validateForm = () => {
+    for (let item of formData) {
+      // Check for empty fields that are required
+      if (!item.heading || !item.subHeading || !item.paragraphs[0] || !item.category || !item.subcategory) {
+        return false;
+      }
+    }
+    return true;
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) {
+      setError('Please fill in all required fields.');
+      return; // Stop the form submission if all fields are not filled
+    }
     try {
       const response = await createBusinessArticle(formData);
-  
-      setError(''); // Clear error
+      alert('Article created successfully! Click OK to continue.'); // Alert the user
+      setError(''); 
       handleCancel();
       console.log('Article created successfully:', response);
-      setSuccess('Article created successfully', response);
     } catch (error) {
       console.error('Error creating article:', error);
       setError(error.message);
@@ -73,8 +84,8 @@ export default function CreateArticle() {
   const handleCancel = () => {
     setFormData(initialFormData); // Reset form data to initial values
     setError('');
-    setSuccess('Cleared');
-    // Reset file input field
+    setSelectedCategory('');
+    setSelectedSubCategory('');
     if (fileInputRef.current) {
       fileInputRef.current.value = ''; // Clear the file input field
     }
@@ -127,7 +138,7 @@ export default function CreateArticle() {
             <label>New article body</label>
             <textarea value={formData[0].paragraphs[0]} onChange={(e) => handleChange(e, 0, 0)} name="paragraphs" rows={10} cols={40} placeholder="Enter article body ..." className="mb-8" />
             
-            <div className='flex flex-row'>
+            <div className='flex flex-row items-center'>
               <span className="mr-4 font-bold my-8">Author:&ensp;
               {formData[0].author}
               </span>
@@ -145,7 +156,7 @@ export default function CreateArticle() {
                 ))}
               </select>
             </div>
-            <label className="mt-4">Upload Article Image</label>
+            <label className="">Upload Article Image</label>
             <input ref={fileInputRef} className="mt-4" type="file" id="image" name="filename" />
             {success && <p className="text-green-500">{success}</p>}
             {error && <p className="text-custom-orange">{error}</p>}

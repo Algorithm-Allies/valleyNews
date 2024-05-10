@@ -78,9 +78,7 @@ export async function getArticleById({ id, category, subcategory }) {
 
 export async function getArticlesByBusiness(id) {
   try {
-    const res = await fetchWithAuth(
-      `${import.meta.env.VITE_API_URL}/articles/business/${id}`
-    );
+    const res = await fetchWithAuth(`/articles/business/${id}`);
     return res.json();
   } catch (e) {
     console.error("Error fetching articles by business:", e);
@@ -90,15 +88,14 @@ export async function getArticlesByBusiness(id) {
 
 export async function deleteArticle(id) {
   try {
-    const response = fetchWithAuth(
-      `${import.meta.env.VITE_API_URL}/articles/delete/${id}`,
-      { method: "DELETE" }
-    );
+    const response = await fetchWithAuth(`/articles/delete/${id}`, {
+      method: "DELETE",
+    });
     // const response = await axios.delete(
     //   `${import.meta.env.VITE_API_URL}/articles/delete/${id}`
     // );
-    console.log(response.data);
-    return response.data;
+    console.log(response);
+    return response;
   } catch (error) {
     console.error("Error deleting article:", error);
     throw error;

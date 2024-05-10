@@ -6,12 +6,17 @@ import {
   createContext,
   useContext,
 } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { validUrl } from "../lib/validUrl";
 const AuthContext = createContext();
 
 export default function AuthProvider({ children }) {
   const [token, setToken] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {}, []);
+
   const logout = useCallback(() => {
     localStorage.clear();
     setToken(null);
@@ -22,9 +27,15 @@ export default function AuthProvider({ children }) {
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
       setToken(storedToken);
+      if (location.pathname === "/") {
+        navigate("/news");
+        return;
+      }
+      if (!validUrl(location.pathname)) {
+        navigate("/not-found");
+      }
       return;
     }
-    console.log(storedToken);
     navigate("/auth/login");
   }, []);
 

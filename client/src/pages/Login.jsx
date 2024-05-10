@@ -25,15 +25,22 @@ export async function action({ request }) {
       "Content-Type": "application/json",
     },
   });
+  console.log(req);
+
+  console.log("testing");
 
   // If, the user was succesful in logging in, we redirect them to home page
   if (req.ok) {
+    console.log("ok");
     const res = await req.json();
-    localStorage.setItem("user", JSON.stringify({ userId, businessId }));
+    localStorage.setItem(
+      "user",
+      JSON.stringify({ userId: res.userId, businessId: res.businessId })
+    );
     localStorage.setItem("token", res.token);
     return redirect("/news");
   }
-
+  console.log("what");
   const { message } = await req.json();
 
   // Otherwise, something went wrong on the server, we will return whatever message the server returns.  For example, email already in use.
@@ -46,6 +53,7 @@ export async function action({ request }) {
 
 function Login() {
   const error = useRouteError();
+  console.log(error);
 
   let formError;
   if (error) {

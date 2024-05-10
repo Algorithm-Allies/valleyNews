@@ -50,7 +50,7 @@ function BusinessPanel() {
     try {
       console.log("Deleting article with ID:", selectedArticleId);
       const response = await deleteArticle(selectedArticleId);
-      console.log(response.data);
+      console.log(response);
       setShowDeletePopup(false);
       setArticleData(
         articleData.filter((item) => item.id !== selectedArticleId)

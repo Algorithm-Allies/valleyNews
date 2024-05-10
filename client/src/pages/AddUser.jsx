@@ -1,13 +1,14 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { addBusinessUser } from "../services/userService.js";
 
 import { useUser } from "../hooks/useUserContext.js";
+import { useNavigate } from "react-router-dom";
 
 export default function AddUser() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const fileInputRef = useRef(null);
-
+  const navigate = useNavigate()
   const initialFormData = {
     userId: "",
   };
@@ -15,6 +16,12 @@ export default function AddUser() {
   const [formData, setFormData] = useState(initialFormData);
 
   const { businessId } = useUser();
+
+  useEffect(() => {
+    if (!businessId) {
+      navigate("/news");
+    }
+  }, [businessId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -57,7 +64,6 @@ export default function AddUser() {
           </h1>
           <hr className="rounded-md border-r-[60vw] border-y-8 border-brown-400 mb-10 " />
           <form className="flex flex-col w-100" onSubmit={handleSubmit}>
-
             <label>User ID</label>
             <input
               value={formData.userId}

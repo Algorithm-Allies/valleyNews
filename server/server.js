@@ -31,7 +31,7 @@ app.get("/", (req, res) => {
   res.send("Welcome to the homepage!");
 });
 app.use("/api/users", require("./routes/userRoutes"));
-app.use("/api/articles", protect, require("./routes/articleRoutes"));
+app.use("/api/articles", require("./routes/articleRoutes"));
 app.use("/api/comments", protect, require("./routes/commentRoutes"));
 app.use("/api/subscription", protect, require("./routes/subsriptionRoutes"));
 app.use("/api/business", protect, require("./routes/businessRoutes"));

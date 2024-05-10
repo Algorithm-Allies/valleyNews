@@ -29,21 +29,21 @@ function BusinessPanel() {
     data: articleData,
     itemsPerPage: 10,
   });
-  const userInfo = useUser();
+  const { businessId } = useUser();
 
   useEffect(() => {
-    if (!userInfo.businessId) {
+    if (!businessId) {
       navigate("/news");
     }
-  }, [userInfo]);
+  }, [businessId]);
 
   useEffect(() => {
     if (businessId) {
-      getArticlesByBusiness(userInfo.businessId)
+      getArticlesByBusiness(businessId)
         .then((data) => setArticleData(data))
         .catch((error) => console.log("Error fetching articles", error));
     }
-  }, [userInfo]);
+  }, [businessId]);
 
   const handleEdit = (e) => {
     e.preventDefault();

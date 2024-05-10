@@ -1,4 +1,5 @@
 import fetchWithAuth from "../lib/fetchWithAuth";
+import axios from "axios";
 
 export async function getAllArticles() {
   try {
@@ -38,6 +39,11 @@ export async function getArticlesByCategoryAndSubcategory({
     const res = await fetchWithAuth(
       `/articles/${category}/${subcategory}?page=${page}&perPage=${perPage}`
     );
+    // const res = await fetch(
+    //   `${
+    //     import.meta.env.VITE_API_URL
+    //   }/articles/${category}/${subcategory}?page=${page}&perPage=${perPage}`
+    // );
     if (res.ok) {
       const articles = await res.json();
       return { ok: true, data: articles };
@@ -67,5 +73,34 @@ export async function getArticleById({ id, category, subcategory }) {
       error:
         "You may have visited an outdated bookmark or mistyped the URL for this page.",
     };
+  }
+}
+
+export async function getArticlesByBusiness(id) {
+  try {
+    const res = await fetchWithAuth(
+      `${import.meta.env.VITE_API_URL}/articles/business/${id}`
+    );
+    return res.json();
+  } catch (e) {
+    console.error("Error fetching articles by business:", e);
+    throw e;
+  }
+}
+
+export async function deleteArticle(id) {
+  try {
+    const response = fetchWithAuth(
+      `${import.meta.env.VITE_API_URL}/articles/delete/${id}`,
+      { method: "DELETE" }
+    );
+    // const response = await axios.delete(
+    //   `${import.meta.env.VITE_API_URL}/articles/delete/${id}`
+    // );
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting article:", error);
+    throw error;
   }
 }

@@ -29,9 +29,11 @@ export async function action({ request }) {
   // If, the user was succesful in logging in, we redirect them to home page
   if (req.ok) {
     const res = await req.json();
+    localStorage.setItem("user", JSON.stringify({ userId, businessId }));
     localStorage.setItem("token", res.token);
     return redirect("/news");
   }
+
   const { message } = await req.json();
 
   // Otherwise, something went wrong on the server, we will return whatever message the server returns.  For example, email already in use.

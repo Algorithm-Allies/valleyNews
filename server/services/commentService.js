@@ -3,13 +3,14 @@ const db = require("../config/database");
 const findCommentById = async (comment_id) => {
   try {
     const query = `
-      SELECT *
-      FROM comment
-      WHERE id = $1
-    `;
-    const { rows } = await db.query(query, [comment_id]);
+      SELECT c.*, u.id as user_id, u.email, u.account_type
+    FROM comment c
+    JOIN "user" u ON c.user_id = u.id
+    WHERE c.id = $1
+      `;
 
-    return rows.length ? rows[0] : null;
+    const result = await db.query(query, [comment_id]);
+    return result.rows;
   } catch (error) {
     console.error("Error retrieving comment by ID:", error);
     throw error;
@@ -34,10 +35,11 @@ const findArticleById = async (article_id) => {
 const findCommentsByArticleId = async (article_id) => {
   try {
     const query = `
-        SELECT *
-        FROM comment
-        WHERE article_id = $1
-      `;
+    SELECT c.*, u.id as user_id, u.email, u.account_type
+    FROM comment c
+    JOIN "user" u ON c.user_id = u.id
+    WHERE c.article_id = $1
+  `;
     const comments = await db.query(query, [article_id]);
     return comments.rows;
   } catch (error) {
@@ -54,16 +56,16 @@ const addCommentIntoArticle = async (commentData) => {
         RETURNING *;
       `;
 
-    const { article_id, user_id, comment, created_at } = commentData;
+    const { article_id, user_id, comment, timestamp } = commentData;
 
     const addedComment = await db.query(query, [
       article_id,
       user_id,
       comment,
-      created_at,
+      timestamp,
     ]);
-
-    return addedComment.rows;
+    const result = await findCommentById(addedComment.rows[0].id);
+    return result;
   } catch (error) {
     console.error("Error adding comment into article:", error);
     throw error;
@@ -80,9 +82,10 @@ const editCommentByID = async (comment_id, comment) => {
         WHERE id = $2
         RETURNING *;
       `;
-    console.log(comment);
+
     const editedComment = await db.query(query, [comment, comment_id]);
-    return editedComment;
+    const result = await findCommentById(comment_id);
+    return result;
   } catch (error) {
     console.error("Error editing comment:", error);
     throw error;

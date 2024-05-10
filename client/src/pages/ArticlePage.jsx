@@ -6,17 +6,21 @@ import {
   NewspaperIcon,
   UserCircleIcon,
   ChevronRightIcon,
+  EyeIcon,
 } from "@heroicons/react/24/solid";
 import React from "react";
 import CommentList from "../components/CommentList";
 import CommentForm from "../components/CommentForm";
 import { isValidArticleLink } from "../lib/articleUrlHelpers";
+import fetchWithAuth from "../lib/fetchWithAuth";
 
 export default function ArticlePage() {
   const [article, setArticle] = useState(null);
+  const [comments, setComments] = useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [error, setError] = React.useState(null);
   const { category, subcategory, id } = useParams();
+
   useEffect(() => {
     setIsLoading(true);
     if (!isValidArticleLink({ category, subcategory })) {
@@ -26,7 +30,6 @@ export default function ArticlePage() {
       setIsLoading(false);
       return;
     }
-
     const fetchArticle = async () => {
       try {
         const res = await getArticleById({ id, category, subcategory });
@@ -44,6 +47,31 @@ export default function ArticlePage() {
     };
     fetchArticle();
   }, [category, subcategory, id]);
+
+  useEffect(() => {
+    async function fetchComments() {
+      try {
+        const response = await fetchWithAuth(
+          `https://valleynews.onrender.com/api/comments/article/${id}`
+        );
+        setComments(response.data);
+      } catch (error) {
+        console.error("Error fetching comments:", error);
+        setError("Error fetching comments");
+        setIsLoading(false);
+      }
+    }
+
+    fetchComments();
+  }, [id]);
+
+  const addComment = (newComment) => {
+    setComments([...comments, newComment]);
+  };
+
+  const deleteComment = (deletedCommentId) => {
+    setComments(comments.filter((comment) => comment.id !== deletedCommentId));
+  };
 
   if (isLoading) {
     return <p>Loading ....</p>;
@@ -68,6 +96,7 @@ export default function ArticlePage() {
     author,
     paragraphs,
     source,
+    click_count,
   } = article;
 
   return (
@@ -104,6 +133,11 @@ export default function ArticlePage() {
               <UserCircleIcon className="size-4" />
               <p className="font-semibold">{author}</p>
             </div>
+            <span className="block h-4 bg-brown-200 w-[2px]"></span>
+            <div className="flex items-center gap-2">
+              <EyeIcon className="size-4" />
+              <p className="font-semibold">{click_count ?? 0}</p>
+            </div>
           </div>
           <div className="space-y-4 mb-6">
             {paragraphs.map((paragraph, idx) => (
@@ -120,8 +154,8 @@ export default function ArticlePage() {
           </a>
         </article>
         <div className="space-y-8">
-          <CommentForm />
-          <CommentList />
+          <CommentForm articleId={id} addComment={addComment} />
+          <CommentList comments={comments} deleteComment={deleteComment} />
         </div>
       </div>
     </div>

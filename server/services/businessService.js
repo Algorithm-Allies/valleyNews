@@ -111,11 +111,14 @@ const removeUserQuery = async (businessId, userId) => {
 const viewUsersQuery = async (businessId) => {
   try {
     const query = `
-    SELECT u.id, u.email, u.account_type
-    FROM "user" u
-    JOIN "user_business" ub ON u.id = ub.user_id
-    WHERE ub.business_id = $1; 
-  `;
+      SELECT u.id, u.email, b.phone_number, p.role
+      FROM "user" u
+      JOIN "user_business" ub ON u.id = ub.user_id
+      JOIN "permissions" p ON ub.permission_id = p.id
+      JOIN "business" b ON ub.business_id = b.id
+      WHERE ub.business_id = $1;
+    `;
+
     const result = await db.query(query, [businessId]);
     return result.rows;
   } catch (error) {
@@ -129,13 +132,29 @@ const getSingleUserQuery = async (businessId, userId) => {
     const query = `
     SELECT u.id, u.email, u.account_type
     FROM "user" u
-    JOIN "userBusiness" ub ON u.id = ub.user_id
+    JOIN "user_business" ub ON u.id = ub.user_id
     WHERE ub.business_id = $1 AND u.id = $2;
 `;
     const result = await db.query(query, [businessId, userId]);
     return result.rows[0];
   } catch (error) {
     console.error("Error retreiving single user from business:", error);
+    throw error;
+  }
+};
+
+const getBusinessByUser = async (userId) => {
+  try {
+    const query = `
+      SELECT b.*
+      FROM business b
+      JOIN "user_business" ub ON b.id = ub.business_id
+      WHERE ub.user_id = $1;
+    `;
+    const { rows } = await db.query(query, [userId]);
+    return rows;
+  } catch (error) {
+    console.error("Error fetching businesses by user:", error);
     throw error;
   }
 };
@@ -150,4 +169,5 @@ module.exports = {
   getUserBusiness,
   viewUsersQuery,
   getSingleUserQuery,
+  getBusinessByUser,
 };

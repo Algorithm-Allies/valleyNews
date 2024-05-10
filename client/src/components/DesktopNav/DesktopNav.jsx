@@ -5,11 +5,16 @@ import { useAuth } from "../AuthProvider";
 
 export default function DesktopNav({ links }) {
   const { logout } = useAuth();
+  const handleLogout = () => {
+    // Navigate to login page
+    window.location.href = "/auth/login";
+  };
+
   return (
     <div className="hidden lg:flex lg:max-w-7xl lg:mx-auto lg:items-baseline">
       <Link
         className="text-custom-orange text-xl font-bold outline-none rounded-sm focus-visible:outline-none focus-visible:outline focus-visble:outline-1 focus-visible:outline-custom-orange"
-        to="/"
+        to={"/news"}
       >
         CVNews
       </Link>

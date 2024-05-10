@@ -1,5 +1,10 @@
 const db = require("../config/database");
-const { insertArticle } = require("../services/articleService");
+const {
+  insertArticle,
+  getArticleByIdQuery,
+  editArticleQuery,
+} = require("../services/articleService");
+const { viewBusinessQuery } = require("../services/businessService");
 
 // Create articles -- bulk insert into database
 async function createArticles(req, res) {
@@ -54,10 +59,12 @@ async function getArticlesByCategory(req, res) {
 `;
 
   const articlesQuery = `
+  SELECT * FROM (
     SELECT * FROM article
     WHERE category = $1
     ORDER BY date_time_published DESC
-    LIMIT $2 OFFSET $3
+  ) AS ordered_articles
+  LIMIT $2 OFFSET $3
   `;
 
   try {
@@ -118,11 +125,13 @@ async function getArticlesBySubcategory(req, res) {
   `;
 
   const articlesQuery = `
+  SELECT * FROM (
     SELECT * FROM article
     WHERE category = $1
     AND subcategory = $2
     ORDER BY date_time_published DESC
-    LIMIT $3 OFFSET $4
+  ) AS ordered_articles
+  LIMIT $3 OFFSET $4
   `;
 
   try {
@@ -161,19 +170,33 @@ async function getArticlesBySubcategory(req, res) {
 async function getArticleById(req, res) {
   const articleId = req.params.id;
 
-  const query = `
-    SELECT * FROM article
-    WHERE id = $1
-  `;
-
   try {
-    const { rows } = await db.query(query, [articleId]);
+    // Update click count
+    const updateQuery = `
+      UPDATE article
+      SET click_count = COALESCE(click_count, 0) + 1
+      WHERE id = $1;
+    `;
+    await db.query(updateQuery, [articleId]);
+
+    // Get article by ID
+    const selectQuery = `
+      SELECT * FROM article
+      WHERE id = $1
+    `;
+    const { rows } = await db.query(selectQuery, [articleId]);
+
     if (rows.length === 0) {
       return res.status(404).json({ error: "Article not found" });
     }
+
+    // Send article data with updated click count
     res.status(200).json(rows[0]);
   } catch (error) {
-    console.error("Error fetching article by ID:", error.message);
+    console.error(
+      "Error fetching article by ID and updating click count:",
+      error.message
+    );
     res.status(500).json({ error: "Internal server error" });
   }
 }
@@ -216,7 +239,7 @@ async function articleClicked(req, res) {
   try {
     const query = `
       UPDATE article
-      SET click_count = click_count + 1
+      SET click_count = COALESCE(click_count, 0) + 1
       WHERE id = $1;
     `;
     await db.query(query, [articleId]);
@@ -230,6 +253,100 @@ async function articleClicked(req, res) {
   }
 }
 
+async function getArticleClickCount(req, res) {
+  const articleId = req.params.id;
+
+  try {
+    const query = `
+      SELECT click_count FROM article
+      WHERE id = $1
+    `;
+
+    const { rows } = await db.query(query, [articleId]);
+    if (rows.length === 0) {
+      return res.status(404).json({ error: "Article not found" });
+    }
+
+    const clickCount = rows[0].click_count;
+
+    res.status(200).json({ click_count: clickCount });
+  } catch (error) {
+    console.error("Error fetching article click count:", error.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+//test
+async function getArticlesByBusiness(req, res) {
+  const { businessId } = req.params;
+
+  try {
+    const business = viewBusinessQuery(businessId);
+    if (!business) {
+      return res.status(404).json({ error: "business doesnt exist" });
+    }
+
+    const query = `
+      SELECT *
+      FROM article
+      WHERE business_id = $1
+    `;
+
+    const result = await db.query(query, [businessId]);
+
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error("Error fetching articles by business:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+async function deleteArticle(req, res) {
+  try {
+    const articleId = req.params.articleId;
+
+    const article = await getArticleByIdQuery(articleId);
+
+    if (!article) {
+      return res.status(404).json({ message: "Article not found" });
+    }
+
+    const deleteQuery = `
+      DELETE FROM article WHERE id = $1 RETURNING *`;
+    const deletedArticle = await db.query(deleteQuery, [articleId]);
+
+    if (deletedArticle.rows.length === 0) {
+      return res.status(500).json({ message: "Article could not be deleted" });
+    }
+
+    res.json({
+      message: "Article deleted",
+      deletedArticle: deletedArticle.rows[0],
+    });
+  } catch (error) {
+    console.error("Error deleting article:", error);
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
+  }
+}
+
+async function editArticle(req, res) {
+  try {
+    const articleId = req.params.articleId;
+    const updatedArticleData = req.body;
+    const updatedArticleId = await editArticleQuery(
+      articleId,
+      updatedArticleData
+    );
+
+    res
+      .status(200)
+      .json({ message: "Article updated successfully", updatedArticleId });
+  } catch (error) {
+    console.error("Error editing article:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
 module.exports = {
   createArticles,
   getArticles,
@@ -239,4 +356,8 @@ module.exports = {
   getArticleDetails,
   getArticleUrls,
   articleClicked,
+  getArticleClickCount,
+  getArticlesByBusiness,
+  deleteArticle,
+  editArticle,
 };

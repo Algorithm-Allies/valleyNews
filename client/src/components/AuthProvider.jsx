@@ -24,6 +24,7 @@ export default function AuthProvider({ children }) {
       setToken(storedToken);
       return;
     }
+    console.log(storedToken);
     navigate("/auth/login");
   }, []);
 

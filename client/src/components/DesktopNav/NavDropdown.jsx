@@ -22,7 +22,7 @@ function Dropdown({ subLinks }) {
       <DropdownMenu.Portal>
         <DropdownMenu.Content
           sideOffset={5}
-          className="space-y-2 bg-white  rounded-lg shadow-lg p-4 text-stone-700"
+          className="space-y-2 bg-white  rounded-lg shadow-lg p-4 text-stone-700 z-10"
         >
           {subLinks.map(({ href, label }) => (
             <DropdownMenu.Item asChild key={href}>

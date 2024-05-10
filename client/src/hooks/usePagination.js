@@ -1,13 +1,11 @@
 import React from "react";
 
-export function usePagination({ initialData, itemsPerPage }) {
-  const data = React.useRef(initialData);
+export function usePagination({ data, itemsPerPage }) {
   const countPerPage = React.useRef(itemsPerPage);
   const [currPage, setCurrPage] = React.useState(1);
-
   const hasPrev = currPage > 1;
-  const hasNext = currPage * countPerPage.current < data.current.length;
-  const currData = data.current.slice(
+  const hasNext = currPage * countPerPage.current < data.length;
+  const currData = data.slice(
     (currPage - 1) * countPerPage.current,
     currPage * countPerPage.current
   );
@@ -23,7 +21,7 @@ export function usePagination({ initialData, itemsPerPage }) {
     }
   }
   return {
-    data: currData,
+    currPageItems: currData,
     currPage,
     nextPage,
     prevPage,

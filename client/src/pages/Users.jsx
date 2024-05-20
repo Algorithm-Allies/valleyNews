@@ -1,5 +1,5 @@
 import React from "react";
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../hooks/useUserContext";
 import BusinessNavBar from "../components/BusinessNavBar";
 import Trash from "../assets/trash-fill.png";
@@ -22,7 +22,7 @@ function Users() {
   React.useEffect(() => {
     const getUsers = async () => {
       const users = await getUsersByBusinessId(businessId);
-      console.log(users);
+
       setBusinessUsers(users);
     };
     getUsers();
@@ -63,7 +63,6 @@ function Users() {
                   <th>ID</th>
 
                   <th>Email</th>
-
                 </tr>
               </thead>
               <tbody>
@@ -88,9 +87,7 @@ function Users() {
               </tbody>
             </table>
           </div>
-          <div className="flex flex-row pb-10 justify-end">
-
-          </div>
+          <div className="flex flex-row pb-10 justify-end"></div>
         </div>
       </div>
     </div>

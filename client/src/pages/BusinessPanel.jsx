@@ -31,14 +31,13 @@ function BusinessPanel() {
   const userInfo = useUser();
 
   useEffect(() => {
-    getArticlesByBusiness(userInfo.businessId)
-      .then((data) => setArticleData(data))
-      .catch((error) => console.log("Error fetching articles", error));
+    getArticlesByBusiness(userInfo.businessId).then((data) =>
+      setArticleData(data)
+    );
   }, []);
 
   const handleEdit = (e) => {
     e.preventDefault();
-    console.log("edit");
   };
 
   const handleDelete = (articleId) => {
@@ -48,9 +47,8 @@ function BusinessPanel() {
 
   const handleConfirmDelete = async () => {
     try {
-      console.log("Deleting article with ID:", selectedArticleId);
       const response = await deleteArticle(selectedArticleId);
-      console.log(response.data);
+
       setShowDeletePopup(false);
       setArticleData(
         articleData.filter((item) => item.id !== selectedArticleId)

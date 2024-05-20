@@ -23,7 +23,7 @@ export default function AddUser() {
         ...formData,
         businessId,
       });
-      console.log("User added successfully:", response);
+
       setSuccess("User added successfully");
       setError(""); // Clear error
     } catch (error) {
@@ -57,7 +57,6 @@ export default function AddUser() {
           </h1>
           <hr className="rounded-md border-r-[60vw] border-y-8 border-brown-400 mb-10 " />
           <form className="flex flex-col w-100" onSubmit={handleSubmit}>
-
             <label>User ID</label>
             <input
               value={formData.userId}

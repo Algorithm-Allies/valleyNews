@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { useUser } from "../hooks/useUserContext";
 import axios from "axios";
+import fetchWithAuth from "../lib/fetchWithAuth";
 
 const MAX_CHARACTERS = 400;
 export default function CommentForm({ articleId, addComment }) {
@@ -12,11 +13,15 @@ export default function CommentForm({ articleId, addComment }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        `https://valleynews.onrender.com/api/comments/${articleId}/${userId}`,
-        { comment }
-      );
-      const commentData = response.data[0];
+      const response = await fetchWithAuth(`/comments/${articleId}/${userId}`, {
+        method: "POST",
+        body: JSON.stringify({ comment }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((res) => res.json());
+
+      const commentData = response[0];
       const {
         id,
         comment: newComment,
@@ -40,6 +45,7 @@ export default function CommentForm({ articleId, addComment }) {
       // Clear the comment form
       setComment("");
     } catch (error) {
+      console.log(error);
       // Handle error
       setError("Error adding comment. Please try again later.");
       console.error("Error adding comment:", error);

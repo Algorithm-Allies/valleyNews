@@ -12,7 +12,7 @@ import React from "react";
 import CommentList from "../components/CommentList";
 import CommentForm from "../components/CommentForm";
 import { isValidArticleLink } from "../lib/articleUrlHelpers";
-import axios from "axios";
+import fetchWithAuth from "../lib/fetchWithAuth";
 
 export default function ArticlePage() {
   const [article, setArticle] = useState(null);
@@ -51,10 +51,11 @@ export default function ArticlePage() {
   useEffect(() => {
     async function fetchComments() {
       try {
-        const response = await axios.get(
-          `https://valleynews.onrender.com/api/comments/article/${id}`
-        );
-        setComments(response.data);
+        const response = await await fetchWithAuth(
+          `/comments/article/${id}`
+        ).then((res) => res.json());
+        console.log(response);
+        setComments(response);
       } catch (error) {
         console.error("Error fetching comments:", error);
         setError("Error fetching comments");

@@ -1,33 +1,32 @@
+import fetchWithAuth from "../lib/fetchWithAuth";
 import axios from "axios";
 
 export async function getAllArticles() {
   try {
-    const res = await fetch(
-      `${import.meta.env.VITE_API_URL}/articles`
-      //`https://valleynews.onrender.com/api/articles`
-    );
-    if (res.ok) {
+    const res = await fetchWithAuth(`/articles`);
+    if (res) {
       const articles = await res.json();
       return { ok: true, data: articles };
     }
     // check status code to handle error states for authorization errors and server errors
-  } catch (e) {}
+  } catch (e) {
+    return { ok: false, message: e.message };
+  }
 }
 
 export async function getArticlesByCategory({ category, page, perPage }) {
   try {
-    const res = await fetch(
-      `${
-        import.meta.env.VITE_API_URL
-      }/articles/${category}?page=${page}&perPage=${perPage}`
-      //`http://localhost:4500/api/articles/${category}?page=${page}&perPage=${perPage}`
+    const res = await fetchWithAuth(
+      `/articles/${category}?page=${page}&perPage=${perPage}`
     );
     if (res.ok) {
       const articles = await res.json();
       return { ok: true, data: articles };
     }
     // check status code to handle error states for authorization errors and server errors
-  } catch (e) {}
+  } catch (e) {
+    return { ok: false, message: e.message };
+  }
 }
 
 export async function getArticlesByCategoryAndSubcategory({
@@ -37,24 +36,27 @@ export async function getArticlesByCategoryAndSubcategory({
   perPage,
 }) {
   try {
-    const res = await fetch(
-      `${
-        import.meta.env.VITE_API_URL
-      }/articles/${category}/${subcategory}?page=${page}&perPage=${perPage}`
+    const res = await fetchWithAuth(
+      `/articles/${category}/${subcategory}?page=${page}&perPage=${perPage}`
     );
+    // const res = await fetch(
+    //   `${
+    //     import.meta.env.VITE_API_URL
+    //   }/articles/${category}/${subcategory}?page=${page}&perPage=${perPage}`
+    // );
     if (res.ok) {
       const articles = await res.json();
       return { ok: true, data: articles };
     }
-  } catch (e) {}
+  } catch (e) {
+    return { ok: false, message: e.message };
+  }
 }
 
 export async function getArticleById({ id, category, subcategory }) {
   try {
-    const res = await fetch(
-      `${
-        import.meta.env.VITE_API_URL
-      }/articles/${category}/${subcategory}/${id}`
+    const res = await fetchWithAuth(
+      `/articles/${category}/${subcategory}/${id}`
     );
     if (res.ok) {
       const articles = await res.json();
@@ -76,9 +78,7 @@ export async function getArticleById({ id, category, subcategory }) {
 
 export async function getArticlesByBusiness(id) {
   try {
-    const res = await fetch(
-      `${import.meta.env.VITE_API_URL}/articles/business/${id}`
-    );
+    const res = await fetchWithAuth(`/articles/business/${id}`);
     return res.json();
   } catch (e) {
     console.error("Error fetching articles by business:", e);
@@ -88,11 +88,10 @@ export async function getArticlesByBusiness(id) {
 
 export async function deleteArticle(id) {
   try {
-    const response = await axios.delete(
-      `${import.meta.env.VITE_API_URL}/articles/delete/${id}`
-    );
-
-    return response.data;
+    const response = await fetchWithAuth(`/articles/delete/${id}`, {
+      method: "DELETE",
+    });
+    return response;
   } catch (error) {
     console.error("Error deleting article:", error);
     throw error;

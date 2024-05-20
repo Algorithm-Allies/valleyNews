@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, redirect, useActionData, useRouteError } from "react-router-dom";
+import { Link, useActionData, useRouteError } from "react-router-dom";
 import AuthForm from "../components/Auth/AuthForm";
 import AuthInput from "../components/Auth/AuthInput";
 import FormError from "../components/FormError";

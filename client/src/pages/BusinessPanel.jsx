@@ -6,7 +6,7 @@ import {
   getArticlesByBusiness,
 } from "../services/articleService";
 import { useUser } from "../hooks/useUserContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { createArticleUrl } from "../lib/articleUrlHelpers";
 import DeletePopup from "../components/DeletePopUp";
 import { TrashIcon } from "@heroicons/react/16/solid";
@@ -16,6 +16,7 @@ function BusinessPanel() {
   const [articleData, setArticleData] = useState([]);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [selectedArticleId, setSelectedArticleId] = useState(null);
+  const navigate = useNavigate();
   const {
     currPageItems,
     nextPage,
@@ -28,13 +29,21 @@ function BusinessPanel() {
     data: articleData,
     itemsPerPage: 10,
   });
-  const userInfo = useUser();
+  const { businessId } = useUser();
 
   useEffect(() => {
-    getArticlesByBusiness(userInfo.businessId).then((data) =>
-      setArticleData(data)
-    );
-  }, []);
+    if (!businessId) {
+      navigate("/news");
+    }
+  }, [businessId]);
+
+  useEffect(() => {
+    if (businessId) {
+      getArticlesByBusiness(businessId)
+        .then((data) => setArticleData(data))
+        .catch((error) => console.log("Error fetching articles", error));
+    }
+  }, [businessId]);
 
   const handleEdit = (e) => {
     e.preventDefault();
@@ -48,7 +57,6 @@ function BusinessPanel() {
   const handleConfirmDelete = async () => {
     try {
       const response = await deleteArticle(selectedArticleId);
-
       setShowDeletePopup(false);
       setArticleData(
         articleData.filter((item) => item.id !== selectedArticleId)

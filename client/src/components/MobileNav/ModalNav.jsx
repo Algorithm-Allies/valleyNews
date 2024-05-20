@@ -3,6 +3,7 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
 import MobileNavLink from "./MobileNavLink";
 import MobileNavSubLink from "./MobileNavSubLink";
 import React from "react";
+import { useAuth } from "../AuthProvider";
 export default function ModalNav({ links }) {
   // state to control when the nav is open.  Nav will be closed manually when the user clicks on the link otherwise radix will just close it.
   const [isOpen, setIsOpen] = React.useState(false);
@@ -29,10 +30,7 @@ export default function ModalNav({ links }) {
 }
 
 function ModalLinks({ links, closeNav }) {
-  const handleLogout = () => {
-    // Navigate to login page
-    window.location.href = "/auth/login";
-  };
+  const { logout } = useAuth();
   return (
     <ul className="space-y-3">
       {links.map((link) => {
@@ -64,7 +62,10 @@ function ModalLinks({ links, closeNav }) {
         );
       })}
       <li className="my-2">
-        <button onClick= {handleLogout} className="w-full border-2 border-gray-400 py-2 rounded-sm outline-none transition-colors text-gray-700 hover:bg-custom-orange hover:border-transparent hover:text-white  focus-visible:border-custom-orange">
+        <button
+          onClick={logout}
+          className="w-full border-2 border-gray-400 py-2 rounded-sm outline-none transition-colors text-gray-700 hover:bg-custom-orange hover:border-transparent hover:text-white  focus-visible:border-custom-orange"
+        >
           Logout
         </button>
       </li>

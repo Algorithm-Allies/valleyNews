@@ -3,6 +3,7 @@ import { PencilSquareIcon, XMarkIcon } from "@heroicons/react/16/solid";
 import EditCommentModal from "./EditCommentModal";
 import { useUser } from "../hooks/useUserContext";
 import axios from "axios";
+import fetchWithAuth from "../lib/fetchWithAuth";
 
 export default function Comment({
   comment,
@@ -16,9 +17,9 @@ export default function Comment({
 
   const deleteComment = async (commentId) => {
     try {
-      const response = await axios.delete(
-        `${import.meta.env.VITE_API_URL}/comments/${commentId}`
-      );
+      const response = await fetchWithAuth(`/comments/${commentId}`, {
+        method: "DELETE",
+      }).then((res) => res.json());
       onDeleteComment(commentId);
       return response.data;
     } catch (error) {

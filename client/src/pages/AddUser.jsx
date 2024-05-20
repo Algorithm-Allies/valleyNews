@@ -30,7 +30,7 @@ export default function AddUser() {
         ...formData,
         businessId,
       });
-      console.log("User added successfully:", response);
+
       setSuccess("User added successfully");
       setError(""); // Clear error
     } catch (error) {

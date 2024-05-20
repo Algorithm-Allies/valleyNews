@@ -47,7 +47,6 @@ function BusinessPanel() {
 
   const handleEdit = (e) => {
     e.preventDefault();
-    console.log("edit");
   };
 
   const handleDelete = (articleId) => {
@@ -57,9 +56,7 @@ function BusinessPanel() {
 
   const handleConfirmDelete = async () => {
     try {
-      console.log("Deleting article with ID:", selectedArticleId);
       const response = await deleteArticle(selectedArticleId);
-      console.log(response);
       setShowDeletePopup(false);
       setArticleData(
         articleData.filter((item) => item.id !== selectedArticleId)

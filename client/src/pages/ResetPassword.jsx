@@ -18,7 +18,7 @@ export async function action({ request }) {
     });
   }
   const res = await fetch(
-    `${import.meta.env.VITE_API_URL}/users/new-password`,
+    `${import.meta.env.VITE_API_URL}/users/password-reset-email`,
     {
       method: "POST",
       body: JSON.stringify({ email }),

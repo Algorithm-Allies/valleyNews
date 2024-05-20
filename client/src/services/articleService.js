@@ -91,10 +91,6 @@ export async function deleteArticle(id) {
     const response = await fetchWithAuth(`/articles/delete/${id}`, {
       method: "DELETE",
     });
-    // const response = await axios.delete(
-    //   `${import.meta.env.VITE_API_URL}/articles/delete/${id}`
-    // );
-    console.log(response);
     return response;
   } catch (error) {
     console.error("Error deleting article:", error);

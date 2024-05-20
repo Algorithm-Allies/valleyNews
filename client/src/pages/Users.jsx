@@ -22,7 +22,7 @@ function Users() {
   React.useEffect(() => {
     const getUsers = async () => {
       const users = await getUsersByBusinessId(businessId);
-      console.log(users);
+
       setBusinessUsers(users);
     };
     getUsers();
